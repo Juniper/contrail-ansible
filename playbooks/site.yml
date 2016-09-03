@@ -1,0 +1,2 @@
+---
+- include: contrail_controller.yml
