@@ -1,0 +1,38 @@
+resources:
+  # Contrail controller (cc)
+  cc:
+    number: 2
+    image: trusty
+    flavor: xlarge
+  # Compute (cp)
+  cp:
+    number: 2
+    image: trusty
+    flavor: large
+maps:
+  image:
+    virtualbox:
+      trusty-14.04.2: 'minimal/trusty64'
+      trusty: 'ubuntu/trusty64'
+    lxc:
+      trusty: 'fgrehm/trusty64-lxc'
+  flavor:
+    tiny:
+      ram: 512
+      cpu: 1
+    small:
+      ram: 1024
+      cpu: 1
+    medium:
+      ram: 2046
+      cpu: 1
+    large:
+      ram: 4096
+      cpu: 2
+    xlarge:
+      ram: 8192
+      cpu: 4
+    storage:
+      ram: 1024
+      cpu: 1
+      disk: 10
