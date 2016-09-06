@@ -1,0 +1,11 @@
+---
+- name: Setting a fact to check if the code is running in a container or a machine
+  hosts: all
+
+  tasks:
+  - name: Findout if current machine is a container or a machine
+    shell: test -f /.dockerenv && echo yes || echo no
+    register: running_in_docker_cmd
+    tags: register
+
+  - set_fact: running_in_docker={{ running_in_docker_cmd.stdout }}

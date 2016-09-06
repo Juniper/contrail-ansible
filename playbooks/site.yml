@@ -1,6 +1,8 @@
 ---
+- include: custom_facts.yml
+
 - include: base_host.yml
-  when: ansible_virtualization_type != 'docker'
+  when: not running_in_docker
 
 - include: contrail_controller.yml
-  when: ansible_virtualization_type == 'docker'
+  when: running_in_docker
