@@ -1,0 +1,10 @@
+[contrail-controllers]
+localhost   ansible_connection=local
+
+[contrail-controllers:vars]
+# Setting the variable cloud_orchestrator to anything other than openstack make controller containers
+# to disable certain stuffs only required for openstack
+cloud_orchestrator="kubernetes"
+contrail_version=3.1.1.0-29
+contrail_docker_registry=10.84.34.155:5000
+contrail_docker_registry_insecure=True

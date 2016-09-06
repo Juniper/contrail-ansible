@@ -1,2 +1,6 @@
 ---
+- include: base_host.yml
+  when: ansible_virtualization_type != 'docker'
+
 - include: contrail_controller.yml
+  when: ansible_virtualization_type == 'docker'
