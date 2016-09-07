@@ -1,3 +1,7 @@
 # Setting the variable cloud_orchestrator to anything other than openstack make controller containers
 # to disable certain stuffs only required for openstack
 cloud_orchestrator: kubernetes
+
+# Variable deployment platform decide whether to run contrail application deployment code in the container or on a non-container
+# May be it make sense to detect the role of the system using fact or provide role from outside in some way
+deployment_platform: docker
