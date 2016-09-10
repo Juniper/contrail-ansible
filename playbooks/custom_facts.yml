@@ -8,4 +8,9 @@
     register: running_in_docker_cmd
     tags: register
 
-  - set_fact: running_in_docker={{ running_in_docker_cmd.stdout }}
+  - name: "Setting a fact whether the code is running in a docker container or not"
+    set_fact: running_in_docker={{ running_in_docker_cmd.stdout }}
+
+  - name: Setting a default for deployment_platform
+    set_fact: deployment_platform="docker"
+    when: deployment_platform is not defined

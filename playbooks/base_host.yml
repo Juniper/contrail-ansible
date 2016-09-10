@@ -10,6 +10,7 @@
   roles:
     - role: docker
       tags: [base_host, base_host.docker]
+      when: deployment_platform == "docker"
 
 - name: Setup controller containers
   hosts: contrail-controllers
