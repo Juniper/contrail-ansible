@@ -1,6 +1,6 @@
 ---
 - include: custom_facts.yml
-  tags: facts
+  tags: always
 
 - include: base_host.yml
   when: not running_in_docker
