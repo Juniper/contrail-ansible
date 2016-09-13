@@ -1,3 +1,25 @@
 # Setting the variable cloud_orchestrator to anything other than openstack make controller containers
 # to disable certain stuffs only required for openstack
 cloud_orchestrator: kubernetes
+
+##
+# Rabbitmq configs
+##
+# Set /var/lib/rabbitmq/.erlang.cookie
+rabbitmq_erlang_cookie: 888513f8-ba68-45b5-a6ff-2305118a19a4
+
+# Set max open files for rabbit process
+rabbitmq_ulimit_open_files: 10240
+
+# Use cluster or no
+rabbitmq_create_cluster: no
+
+#Do not use upstream repo
+rabbitmq_use_upstream_repository: false
+
+rabbitmq_users_removed: []
+
+rabbitmq_users: []
+
+rabbitmq_supervisord_config_file: /etc/contrail/supervisord_config.conf
+rabbitmq_supervisord_rabbitmq_config: /etc/contrail/supervisord_config_files/rabbitmq.ini

@@ -16,3 +16,7 @@
   - name: Setting a default for deployment_platform
     set_fact: deployment_platform="docker"
     when: deployment_platform is not defined
+
+  - name: Assuming default service manager
+    set_fact: service_manager=supervisord
+    when: deployment_platform == "docker"
