@@ -1,0 +1,5 @@
+---
+- name: allow unauthenticated packages for ubuntu
+  copy: content='APT::Get::AllowUnauthenticated "true";' dest=/etc/apt/apt.conf.d/99temp owner=root group=root mode=0644
+  when: ansible_os_family == "Debian"
+  tags: install
