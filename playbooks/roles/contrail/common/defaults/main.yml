@@ -25,3 +25,11 @@ api_server_use_ssl: False
 region: RegionOne
 analytics_server_ip: "{{ controller_ip }}"
 analytics_server_port: 8081
+
+# Control node configs
+controlnode_ip: "{{ controller_ip }}"
+control_ip: "{{ controlnode_ip }}"
+
+# Common log level and log_local
+log_level: SYS_NOTICE
+log_local: 1
