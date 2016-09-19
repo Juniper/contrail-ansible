@@ -8,3 +8,7 @@
 - include: contrail_controller.yml
   when: (deployment_platform == "docker" and running_in_docker) or
         (deployment_platform != "docker")
+
+- include: contrail_analytics.yml
+  when: (deployment_platform == "docker" and running_in_docker) or
+        (deployment_platform != "docker")
