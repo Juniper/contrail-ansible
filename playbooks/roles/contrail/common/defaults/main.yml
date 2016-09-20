@@ -5,6 +5,7 @@ controller_ip: "{{ ansible_default_ipv4.address }}"
 # List of cassandra servers
 cassandra_server_list: ["{{ controller_ip }}"]
 cassandra_port: 9160
+cassandra_cql_port: 9042
 
 # List of zookeeper servers
 zk_server_list: ["{{ controller_ip }}"]
@@ -25,6 +26,7 @@ api_server_use_ssl: False
 region: RegionOne
 analytics_server_ip: "{{ controller_ip }}"
 analytics_server_port: 8081
+analytics_server_use_ssl: False
 
 # Control node configs
 controlnode_ip: "{{ controller_ip }}"
@@ -33,3 +35,9 @@ control_ip: "{{ controlnode_ip }}"
 # Common log level and log_local
 log_level: SYS_NOTICE
 log_local: 1
+
+# Redis Config
+# Note: All apps used to connect redis server running on local machine, so redis_server_ip is not required, and
+#  it should default to localhost
+redis_server_ip: 127.0.0.1
+redis_server_port: 6379
