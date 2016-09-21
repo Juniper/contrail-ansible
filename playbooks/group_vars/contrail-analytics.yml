@@ -1,0 +1,10 @@
+# Setting the variable cloud_orchestrator to anything other than openstack 
+# make controller containers to disable certain stuffs only required for 
+# openstack
+cloud_orchestrator: kubernetes
+
+# Redis role variable. For setting redis variables, use the template file
+# redis_config_file.j2
+redis_port: 6381
+redis_bind_interface: 0.0.0.0
+redis_includes: [ /etc/redis/redis_contrail.conf ]
