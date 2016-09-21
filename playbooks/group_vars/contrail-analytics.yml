@@ -3,13 +3,8 @@
 # openstack
 cloud_orchestrator: kubernetes
 
-##
-# Redis role variables. For fine grained control use the template file
+# Redis role variable. For setting redis variables, use the template file
 # redis_config_file.j2
-##
 redis_port: 6381
 redis_bind_interface: 0.0.0.0
-redis_loglevel: notice
-redis_logfile: /var/log/redis/redis_server.log
 redis_includes: [ /etc/redis/redis_contrail.conf ]
-
