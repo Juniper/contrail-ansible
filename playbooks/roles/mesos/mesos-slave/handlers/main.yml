@@ -1,0 +1,8 @@
+---
+# handlers file for mesos-master
+- name: Restart mesos-slave
+  service: name=mesos-slave state=restarted
+
+- name: Reload systemctl daemon
+  command: systemctl daemon-reload
+  when: ansible_service_mgr == 'systemd'

@@ -1,0 +1,14 @@
+---
+# handlers file for mesos-master
+- name: Restart zookeeper
+  service: name=zookeeper state=restarted enabled=yes
+
+- name: Restart mesos-master
+  service: name=mesos-master state=restarted
+
+- name: Restart marathon
+  service: name=marathon state=restarted
+
+- name: Reload systemctl daemon
+  command: systemctl daemon-reload
+  when: ansible_service_mgr == 'systemd'

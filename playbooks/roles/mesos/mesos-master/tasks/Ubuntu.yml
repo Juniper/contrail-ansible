@@ -1,0 +1,9 @@
+---
+- name: Add apt-key
+  apt_key: id=E56151BF keyserver=keyserver.ubuntu.com state=present
+
+- name: Add mesosphere repo
+  apt_repository: repo='deb {{ mesosphere_apt_url }} {{ ansible_distribution_release | lower }} main' state=present
+
+- name: Update cache apt-get update
+  apt: update_cache=yes
