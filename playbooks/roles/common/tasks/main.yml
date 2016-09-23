@@ -1,0 +1,7 @@
+---
+# tasks file for common
+# This is to fix some of the package installation failure because of the command runlevel fail in containers
+# This will not overwrite exsting file
+- name: make sure /var/run/utmp exist
+  copy: content='' dest=/var/run/utmp owner=root group=root mode=0644 force=no
+  tags: always
