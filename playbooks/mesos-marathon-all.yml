@@ -6,13 +6,11 @@
 ---
 - name: setup ansible master
   hosts: mesos-master
-  user: root
   roles:
     - mesos/mesos-master
 
 - name: setup ansible slave
   hosts: mesos-slave
-  user: root
   roles:
     - role: mesos/mesos-slave
       mesos_master_ip: "{{ hostvars[groups['mesos-master'][0]]['ansible_default_ipv4']['address']}}"
