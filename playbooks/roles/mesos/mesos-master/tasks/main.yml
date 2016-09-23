@@ -27,11 +27,11 @@
   template: src=mesos-zk.j2 dest=/etc/mesos/zk
   tags: deploy
 
-- name: Update zookeeper config
+- name: Update zookeeper config myid
   template: src=myid.j2 dest=/etc/zookeeper/conf/myid
   tags: deploy
 
-- name: Update zookeeper config
+- name: Update zookeeper config zoo.cfg
   template: src=zoo.cfg.j2 dest=/etc/zookeeper/conf/zoo.cfg
   tags: deploy
 
@@ -59,6 +59,7 @@
   template: src=marathon-zk.j2 dest=/etc/marathon/conf/zk
   tags: deploy
   notify:
+    - Stop mesos-slave
     - Restart zookeeper
     - Restart mesos-master
     - Restart marathon

@@ -20,4 +20,6 @@
   template: src=mesos-slave-ip.j2 dest=/etc/mesos-slave/ip
   tags: deploy
   notify:
+    - Stop zookeeper
+    - Stop mesos-master
     - Restart mesos-slave

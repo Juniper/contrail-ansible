@@ -4,10 +4,13 @@
   service: name=zookeeper state=restarted enabled=yes
 
 - name: Restart mesos-master
-  service: name=mesos-master state=restarted
+  service: name=mesos-master state=restarted enabled=yes
+
+- name: Stop mesos-slave
+  service: name=mesos-slave state=stopped enabled=no
 
 - name: Restart marathon
-  service: name=marathon state=restarted
+  service: name=marathon state=restarted enabled=yes
 
 - name: Reload systemctl daemon
   command: systemctl daemon-reload
