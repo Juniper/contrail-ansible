@@ -3,3 +3,7 @@
   copy: content='APT::Get::AllowUnauthenticated "true";' dest=/etc/apt/apt.conf.d/99allowunauth owner=root group=root mode=0644
   when: ansible_os_family == "Debian"
   tags: install
+
+- name: install policy-rc.d to selectively disable automated service start by apt
+  copy: src=policy-rc.d dest=/usr/sbin/policy-rc.d mode=0755
+  when: ansible_os_family == 'Debian'
