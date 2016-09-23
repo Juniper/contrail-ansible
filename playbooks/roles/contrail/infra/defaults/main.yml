@@ -1,0 +1,5 @@
+---
+# Cassandra
+contrailinfra_enable_cassandra: false
+contrailinfra_cassandra_deps: openjdk-7-jre-headless
+contrailinfra_manage_cassandra_svc: false
