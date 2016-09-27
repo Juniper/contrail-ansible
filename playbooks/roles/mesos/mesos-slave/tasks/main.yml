@@ -1,9 +1,6 @@
 ---
 # tasks file for mesos-slave
-- include_vars: "{{ ansible_distribution }}.yml"
-
-- include: Ubuntu.yml
-  when: ansible_distribution == "Ubuntu"
+- include: "{{ ansible_distribution }}.yml"
 
 - name: Install the latest version of mesos
   package: name=mesos state=latest

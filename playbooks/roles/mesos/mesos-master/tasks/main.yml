@@ -1,9 +1,6 @@
 ---
 # tasks file for mesos-master
-- include_vars: "{{ ansible_distribution }}.yml"
-
-- include: Ubuntu.yml
-  when: ansible_distribution == "Ubuntu"
+- include: "{{ ansible_distribution }}.yml"
 
 - name: Install master packages
   package: pkg={{ item }} state=present

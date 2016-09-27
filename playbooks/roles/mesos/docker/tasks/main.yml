@@ -1,19 +1,6 @@
 ---
 # tasks file for docker
-- include_vars: "{{ ansible_distribution }}.yml"
-
-- include: Ubuntu.yml
-  when: ansible_distribution == "Ubuntu"
-
-- shell: uname -r
-  ignore_errors: yes
-  register: uname_result
-
-- name: Install linux image packages
-  package: pkg={{ item }} state=present
-  with_items:
-    - linux-image-extra-{{ uname_result.stdout }}
-    - linux-image-extra-virtual
+- include: "{{ ansible_distribution }}.yml"
 
 - name: Install docker engine
   package: name=docker-engine state=latest
