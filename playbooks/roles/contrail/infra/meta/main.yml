@@ -1,0 +1,12 @@
+---
+dependencies:
+  - role: cassandra
+    src: https://github.com/hkumarmk/ansible-role-cassandra
+    version: master # this should be set to specific release tag or commit id in later point
+    name: cassandra
+    cassandra_deps: "{{ contrailinfra_cassandra_deps }}"
+    cassandra_service_manage: "{{ contrailinfra_manage_cassandra_svc }}"
+    when: "{{ contrailinfra_enable_cassandra }}"
+    tags: [cassandra]
+
+  - role: contrail/common
