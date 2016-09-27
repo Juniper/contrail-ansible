@@ -3,3 +3,8 @@
 contrailinfra_enable_cassandra: false
 contrailinfra_cassandra_deps: openjdk-7-jre-headless
 contrailinfra_manage_cassandra_svc: false
+
+# contrail database
+contrail_database_packages:
+  - contrail-openstack-database
+  - opscenter
