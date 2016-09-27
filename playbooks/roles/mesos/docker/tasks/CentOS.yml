@@ -3,4 +3,4 @@
   template: src=docker-repo.j2 dest=/etc/yum.repos.d/docker.repo
 
 - name: Update cache
-  shell: yum update
+  yum: name=* state=latest

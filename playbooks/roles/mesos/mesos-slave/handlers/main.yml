@@ -8,7 +8,4 @@
 
 - name: Stop zookeeper
   service: name=zookeeper state=stopped enabled=no
-
-- name: Reload systemctl daemon
-  command: systemctl daemon-reload
-  when: ansible_service_mgr == 'systemd'
+  ignore_errors: True
