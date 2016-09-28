@@ -2,23 +2,11 @@
 # tasks file for mesos-master
 - include: "{{ ansible_distribution }}.yml"
 
-- name: Install master packages
-  package: pkg={{ item }} state=present
+- name: Install mesos and marathon
+  package: pkg={{ item }} state=latest
   with_items:
-    - python-software-properties
-    - debconf-utils
-
-- name: Accept oracle java license
-  shell: echo "oracle-java8-installer shared/accepted-oracle-license-v1-1 select true" | sudo debconf-set-selections
-
-- name: Install the latest version of java
-  package: name=oracle-java8-installer state=latest
-
-- name: Install the latest version of java default
-  package: name=oracle-java8-set-default state=latest
-
-- name: Install the latest version of mesos
-  package: name=mesosphere state=latest
+    - mesos
+    - marathon
 
 - name: Update mesos zookeeper connection config
   template: src=mesos-zk.j2 dest=/etc/mesos/zk
