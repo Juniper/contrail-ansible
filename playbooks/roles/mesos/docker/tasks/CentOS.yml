@@ -1,6 +1,0 @@
----
-- name: Add docker repo
-  template: src=docker-repo.j2 dest=/etc/yum.repos.d/docker.repo
-
-- name: Update cache
-  yum: name=* state=latest

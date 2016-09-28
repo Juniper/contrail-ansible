@@ -1,8 +1,0 @@
----
-# tasks file for docker
-- include: "{{ ansible_distribution }}.yml"
-
-- name: Install docker engine
-  package: name=docker-engine state=latest
-  notify:
-    - Restart docker
