@@ -1,14 +1,13 @@
 ---
-- include: custom_facts.yml
-  tags: always
+- include: common.yml
 
 - include: base_host.yml
   when: not running_in_docker
 
 - include: contrail_controller.yml
-  when: (deployment_platform == "docker" and running_in_docker) or
-        (deployment_platform != "docker")
+  when: ((deployment_platform == "docker" and running_in_docker) or
+        (deployment_platform != "docker")) and enable_controller
 
 - include: contrail_analytics.yml
-  when: (deployment_platform == "docker" and running_in_docker) or
-        (deployment_platform != "docker")
+  when: ((deployment_platform == "docker" and running_in_docker) or
+        (deployment_platform != "docker")) and enable_analytics

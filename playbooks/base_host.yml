@@ -8,6 +8,7 @@
       {{ contrail_docker_registry }}{% endif %}
 
   roles:
+    - role: common
     - role: docker
       tags: [base_host, base_host.docker]
       when: deployment_platform == "docker"
@@ -15,5 +16,6 @@
 - name: Setup controller containers
   hosts: contrail-controllers
   roles:
+    - role: common
     - role: contrail/containers
       tags: [base_host, base_host.containers]

@@ -5,3 +5,6 @@
 - name: make sure /var/run/utmp exist
   copy: content='' dest=/var/run/utmp owner=root group=root mode=0644 force=no
   tags: always
+
+- include: facts.yml
+  tags: always
