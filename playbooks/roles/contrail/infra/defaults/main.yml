@@ -8,3 +8,8 @@ contrailinfra_manage_cassandra_svc: false
 contrail_database_packages:
   - contrail-openstack-database
   - opscenter
+
+# Node manager
+nodemanager_conf: "/etc/contrail/contrail-database-nodemgr.conf"
+
+enable_contrail_database: false

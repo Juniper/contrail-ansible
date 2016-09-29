@@ -1,0 +1,14 @@
+---
+- name: configure database nodemanager discovery server
+  ini_file: dest={{ nodemanager_conf }} section=DISCOVERY option=server value={{ disc_server_ip }}
+  notify: restart database nodemanager
+
+- name: configure database nodemanager discovery server port
+  ini_file: dest={{ nodemanager_conf }} section=DISCOVERY option=port value={{ disc_server_port }}
+  notify: restart database nodemanager
+
+# Service management
+- name: Make sure database nodemanager service is up
+  supervisorctl: name="contrail-database-nodemgr" state=started config=/etc/contrail/supervisord_database.conf
+  tags: [service, contrail.database.nodemgr.service, contrail.infra.service, contrail.service]
+  when: supervisor_database_ready
