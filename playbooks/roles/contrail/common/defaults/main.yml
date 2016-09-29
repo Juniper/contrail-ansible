@@ -7,6 +7,10 @@ cassandra_server_list: ["{{ controller_ip }}"]
 cassandra_port: 9160
 cassandra_cql_port: 9042
 
+configdb_server_list: ["{{ controller_ip }}"]
+configdb_port: 9161
+configdb_cql_port: 9041
+
 # List of zookeeper servers
 zk_server_list: ["{{ controller_ip }}"]
 zk_port: 2181
