@@ -16,4 +16,4 @@
   hosts: contrail-controllers
   roles:
     - role: contrail/containers
-      tags: [base_host, base_host.containers]
+      tags: [base_host, base_host.containers, containers]
