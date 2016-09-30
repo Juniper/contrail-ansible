@@ -1,0 +1,15 @@
+---
+- name: Check if supervisor is running and register it to supervisor_database_ready
+  shell: pgrep -f -x "/usr/bin/python /usr/bin/supervisord -n -c /etc/contrail/supervisord_database.conf" || true
+  register: supervisor_database_ready_cmd
+  always_run: yes
+  tags: [always]
+
+- name: "Setting a fact for supervisor_database_ready"
+  set_fact: supervisor_database_ready={{ (supervisor_database_ready_cmd.stdout) | ternary(true, false) }}
+  tags: [always]
+
+- include: nodemanager.yml
+  tags: [contrail.database.nodemanager, contrail.database.nodemanager.provision]
+
+- meta: flush_handlers
