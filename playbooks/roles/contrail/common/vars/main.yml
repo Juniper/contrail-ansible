@@ -1,7 +1,7 @@
 ---
 # This will construct a string with space delimited list of cassandra server ip and port in form of
 # "<ip1>:<port> <ip2>:port". i.e "10.0.0.11:9160 10.0.0.12:9160 10.0.0.3:9160"
-cassandra_servers_with_port: "{{ cassandra_server_list | map('regex_replace', '^(.*)$', '\\1:' + cassandra_port|string) | join(' ') }}"
+configdb_servers_with_port: "{{ configdb_server_list | map('regex_replace', '^(.*)$', '\\1:' + configdb_port|string) | join(' ') }}"
 
 # This will construct a string with comma delimited list of all zookeeper server and port in form of "ip1:port, ip2:port"
 zk_servers_with_port: "{{ zk_server_list | map('regex_replace', '^(.*)$', '\\1:' + zk_port|string) | join(',') }}"
