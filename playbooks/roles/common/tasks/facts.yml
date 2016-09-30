@@ -1,0 +1,26 @@
+---
+- name: Findout if current machine is a container or a machine
+  shell: test -f /.dockerenv && echo yes || echo no
+  register: running_in_docker_cmd
+  tags: register
+  always_run: yes
+  when: running_in_docker is not defined
+
+- name: "Setting a fact whether the code is running in a docker container or not"
+  set_fact: running_in_docker={{ (running_in_docker is defined) | ternary(running_in_docker, running_in_docker_cmd.stdout) }}
+
+- name: Setting a default for deployment_platform
+  set_fact: deployment_platform="docker"
+  when: deployment_platform is not defined
+
+- name: Assuming default service manager
+  set_fact: service_manager=supervisord
+  when: deployment_platform == "docker"
+
+- name: Setting a default for enable_controller
+  set_fact: enable_controller=false
+  when: enable_controller is not defined
+
+- name: Setting a default for enable_analytics
+  set_fact: enable_analytics=false
+  when: enable_analytics is not defined
