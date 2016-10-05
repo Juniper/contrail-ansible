@@ -1,3 +1,0 @@
-- name: restart database nodemanager
-  supervisorctl: name="contrail-database-nodemgr" state=restarted config=/etc/contrail/supervisord_database.conf
-  when: supervisor_database_ready
