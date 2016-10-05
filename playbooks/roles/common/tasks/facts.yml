@@ -24,3 +24,7 @@
 - name: Setting a default for enable_analytics
   set_fact: enable_analytics=false
   when: enable_analytics is not defined
+
+- name: Setting a fact no_upstart when deployment platform is docker
+  set_fact: no_upstart=true
+  when: deployment_platform == "docker"
