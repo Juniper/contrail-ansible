@@ -1,8 +1,0 @@
----
-- include: install/debian.yml
-  when: ansible_os_family == 'Debian' and enable_contrail_database
-  tags: [install, contrail.infra.install, contrail.database.install]
-
-- include: provision.yml
-  when: enable_contrail_database
-  tags: [contrail.infra.provision, contrail.database.provision, provision]
