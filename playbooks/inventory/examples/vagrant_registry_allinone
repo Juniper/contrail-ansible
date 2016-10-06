@@ -5,3 +5,9 @@ localhost   ansible_connection=local
 contrail_version=3.1.1.0-29
 contrail_docker_registry=192.168.100.12:5000
 contrail_docker_registry_insecure=True
+
+[contrail-analyticsdb]
+localhost   ansible_connection=local
+
+[contrail-analytics]
+localhost   ansible_connection=local

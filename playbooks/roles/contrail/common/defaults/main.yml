@@ -32,9 +32,14 @@ api_server_ip: "{{ config_ip }}"
 api_server_port: 8082
 api_server_use_ssl: False
 region: RegionOne
-analytics_server_ip: "{{ controller_ip }}"
+
+analytics_ip: "{{ controller_ip }}"
+analytics_server_ip: "{{ analytics_ip }}"
 analytics_server_port: 8081
 analytics_server_use_ssl: False
+
+kafka_broker_list: ["{{ analytics_ip }}"]
+kafka_port: 9092
 
 # Control node configs
 controlnode_ip: "{{ controller_ip }}"
