@@ -14,7 +14,6 @@ configdb_rmi_port: 7198
 configdb_storage_port: 7010
 configdb_ssl_storage_port: 7011
 
-
 # List of zookeeper servers
 zk_server_list: ["{{ controller_ip }}"]
 zk_port: 2181
@@ -54,3 +53,7 @@ log_local: 1
 #  it should default to localhost
 redis_server_ip: 127.0.0.1
 redis_server_port: 6379
+
+analyticsdb_server_list: ["{{ ansible_default_ipv4.address }}"]
+analyticsdb_port: 9160
+analyticsdb_cql_port: 9042
