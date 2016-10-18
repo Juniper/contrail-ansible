@@ -14,7 +14,7 @@
       when: deployment_platform == "docker"
 
 - name: Setup controller containers
-  hosts: contrail-controllers
+  hosts: all
   roles:
     - role: common
     - role: contrail/containers
