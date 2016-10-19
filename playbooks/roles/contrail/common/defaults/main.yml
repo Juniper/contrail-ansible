@@ -37,6 +37,8 @@ analytics_server_ip: "{{ analytics_ip }}"
 analytics_server_port: 8081
 analytics_server_use_ssl: False
 
+analytics_collector_port: 8086
+
 kafka_broker_list: ["{{ analytics_ip }}"]
 kafka_port: 9092
 
