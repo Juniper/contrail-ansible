@@ -1,6 +1,9 @@
 [contrail-analytics]
 localhost   ansible_connection=local
 
+[contrail-analyticsdb]
+localhost   ansible_connection=local
+
 [contrail-analytics:vars]
 contrail_version=3.1.1.0-29
 contrail_docker_registry=10.84.34.155:5000

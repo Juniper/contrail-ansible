@@ -8,3 +8,11 @@ zk_servers_with_port: "{{ zk_server_list | map('regex_replace', '^(.*)$', '\\1:'
 
 # This will construct a string with comma delimited list of all rabbitmq server and port in form of "ip1:port, ip2:port"
 rabbitmq_servers_with_port: "{{ rabbit_server_list | map('regex_replace', '^(.*)$', '\\1:' + rabbit_port|string) | join(',') }}"
+
+# This will construct a string with space delimited list of kafka server ip and port in form of
+# "<ip1>:<port> <ip2>:port". i.e "10.0.0.11:9160 10.0.0.12:9160 10.0.0.3:9160"
+kafka_brokers_with_port: "{{ kafka_broker_list | map('regex_replace', '^(.*)$', '\\1:' + kafka_port|string) | join(' ') }}"
+
+# This will construct a string with space delimited list of cassandra server ip and port in form of
+# "<ip1>:<port> <ip2>:port". i.e "10.0.0.11:9042 10.0.0.12:9042 10.0.0.3:9042"
+analyticsdb_servers_with_cql_port: "{{ analyticsdb_server_list | map('regex_replace', '^(.*)$', '\\1:' + analyticsdb_cql_port|string) | join(' ') }}"
