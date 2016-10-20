@@ -6,6 +6,10 @@
     docker_insecure_registries: >-
       {%- if contrail_docker_registry_insecure|bool and contrail_docker_registry %}
       {{ contrail_docker_registry }}{% endif %}
+  tasks:
+    - name: set /etc/hosts entry for hostname
+      lineinfile: dest=/etc/hosts
+        line="127.0.0.1 {{ ansible_hostname }}"
 
   roles:
     - role: common
