@@ -1,13 +1,14 @@
 ---
 cloud_orchestrator: openstack
 controller_ip: "{{ ansible_default_ipv4.address }}"
+controller_list: ["{{ controller_ip }}"]
 
 # List of cassandra servers
-cassandra_server_list: ["{{ controller_ip }}"]
+cassandra_server_list: "{{ controller_list }}"
 cassandra_port: 9160
 cassandra_cql_port: 9042
 
-configdb_server_list: ["{{ controller_ip }}"]
+configdb_server_list: "{{ controller_list }}"
 configdb_port: 9161
 configdb_cql_port: 9041
 configdb_rmi_port: 7198
@@ -15,11 +16,11 @@ configdb_storage_port: 7010
 configdb_ssl_storage_port: 7011
 
 # List of zookeeper servers
-zk_server_list: ["{{ controller_ip }}"]
+zk_server_list: "{{ controller_list }}"
 zk_port: 2181
 
 # List of rabbitmq servers
-rabbit_server_list: ["{{ controller_ip }}"]
+rabbit_server_list: "{{ controller_list }}"
 rabbit_port: 5672
 
 config_ip: "{{ controller_ip }}"
