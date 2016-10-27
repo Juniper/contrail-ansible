@@ -1,11 +1,23 @@
 [contrail-controllers]
 192.168.0.24
 
+[contrail-analyticsdb]
+192.168.0.24
+
+[contrail-analytics]
+192.168.0.24
+
 [computes]
 192.168.0.25
 
 [contrail-controllers:vars]
 container_enable_controller=true
+
+[contrail-analyticsdb:vars]
+container_enable_analyticsdb=true
+
+[contrail-analytics:vars]
+container_enable_analytics=true
 
 [computes:vars]
 container_enable_agent=true
@@ -14,6 +26,8 @@ vrouter_physical_interface=eth0
 
 [all:children]
 contrail-controllers
+contrail-analyticsdb
+contrail-analytics
 computes
 
 [all:vars]
