@@ -1,0 +1,79 @@
+global
+  tune.maxrewrite {{ tune_maxrewrite }}
+  tune.bufsize {{ tune_bufsize }}
+  log /dev/log  local0
+  log /dev/log  local1 notice
+{% if haproxy_socket != '' %}
+  stats socket {{ haproxy_socket }} level admin
+{% endif %}
+{% if haproxy_chroot != '' %}
+  chroot {{ haproxy_chroot }}
+{% endif %}
+  user {{ haproxy_user }}
+  group {{ haproxy_group }}
+  daemon
+{% for global_var in haproxy_global_vars %}
+  {{ global_var }}
+{% endfor %}
+
+defaults
+  log global
+  mode  http
+  option  httplog
+  option  dontlognull
+{% if haproxy_version == '1.4' %}
+        contimeout 5000
+        clitimeout 50000
+        srvtimeout 50000
+{% else %}
+        timeout connect 5000
+        timeout client 50000
+        timeout server 50000
+{% endif %}
+{% if ansible_os_family == 'Debian' %}
+  errorfile 400 /etc/haproxy/errors/400.http
+  errorfile 403 /etc/haproxy/errors/403.http
+  errorfile 408 /etc/haproxy/errors/408.http
+  errorfile 500 /etc/haproxy/errors/500.http
+  errorfile 502 /etc/haproxy/errors/502.http
+  errorfile 503 /etc/haproxy/errors/503.http
+  errorfile 504 /etc/haproxy/errors/504.http
+{% endif %}
+
+listen stats :{{ stats_port }}
+    mode http
+    stats enable
+    stats uri /
+    {%  if haproxy_auth_user and haproxy_auth_password -%}
+    stats auth {{ haproxy_auth_user }}:{{ haproxy_auth_password }}
+    {%- endif %}
+
+frontend  contrail-api *:{{ contrail_api_frontend_port }}
+    default_backend    contrail-api-backend
+    timeout client 3m
+
+frontend  contrail-discovery *:{{ contrail_discovery_frontend_port }}
+    default_backend    contrail-discovery-backend
+
+backend contrail-api-backend
+    option nolinger
+    timeout server 3m
+    balance roundrobin
+    {% for contrail_api_ip in contrail_api_server_list %}
+    server {{ contrail_api_ip }} {{ contrail_api_ip }}:{{ contrail_api_backend_port }} check inter {{ check_interval }} rise 2 fall 3
+    {% endfor %}
+
+backend contrail-discovery-backend
+    option nolinger
+    balance roundrobin
+    {% for discovery_ip in contrail_discovery_server_list %}
+    server {{ discovery_ip }} {{ discovery_ip }}:{{ contrail_discovery_backend_port }} check inter {{ check_interval }} rise 2 fall 3
+    {% endfor %}
+
+#
+# Neutron server's haproxy section
+#
+
+{% if neutron_haproxy is defined %}
+{% include 'neutron_haproxy.cfg.j2' %}
+{%- endif %}

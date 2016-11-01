@@ -1,0 +1,36 @@
+---
+# Installation
+loadbalancer_packages:
+  - haproxy
+
+haproxy_socket: /var/lib/haproxy/stats
+haproxy_chroot: /var/lib/haproxy
+haproxy_user: haproxy
+haproxy_group: haproxy
+haproxy_auth_user: "{{ haproxy_user }}"
+haproxy_auth_password: "{{ haproxy_user }}"
+tune_maxrewrite: 1024
+tune_bufsize: 16384
+stats_port: 5937
+
+# Frontend settings.
+#Default frontend ports
+contrail_api_frontend_port: 8082
+contrail_discovery_frontend_port: 9100
+neutron_frontend_port: 9696
+
+#Default backend ports
+contrail_discovery_backend_port: 9110
+contrail_api_backend_port: 5998
+neutron_backend_port: 9797
+
+# Backend settings.
+check_interval:  2000
+
+# List of backend servers.
+contrail_api_server_list: "{{ controller_list }}"
+contrail_discovery_server_list: "{{ controller_list }}"
+neutron_server_list: "{{ controller_list }}"
+
+# Extra global vars (see README for example usage).
+haproxy_global_vars: []
