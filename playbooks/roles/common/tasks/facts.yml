@@ -17,6 +17,10 @@
   set_fact: service_manager=supervisord
   when: deployment_platform == "docker"
 
+- name: Setting a default for enable_loadbalancer
+  set_fact: enable_loadbalancer=false
+  when: enable_loadbalancer is not defined
+
 - name: Setting a default for enable_controller
   set_fact: enable_controller=false
   when: enable_controller is not defined

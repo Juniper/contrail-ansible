@@ -1,0 +1,11 @@
+
+frontend neutron-server *:{{ neutron_frontend_port }}
+    default_backend    neutron-server-backend
+
+backend neutron-server-backend
+    option nolinger
+    balance roundrobin
+    {% for neutron_ip in neutron_server_list %}
+    server {{ neutron_ip }} {{ neutron_ip }}:{{ neutron_backend_port }} check inter {{ check_interval }} rise 2 fall 3
+    {% endfor %}
+

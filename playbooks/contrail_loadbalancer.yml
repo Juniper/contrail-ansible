@@ -1,0 +1,9 @@
+---
+- name: "Setup Contrail Loadbalancer"
+  hosts: contrail-loadbalancer
+
+  roles:
+    - role: common
+
+    - role: contrail/loadbalancer
+      tags: [contrail.loadbalancer]
