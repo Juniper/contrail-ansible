@@ -9,6 +9,7 @@
 
 [computes]
 192.168.0.25
+192.168.0.26
 
 [contrail-controllers:vars]
 container_enable_controller=true
@@ -34,3 +35,7 @@ computes
 contrail_version=3.2.0.0-3004
 contrail_docker_registry=10.84.34.155:5000
 contrail_docker_registry_insecure=True
+; install docker from package rather than installer from get.docker.com which is default method
+docker_install_method=package
+; Dont install any bridge utils packages for docker
+docker_network_bridge=False
