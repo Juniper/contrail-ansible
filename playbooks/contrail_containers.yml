@@ -14,7 +14,7 @@
   roles:
     - role: common
     - role: docker
-      tags: [base_host, base_host.docker]
+      tags: [contrail.containers, contrail.containers.docker]
       when: deployment_platform == "docker"
 
 - name: Setup controller containers
@@ -22,4 +22,4 @@
   roles:
     - role: common
     - role: contrail/containers
-      tags: [base_host, base_host.containers, containers]
+      tags: [contrail.containers, containers]
