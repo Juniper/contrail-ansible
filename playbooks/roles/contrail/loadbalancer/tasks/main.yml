@@ -1,6 +1,0 @@
----
-- include: install.yml
-  tags: [contrail.loadbalancer.install, contrail.haproxy.install, install]
-
-- include: provision.yml
-  tags: [contrail.loadbalancer.provision, contrail.haproxy.provision, provision]
