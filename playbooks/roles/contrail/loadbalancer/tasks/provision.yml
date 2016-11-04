@@ -1,4 +1,0 @@
----
-- include: haproxy.yml
-  tags: [contrail.haproxy, contrail.haproxy.provision]
-

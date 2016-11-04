@@ -4,9 +4,9 @@
 - include: base_host.yml
   when: not running_in_docker
 
-- include: contrail_loadbalancer.yml
+- include: contrail_lb.yml
   when: ((deployment_platform == "docker" and running_in_docker) or
-        (deployment_platform != "docker")) and enable_loadbalancer
+        (deployment_platform != "docker")) and enable_lb
 
 - include: contrail_controller.yml
   when: ((deployment_platform == "docker" and running_in_docker) or
