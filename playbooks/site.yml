@@ -1,7 +1,7 @@
 ---
 - include: common.yml
 
-- include: base_host.yml
+- include: contrail_containers.yml
   when: not running_in_docker
 
 - include: contrail_lb.yml
