@@ -4,8 +4,9 @@
 
   vars:
     docker_insecure_registries: >-
+      {% if contrail_docker_registry_insecure is defined and contrail_docker_registry is defined %}
       {%- if contrail_docker_registry_insecure|bool and contrail_docker_registry %}
-      {{ contrail_docker_registry }}{% endif %}
+      {{ contrail_docker_registry }}{% endif %}{% endif %}
   tasks:
     - name: set /etc/hosts entry for hostname
       lineinfile: dest=/etc/hosts
