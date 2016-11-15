@@ -7,30 +7,24 @@
 [contrail-analytics]
 192.168.0.24
 
+[contrail-kubernetes]
+192.168.0.24
+
 [computes]
 192.168.0.25
 192.168.0.26
-
-[contrail-controllers:vars]
-container_enable_controller=true
-
-[contrail-analyticsdb:vars]
-container_enable_analyticsdb=true
-
-[contrail-analytics:vars]
-container_enable_analytics=true
-
-[computes:vars]
-container_enable_agent=true
-config_ip=192.168.0.24
 
 [all:children]
 contrail-controllers
 contrail-analyticsdb
 contrail-analytics
+contrail-kubernetes
 computes
 
 [all:vars]
+; config_ip - config api server ip address, required for compute nodes to connect to config api
+config_ip=192.168.0.24
+
 ; contrail version
 contrail_version=4.0.0.0-3011
 
