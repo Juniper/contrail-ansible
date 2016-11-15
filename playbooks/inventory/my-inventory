@@ -23,7 +23,6 @@ container_enable_analytics=true
 [computes:vars]
 container_enable_agent=true
 config_ip=192.168.0.24
-vrouter_physical_interface=eth0
 
 [all:children]
 contrail-controllers
@@ -32,10 +31,24 @@ contrail-analytics
 computes
 
 [all:vars]
-contrail_version=3.2.0.0-3004
+; contrail version
+contrail_version=4.0.0.0-3011
+
+; compute vrouter interface - physical interface name that hosting compute ip address
+vrouter_physical_interface=eth0
+
+; ansible connection details
+ansible_user=root
+ansible_connection=ssh
+ansible_become=true
+;ansible_ssh_private_key_file=~/.ssh/id_rsa
+
+; docker registry
 contrail_docker_registry=10.84.34.155:5000
 contrail_docker_registry_insecure=True
+
 ; install docker from package rather than installer from get.docker.com which is default method
 docker_install_method=package
+
 ; Dont install any bridge utils packages for docker
 docker_network_bridge=False
