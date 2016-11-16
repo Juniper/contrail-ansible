@@ -32,3 +32,9 @@
 - name: Setting a fact no_upstart when deployment platform is docker
   set_fact: no_upstart=true
   when: deployment_platform == "docker"
+
+# Workaround to avoid failing service startup within the container if the ubuntu 14.04 containers running inside the centos
+# as ansible wrongly detect ansible_service_mgr as systemd
+- name: Setting fact to override ansible_service_mgr for docker. This is to wrongly detect service manager as systemd when ubuntu container run on top of centos
+  set_fact: ansible_service_mgr=upstart
+  when: deployment_platform == "docker" and ansible_service_mgr == 'systemd'
