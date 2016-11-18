@@ -6,5 +6,9 @@
   copy: content='' dest=/var/run/utmp owner=root group=root mode=0644 force=no
   tags: always
 
+- name: set /etc/hosts entry for all nodes with their hostname so that they can be reached with hostnames
+  lineinfile: dest=/etc/hosts line="{{item}} {{ hostvars[item]['ansible_hostname'] }}"
+  with_items: "{{ groups['all'] }}"
+
 - include: facts.yml
   tags: always
