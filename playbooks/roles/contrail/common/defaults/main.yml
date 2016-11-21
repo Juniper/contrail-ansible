@@ -3,14 +3,9 @@ cloud_orchestrator: openstack
 controller_ip: "{{ ansible_default_ipv4.address }}"
 controller_list: ["{{ controller_ip }}"]
 
-analyticsdb_server_list: ["{{ controller_ip }}"]
+analyticsdb_list: "{{ controller_list }}"
 analyticsdb_port: 9160
 analyticsdb_cql_port: 9042
-
-# List of cassandra servers
-cassandra_server_list: "{{ controller_list }}"
-cassandra_port: 9160
-cassandra_cql_port: 9042
 
 configdb_server_list: "{{ controller_list }}"
 configdb_port: 9161
