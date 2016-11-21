@@ -39,7 +39,7 @@ analytics_server_use_ssl: False
 
 analytics_collector_port: 8086
 
-kafka_broker_list: ["{{ analytics_ip }}"]
+kafka_broker_list: "{{ analyticsdb_list }}"
 kafka_port: 9092
 
 # Control node configs
