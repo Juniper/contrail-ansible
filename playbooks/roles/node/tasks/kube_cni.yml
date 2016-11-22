@@ -1,13 +1,8 @@
 ---
 # Below tasks are temporary workaround to install nsenter from pip, that should go away once we create packages
-- name: Check nsenter is installed or not
-  shell: pip show nsenter
-  ignore_errors: yes
-  register: nsenter_pip_installed
-
 - name: Backup nsenter
   copy: src="/bin/nsenter" dest="/bin/nsenter.orig" remote_src=true
-  when: nsenter_pip_installed.rc != 0
+  ignore_errors: yes
 
 - name: Install cni dependencies
   pip: name="{{ item }}" state=present
@@ -18,12 +13,9 @@
 - name: Remove nscenter binary from pip (/usr/bin/nsenter)
   file: dest=/usr/bin/nsenter state=absent
 
-- name: Install contrail cni package
-  package: name=contrail-kube-cni state=present
-
 - name: Copy back nsenter
   copy: src="/bin/nsenter.orig" dest="/bin/nsenter" mode=0755 remote_src=true
-  when: nsenter_pip_installed.rc != 0
+  ignore_errors: yes
 
 - name: Make sure cni directories exist
   file: path="{{ item }}" state=directory recurse=true
@@ -34,6 +26,9 @@
 
 - name: Create cni config
   copy: src=kube_cni.conf dest=/etc/cni/net.d/10-contrail.conf
+
+- name: Install contrail cni package
+  package: name=contrail-kube-cni state=present
 
 - name: Create softlink contrail cni binary to /opt/cni/bin
   file: src=/usr/bin/contrail-kube-cni  dest=/opt/cni/bin/contrail-kube-cni state=link
