@@ -1,0 +1,38 @@
+---
+- name: Copy contrail lb image
+  copy:
+    src: "{{ contrail_docker_image_load_path }}/{{ contrail_lb_image_archive }}"
+    dest: "/tmp/{{ contrail_lb_image_archive }}"
+  when: contrail_docker_registry is not defined or load_contrail_lb_image is defined
+
+- name: "Load contrail lb image"
+  docker_image:
+    name: contrail-lb
+    tag: "{{ contrail_version }}"
+    load_path: "/tmp/{{ contrail_lb_image_archive }}"
+  when: contrail_docker_registry is not defined or load_contrail_lb_image is defined
+
+- name: "Copy contrailctl/lb.conf"
+  copy: src={{ item }} dest={{ contrailctl_config_directory }}
+  with_first_found:
+    - files:
+      - contrailctl/lb.conf
+      - "{{ playbook_dir }}/contrailctl/lb.conf"
+      - /etc/contrailctl/lb.conf
+      skip: true
+
+- name: "Start Loadbalancer container"
+  docker_container:
+    name: lb
+    image: "{{ lb_image }}"
+    privileged: true
+    pid_mode: host
+    network_mode: host
+    state: started
+    tty: true
+    capabilities:
+      - AUDIT_WRITE
+    volumes:
+      - "{{ contrailctl_config_directory }}:/etc/contrailctl/"
+    env:
+      CLOUD_ORCHESTRATOR: "{{ cloud_orchestrator }}"

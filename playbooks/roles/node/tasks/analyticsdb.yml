@@ -1,0 +1,37 @@
+---
+- name: Copy contrail analyticsdb image
+  copy:
+    src: "{{ contrail_docker_image_load_path }}/{{ contrail_analyticsdb_image_archive }}"
+    dest: "/tmp/{{ contrail_analyticsdb_image_archive }}"
+  when: contrail_docker_registry is not defined or load_contrail_analyticsdb_image is defined
+
+- name: "Load contrail analyticsdb image"
+  docker_image:
+    name: contrail-analyticsdb
+    tag: "{{ contrail_version }}"
+    load_path: "/tmp/{{ contrail_analyticsdb_image_archive }}"
+  when: contrail_docker_registry is not defined or load_contrail_analyticsdb_image is defined
+
+- name: "Copy contrailctl/analyticsdb.conf"
+  copy: src={{ item }} dest={{ contrailctl_config_directory }}
+  with_first_found:
+    - files:
+      - contrailctl/analyticsdb.conf
+      - "{{ playbook_dir }}/contrailctl/analyticsdb.conf"
+      - /etc/contrailctl/analyticsdb.conf
+      skip: true
+
+- name: "Start contrail analyticsdb container"
+  docker_container:
+    name: analyticsdb
+    image: "{{ analyticsdb_image }}"
+    privileged: true
+    network_mode: host
+    state: started
+    tty: true
+    capabilities:
+      - AUDIT_WRITE
+    volumes:
+      - "{{ contrailctl_config_directory }}:/etc/contrailctl/"
+    env:
+      CLOUD_ORCHESTRATOR: "{{ cloud_orchestrator }}"
