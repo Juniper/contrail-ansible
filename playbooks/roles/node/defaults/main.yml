@@ -1,0 +1,42 @@
+---
+cloud_orchestrator: openstack
+lb_image: >-
+  {%- if contrail_docker_registry is defined and load_contrail_lb_image is not defined -%}{{ contrail_docker_registry }}/contrail-lb:{{ contrail_version }}
+  {%- else %}contrail-lb:{{ contrail_version }}{%- endif %}
+controller_image: >-
+  {%- if contrail_docker_registry is defined and load_contrail_controller_image is not defined -%}{{ contrail_docker_registry }}/contrail-controller:{{ contrail_version }}
+  {%- else %}contrail-controller:{{ contrail_version }}{%- endif %}
+analytics_image: >-
+  {%- if contrail_docker_registry is defined and load_contrail_analytics_image is not defined -%}{{contrail_docker_registry}}/contrail-analytics:{{ contrail_version }}
+  {%- else %}contrail-analytics:{{ contrail_version }}{%- endif %}
+analyticsdb_image: >-
+  {%- if contrail_docker_registry is defined and load_contrail_analyticsdb_image is not defined -%}{{contrail_docker_registry}}/contrail-analyticsdb:{{ contrail_version }}
+  {%- else %}contrail-analyticsdb:{{ contrail_version }}{%- endif %}
+agent_image: >-
+  {%- if contrail_docker_registry is defined and load_contrail_agent_image is not defined -%}{{contrail_docker_registry}}/contrail-agent:{{ contrail_version }}
+  {%- else %}contrail-agent:{{ contrail_version }}{%- endif %}
+vrouter_compiler_image_redhat7: >-
+  {%- if contrail_docker_registry is defined and load_contrail_vrouter_module_compiler_redhat7_image is not defined -%}{{contrail_docker_registry}}/vrouter-module-compiler-redhat7:{{ contrail_version }}
+  {%- else %}vrouter-module-compiler-redhat7:{{ contrail_version }}{%- endif %}
+contrail_kube_manager_image: >-
+  {%- if contrail_docker_registry is defined and load_contrail_kube_manager_image is not defined -%}{{contrail_docker_registry}}/contrail-kube-manager:{{ contrail_version }}
+  {%- else %}contrail-kube-manager:{{ contrail_version }}{%- endif %}
+
+docker_py_version: 1.9.0
+
+container_agent_extra_env: {}
+external_vrouter_compile: false
+vrouter_physical_interface: "{{ ansible_default_ipv4.interface }}"
+kernel_source_packages: []
+
+# contrail_docker_image_load_path: In case of no contrail_docker_registry, load the images from tar files under this path
+contrail_docker_image_load_path: "{{playbook_dir}}/container_images"
+lb_image_archive: "contrail-lb-{{ contrail_version }}.tar.gz"
+contrail_controller_image_archive: "contrail-controller-{{ contrail_version }}.tar.gz"
+contrail_analytics_image_archive: "contrail-analytics-{{ contrail_version }}.tar.gz"
+contrail_analyticsdb_image_archive: "contrail-analyticsdb-{{ contrail_version }}.tar.gz"
+contrail_agent_image_archive: "contrail-agent-{{ contrail_version }}.tar.gz"
+vrouter_module_compiler_redhat7_image_archive: "vrouter-module-compiler-redhat7-{{ contrail_version }}.tar.gz"
+contrail_kube_manager_image_archive: "contrail-kube-manager-{{ contrail_version }}.tar.gz"
+
+contrailctl_config_directory: /etc/contrailctl

@@ -1,0 +1,13 @@
+---
+- name: Make sure cni directories exist
+  file: path="{{ item }}" state=directory recurse=true
+  with_items:
+    - /var/log/contrail/cni
+    - /etc/cni/net.d
+    - /opt/cni/bin
+
+- name: Create cni config
+  copy: src=kube_cni.conf dest=/etc/cni/net.d/10-contrail.conf
+
+- name: Copy contrail cni binary
+  copy: src=contrail_kube_cni  dest=/opt/cni/bin/contrail mode=755
