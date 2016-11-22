@@ -1,4 +1,19 @@
 ---
+- name: Add contrail yum repository
+  yum_repository:
+    name: contrail
+    description: contrail repo
+    baseurl: "{{ contrail_yum_repo }}"
+    gpgcheck: no
+    enabled: yes
+  when: ansible_os_family == "RedHat" and contrail_yum_repo
+
+- name: Add contrail apt repository
+  apt_repository:
+    repo: "deb {{ contrail_apt_repo }} ./"
+    state: present
+  when: ansible_os_family == "Debian" and contrail_apt_repo
+
 - name: Install python-setuptools
   package: name=python-setuptools state=present
 

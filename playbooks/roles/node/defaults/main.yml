@@ -21,6 +21,13 @@ vrouter_compiler_image_redhat7: >-
 contrail_kube_manager_image: >-
   {%- if contrail_docker_registry is defined and load_contrail_kube_manager_image is not defined -%}{{contrail_docker_registry}}/contrail-kube-manager:{{ contrail_version }}
   {%- else %}contrail-kube-manager:{{ contrail_version }}{%- endif %}
+contrail_repo_ubuntu_image: >-
+  {%- if contrail_docker_registry is defined and load_contrail_repo_ubuntu_image is not defined -%}{{contrail_docker_registry}}/contrail-repo-ubuntu:{{ contrail_version }}
+  {%- else %}contrail-repo-ubuntu:{{ contrail_version }}{%- endif %}
+contrail_repo_centos_image: >-
+  {%- if contrail_docker_registry is defined and load_contrail_repo_centos_image is not defined -%}{{contrail_docker_registry}}/contrail-repo-centos:{{ contrail_version }}
+  {%- else %}contrail-repo-centos:{{ contrail_version }}{%- endif %}
+
 
 docker_py_version: 1.9.0
 
@@ -38,5 +45,10 @@ contrail_analyticsdb_image_archive: "contrail-analyticsdb-{{ contrail_version }}
 contrail_agent_image_archive: "contrail-agent-{{ contrail_version }}.tar.gz"
 vrouter_module_compiler_redhat7_image_archive: "vrouter-module-compiler-redhat7-{{ contrail_version }}.tar.gz"
 contrail_kube_manager_image_archive: "contrail-kube-manager-{{ contrail_version }}.tar.gz"
-
+contrail_repo_ubuntu_image_archive: "contrail-repo-ubuntu-{{ contrail_version }}.tar.gz"
+contrail_repo_centos_image_archive: "contrail-repo-centos-{{ contrail_version }}.tar.gz"
 contrailctl_config_directory: /etc/contrailctl
+contrail_apt_repo_port: 1567
+contrail_apt_repo: "{% if 'contrail-repo' in groups -%}http://{{ hostvars[groups['contrail-repo'][0]]['ansible_default_ipv4']['address'] }}:{{ contrail_apt_repo_port }}{%- else %}false{%- endif %}"
+contrail_yum_repo_port: 2567
+contrail_yum_repo: "{% if 'contrail-repo' in groups -%}http://{{ hostvars[groups['contrail-repo'][0]]['ansible_default_ipv4']['address'] }}:{{ contrail_yum_repo_port }}{%- else %}false{%- endif %}"

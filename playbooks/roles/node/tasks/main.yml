@@ -1,4 +1,8 @@
 ---
+- include: "repo/{{ ansible_os_family }}.yml"
+  tags: [repo]
+  when: "'contrail-repo' in group_names"
+
 - include: host.yml
   tags: [always]
 
