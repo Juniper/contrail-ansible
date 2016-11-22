@@ -1,0 +1,4 @@
+---
+external_vrouter_compile: true
+kernel_source_packages:
+  - "linux-headers-{{ ansible_kernel }}"

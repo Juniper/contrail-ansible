@@ -1,0 +1,31 @@
+---
+- include: host.yml
+  tags: [always]
+
+- include: lb.yml
+  tags: [container.lb, lb]
+  when: container_enable_lb is defined
+
+- include: controller.yml
+  tags: [container.controller, controller]
+  when: "'contrail-controllers' in group_names"
+
+- include: analyticsdb.yml
+  tags: [container.analyicsdb, analyticsdb]
+  when: "'contrail-analyticsdb' in group_names"
+
+- include: analytics.yml
+  tags: [container.analytics, analytics]
+  when: "'contrail-analytics' in group_names"
+
+- include: kube_manager.yml
+  tags: [container.kube_manager, kube_manager]
+  when: "'contrail-kubernetes' in group_names and cloud_orchestrator == 'kubernetes'"
+
+- include: agent.yml
+  tags: [container.agent, agent]
+  when: "'computes' in group_names"
+
+- include: kube_cni.yml
+  tags: [container.kube_cni, kube_cni]
+  when: "'computes' in group_names and cloud_orchestrator == 'kubernetes'"
