@@ -1,3 +1,9 @@
+# Enable contrail-repo when required - this will start a contrail apt or yum repo container on specified node
+# This repo will be used by other nodes on installing any packages in the node
+# setting up contrail-cni need this repo enabled
+;[contrail-repo]
+;192.168.0.24
+
 [contrail-controllers]
 192.168.0.24
 
@@ -20,6 +26,7 @@ contrail-analyticsdb
 contrail-analytics
 contrail-kubernetes
 computes
+;contrail-repo
 
 [all:vars]
 ; config_ip - config api server ip address, required for compute nodes to connect to config api
