@@ -14,15 +14,6 @@
     state: present
   when: ansible_os_family == "Debian" and contrail_apt_repo
 
-- name: Install python-setuptools
-  package: name=python-setuptools state=present
-
-- name: Make sure pip is installed
-  easy_install: name=pip state=present
-
-- name: "Make sure docker-py is installed"
-  pip: name=docker-py version={{ docker_py_version }}
-
 - name: "Disable firewalld on redhat systems"
   service: name=firewalld state=stopped enabled=no
   when: ansible_os_family == "RedHat"

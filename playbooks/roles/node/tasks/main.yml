@@ -1,4 +1,13 @@
 ---
+- name: Install python-setuptools
+  package: name=python-setuptools state=present
+
+- name: Make sure pip is installed
+  easy_install: name=pip state=present
+
+- name: "Make sure docker-py is installed"
+  pip: name=docker-py version={{ docker_py_version }}
+
 - include: "repo/{{ ansible_os_family }}.yml"
   tags: [repo]
   when: "'contrail-repo' in group_names"
