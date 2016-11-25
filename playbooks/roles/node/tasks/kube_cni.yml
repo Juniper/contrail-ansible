@@ -7,7 +7,7 @@
 
 - name: Backup nsenter
   copy: src="/bin/nsenter" dest="/bin/nsenter.orig" remote_src=true
-  when: nsenter_pip_installed.rc != 0
+  when: nsenter_pip_installed.rc != 0 and ansible_os_family == 'RedHat'
 
 - name: Install cni dependencies
   pip: name="{{ item }}" state=present
@@ -17,13 +17,14 @@
 
 - name: Remove nscenter binary from pip (/usr/bin/nsenter)
   file: dest=/usr/bin/nsenter state=absent
+  when: ansible_os_family == 'RedHat'
 
 - name: Install contrail cni package
   package: name=contrail-kube-cni state=present
 
 - name: Copy back nsenter
   copy: src="/bin/nsenter.orig" dest="/bin/nsenter" mode=0755 remote_src=true
-  when: nsenter_pip_installed.rc != 0
+  when: nsenter_pip_installed.rc != 0 and ansible_os_family == 'RedHat'
 
 - name: Make sure cni directories exist
   file: path="{{ item }}" state=directory recurse=true
