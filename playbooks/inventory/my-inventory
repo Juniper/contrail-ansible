@@ -16,7 +16,7 @@
 [contrail-kubernetes]
 192.168.0.24
 
-[computes]
+[contrail-compute]
 192.168.0.25
 192.168.0.26
 
@@ -25,7 +25,7 @@ contrail-controllers
 contrail-analyticsdb
 contrail-analytics
 contrail-kubernetes
-computes
+contrail-compute
 ;contrail-repo
 
 [all:vars]
