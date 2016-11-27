@@ -14,16 +14,16 @@
 
 - name: Copy vrouter compiler image
   copy:
-    src: "{{ contrail_docker_image_load_path }}/{{ vrouter_module_compiler_redhat7_image_archive }}"
+    src: "{{ docker_image_load_path }}/{{ vrouter_module_compiler_redhat7_image_archive }}"
     dest: "/tmp/{{ vrouter_module_compiler_redhat7_image_archive }}"
-  when: contrail_docker_registry is not defined or load_contrail_vrouter_module_compiler_redhat7_image is defined
+  when: docker_registry is not defined or load_contrail_vrouter_module_compiler_redhat7_image is defined
 
 - name: "Load vrouter compiler image"
   docker_image:
     name: vrouter-module-compiler-redhat7
     tag: "{{ contrail_version }}"
     load_path: "/tmp/{{ vrouter_module_compiler_redhat7_image_archive }}"
-  when: contrail_docker_registry is not defined or load_vrouter_module_compiler_redhat7_image is defined
+  when: docker_registry is not defined or load_vrouter_module_compiler_redhat7_image is defined
 
 - name: "Compile vrouter module"
   docker_container:
@@ -51,16 +51,16 @@
 
 - name: Copy contrail vrouter agent image
   copy:
-    src: "{{ contrail_docker_image_load_path }}/{{ contrail_agent_image_archive }}"
+    src: "{{ docker_image_load_path }}/{{ contrail_agent_image_archive }}"
     dest: "/tmp/{{ contrail_agent_image_archive }}"
-  when: contrail_docker_registry is not defined or load_contrail_agent_image is defined
+  when: docker_registry is not defined or load_contrail_agent_image is defined
 
 - name: "Load contrail vrouter agent image"
   docker_image:
     name: contrail-agent
     tag: "{{ contrail_version }}"
     load_path: "/tmp/{{ contrail_agent_image_archive }}"
-  when: contrail_docker_registry is not defined or load_contrail_agent_image is defined
+  when: docker_registry is not defined or load_contrail_agent_image is defined
 
 - name: "Start contrail agent container"
   docker_container:

@@ -1,16 +1,16 @@
 ---
 - name: Copy contrail analyticsdb image
   copy:
-    src: "{{ contrail_docker_image_load_path }}/{{ contrail_analyticsdb_image_archive }}"
+    src: "{{ docker_image_load_path }}/{{ contrail_analyticsdb_image_archive }}"
     dest: "/tmp/{{ contrail_analyticsdb_image_archive }}"
-  when: contrail_docker_registry is not defined or load_contrail_analyticsdb_image is defined
+  when: docker_registry is not defined or load_contrail_analyticsdb_image is defined
 
 - name: "Load contrail analyticsdb image"
   docker_image:
     name: contrail-analyticsdb
     tag: "{{ contrail_version }}"
     load_path: "/tmp/{{ contrail_analyticsdb_image_archive }}"
-  when: contrail_docker_registry is not defined or load_contrail_analyticsdb_image is defined
+  when: docker_registry is not defined or load_contrail_analyticsdb_image is defined
 
 - name: "Copy contrailctl/analyticsdb.conf"
   copy: src={{ item }} dest={{ contrailctl_config_directory }}

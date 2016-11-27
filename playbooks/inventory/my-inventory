@@ -45,8 +45,8 @@ ansible_become=true
 ;ansible_ssh_private_key_file=~/.ssh/id_rsa
 
 ; docker registry
-contrail_docker_registry=10.84.34.155:5000
-contrail_docker_registry_insecure=True
+docker_registry=10.84.34.155:5000
+docker_registry_insecure=True
 
 ; install docker from package rather than installer from get.docker.com which is default method
 docker_install_method=package

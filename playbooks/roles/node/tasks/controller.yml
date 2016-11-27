@@ -1,16 +1,16 @@
 ---
 - name: Copy contrail controller image
   copy:
-    src: "{{ contrail_docker_image_load_path }}/{{ contrail_controller_image_archive }}"
+    src: "{{ docker_image_load_path }}/{{ contrail_controller_image_archive }}"
     dest: "/tmp/{{ contrail_controller_image_archive }}"
-  when: contrail_docker_registry is not defined or load_contrail_controller_image is defined
+  when: docker_registry is not defined or load_contrail_controller_image is defined
 
 - name: "Load contrail controller image"
   docker_image:
     name: contrail-controller
     tag: "{{ contrail_version }}"
     load_path: "/tmp/{{ contrail_controller_image_archive }}"
-  when: contrail_docker_registry is not defined or load_contrail_controller_image is defined
+  when: docker_registry is not defined or load_contrail_controller_image is defined
 
 - name: "Copy contrailctl/controller.conf"
   copy: src={{ item }} dest={{ contrailctl_config_directory }}

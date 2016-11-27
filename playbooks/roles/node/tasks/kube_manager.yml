@@ -1,16 +1,16 @@
 ---
 - name: Copy contrail kube_manager image
   copy:
-    src: "{{ contrail_docker_image_load_path }}/{{ contrail_kube_manager_packages }}"
+    src: "{{ docker_image_load_path }}/{{ contrail_kube_manager_packages }}"
     dest: "/tmp/{{ contrail_kube_manager_image_archive }}"
-  when: contrail_docker_registry is not defined or load_contrail_kube_manager_image is defined
+  when: docker_registry is not defined or load_contrail_kube_manager_image is defined
 
 - name: "Load contrail kube_manager image"
   docker_image:
     name: contrail-kube-manager
     tag: "{{ contrail_version }}"
     load_path: "/tmp/{{ contrail_kube_manager_image_archive }}"
-  when: contrail_docker_registry is not defined  or load_contrail_kube_manager_image is defined
+  when: docker_registry is not defined  or load_contrail_kube_manager_image is defined
 
 - name: "Start contrail kube_manager container"
   docker_container:

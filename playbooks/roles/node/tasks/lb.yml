@@ -1,16 +1,16 @@
 ---
 - name: Copy contrail lb image
   copy:
-    src: "{{ contrail_docker_image_load_path }}/{{ contrail_lb_image_archive }}"
+    src: "{{ docker_image_load_path }}/{{ contrail_lb_image_archive }}"
     dest: "/tmp/{{ contrail_lb_image_archive }}"
-  when: contrail_docker_registry is not defined or load_contrail_lb_image is defined
+  when: docker_registry is not defined or load_contrail_lb_image is defined
 
 - name: "Load contrail lb image"
   docker_image:
     name: contrail-lb
     tag: "{{ contrail_version }}"
     load_path: "/tmp/{{ contrail_lb_image_archive }}"
-  when: contrail_docker_registry is not defined or load_contrail_lb_image is defined
+  when: docker_registry is not defined or load_contrail_lb_image is defined
 
 - name: "Copy contrailctl/lb.conf"
   copy: src={{ item }} dest={{ contrailctl_config_directory }}
