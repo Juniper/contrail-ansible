@@ -1,16 +1,16 @@
 ---
 - name: Copy contrail apt repo image
   copy:
-    src: "{{ contrail_docker_image_load_path }}/{{ contrail_repo_ubuntu_image_archive }}"
+    src: "{{ docker_image_load_path }}/{{ contrail_repo_ubuntu_image_archive }}"
     dest: "/tmp/{{ contrail_repo_ubuntu_image_archive }}"
-  when: contrail_docker_registry is not defined or load_contrail_repo_ubuntu_image is defined
+  when: docker_registry is not defined or load_contrail_repo_ubuntu_image is defined
 
 - name: "Load contrail apt repo image"
   docker_image:
     name: contrail-repo-ubuntu
     tag: "{{ contrail_version }}"
     load_path: "/tmp/{{ contrail_repo_ubuntu_image_archive }}"
-  when: contrail_docker_registry is not defined  or load_contrail_repo_ubuntu_image is defined
+  when: docker_registry is not defined  or load_contrail_repo_ubuntu_image is defined
 
 - name: Launch apt repo container
   docker_container:

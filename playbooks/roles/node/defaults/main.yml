@@ -1,31 +1,31 @@
 ---
 cloud_orchestrator: openstack
 lb_image: >-
-  {%- if contrail_docker_registry is defined and load_contrail_lb_image is not defined -%}{{ contrail_docker_registry }}/contrail-lb:{{ contrail_version }}
+  {%- if docker_registry is defined and load_contrail_lb_image is not defined -%}{{ docker_registry }}/contrail-lb:{{ contrail_version }}
   {%- else %}contrail-lb:{{ contrail_version }}{%- endif %}
 controller_image: >-
-  {%- if contrail_docker_registry is defined and load_contrail_controller_image is not defined -%}{{ contrail_docker_registry }}/contrail-controller:{{ contrail_version }}
+  {%- if docker_registry is defined and load_contrail_controller_image is not defined -%}{{ docker_registry }}/contrail-controller:{{ contrail_version }}
   {%- else %}contrail-controller:{{ contrail_version }}{%- endif %}
 analytics_image: >-
-  {%- if contrail_docker_registry is defined and load_contrail_analytics_image is not defined -%}{{contrail_docker_registry}}/contrail-analytics:{{ contrail_version }}
+  {%- if docker_registry is defined and load_contrail_analytics_image is not defined -%}{{docker_registry}}/contrail-analytics:{{ contrail_version }}
   {%- else %}contrail-analytics:{{ contrail_version }}{%- endif %}
 analyticsdb_image: >-
-  {%- if contrail_docker_registry is defined and load_contrail_analyticsdb_image is not defined -%}{{contrail_docker_registry}}/contrail-analyticsdb:{{ contrail_version }}
+  {%- if docker_registry is defined and load_contrail_analyticsdb_image is not defined -%}{{docker_registry}}/contrail-analyticsdb:{{ contrail_version }}
   {%- else %}contrail-analyticsdb:{{ contrail_version }}{%- endif %}
 agent_image: >-
-  {%- if contrail_docker_registry is defined and load_contrail_agent_image is not defined -%}{{contrail_docker_registry}}/contrail-agent:{{ contrail_version }}
+  {%- if docker_registry is defined and load_contrail_agent_image is not defined -%}{{docker_registry}}/contrail-agent:{{ contrail_version }}
   {%- else %}contrail-agent:{{ contrail_version }}{%- endif %}
 vrouter_compiler_image_redhat7: >-
-  {%- if contrail_docker_registry is defined and load_contrail_vrouter_module_compiler_redhat7_image is not defined -%}{{contrail_docker_registry}}/vrouter-module-compiler-redhat7:{{ contrail_version }}
+  {%- if docker_registry is defined and load_contrail_vrouter_module_compiler_redhat7_image is not defined -%}{{docker_registry}}/vrouter-module-compiler-redhat7:{{ contrail_version }}
   {%- else %}vrouter-module-compiler-redhat7:{{ contrail_version }}{%- endif %}
 contrail_kube_manager_image: >-
-  {%- if contrail_docker_registry is defined and load_contrail_kube_manager_image is not defined -%}{{contrail_docker_registry}}/contrail-kube-manager:{{ contrail_version }}
+  {%- if docker_registry is defined and load_contrail_kube_manager_image is not defined -%}{{docker_registry}}/contrail-kube-manager:{{ contrail_version }}
   {%- else %}contrail-kube-manager:{{ contrail_version }}{%- endif %}
 contrail_repo_ubuntu_image: >-
-  {%- if contrail_docker_registry is defined and load_contrail_repo_ubuntu_image is not defined -%}{{contrail_docker_registry}}/contrail-repo-ubuntu:{{ contrail_version }}
+  {%- if docker_registry is defined and load_contrail_repo_ubuntu_image is not defined -%}{{docker_registry}}/contrail-repo-ubuntu:{{ contrail_version }}
   {%- else %}contrail-repo-ubuntu:{{ contrail_version }}{%- endif %}
 contrail_repo_centos_image: >-
-  {%- if contrail_docker_registry is defined and load_contrail_repo_centos_image is not defined -%}{{contrail_docker_registry}}/contrail-repo-centos:{{ contrail_version }}
+  {%- if docker_registry is defined and load_contrail_repo_centos_image is not defined -%}{{docker_registry}}/contrail-repo-centos:{{ contrail_version }}
   {%- else %}contrail-repo-centos:{{ contrail_version }}{%- endif %}
 
 
@@ -36,8 +36,8 @@ external_vrouter_compile: false
 vrouter_physical_interface: "{{ ansible_default_ipv4.interface }}"
 kernel_source_packages: []
 
-# contrail_docker_image_load_path: In case of no contrail_docker_registry, load the images from tar files under this path
-contrail_docker_image_load_path: "{{playbook_dir}}/container_images"
+# docker_image_load_path: In case of no docker_registry, load the images from tar files under this path
+docker_image_load_path: "{{playbook_dir}}/container_images"
 lb_image_archive: "contrail-lb-{{ contrail_version }}.tar.gz"
 contrail_controller_image_archive: "contrail-controller-{{ contrail_version }}.tar.gz"
 contrail_analytics_image_archive: "contrail-analytics-{{ contrail_version }}.tar.gz"
