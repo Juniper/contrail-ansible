@@ -1,0 +1,111 @@
+# ***OPTIONAL***
+# Enable contrail-repo when required - this will start a contrail apt or yum
+# repo container on specified node.
+# This repo will be used by other nodes on installing any packages in the node
+# setting up contrail-cni need this repo enabled.
+;[contrail-repo]
+;1.1.1.1
+
+# ***OPTIONAL***
+# List of kubernetes node ip's in which the contrial-kube-manager container needs
+# to be launched.
+# Required only in case of kubernetes orchestrator.
+;[contrail-kubernetes]
+;1.1.1.11
+
+# ***OPTIONAL***
+# List of Loadbalancer node ip's in which the contrial-lb container needs
+# to be launched. Not required when external lb is used.
+;[contrail-lb]
+;1.1.1.1
+
+# List of controller node ip's in which the contrial-controller container needs
+# to be launched.
+[contrail-controllers]
+1.1.1.1
+1.1.1.2
+1.1.1.3
+
+# List of analyticsdb node ip's in which the contrial-analyticsdb container needs
+# to be launched.
+[contrail-analyticsdb]
+1.1.1.4
+1.1.1.5
+1.1.1.6
+
+# List of analytics node ip's in which the contrial-analytics container needs
+# to be launched.
+[contrail-analytics]
+1.1.1.4
+1.1.1.5
+1.1.1.6
+
+# List of compute node ip's in which the contrial-agent container needs to be
+# launched.
+[computes]
+1.1.1.7
+1.1.1.8
+1.1.1.9
+1.1.1.10
+
+# List of all the defined groups in this inventory
+[all:children]
+contrail-lb
+contrail-controllers
+contrail-analyticsdb
+contrail-analytics
+computes
+
+# List of variables that can be shared across "all" group
+[all:vars]
+# config_ip - config api-server ip address, required for compute nodes to
+# connect to config api-server.
+config_ip=10.84.32.8
+
+# contrail version - Version of contrail containers to be used
+contrail_version=4.0.0.0-3012
+
+# vrouter_physical_interface - physical interface name of the compute.
+# Asumes that all the computes in the compute group has same interface name
+# TODO: Dynamically identify the interface name
+vrouter_physical_interface=p1p1
+
+# Docker images
+# docker images to launch the containers can be made available by one of the 
+# following ways or by combination of the both.
+#   a) docker registery
+#   b) dokcer image archive
+#
+# a) docker registry
+docker_registry=1.1.1.1:5000
+docker_registry_insecure=True
+
+# b) docker image archive
+#
+# ***OPTIONAL***
+# docker image archive location,
+# Defaults to contrail-ansible/playbooks/contrail_images/
+# Not required when all the contrail dokcer images are available in
+# defined docker_registry
+;docker_image_load_path=/home/ijohnson/mydockimages/
+# Set all or sub set of the following flags to decide on the contrail
+# docker images to be picked from archive/registry. Some images can be 
+# used from registry and some from the archive(Used during dev/test) 
+;load_contrail_lb_image=True
+;load_contrail_controller_image=True
+;load_contrail_analytics_image=True
+;load_contrail_analyticsdb_image=True
+;load_contrail_agent_image=True
+
+# Install docker from package rather than installer from get.docker.com which
+# is default method
+;docker_install_method=package
+
+# Dont install any bridge utils packages for docker
+docker_network_bridge=False
+
+# ansible connection details
+ansible_user=root
+ansible_connection=ssh
+ansible_become=true
+;ansible_ssh_private_key_file=~/.ssh/id_rsa

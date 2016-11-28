@@ -17,7 +17,7 @@
 
 - include: lb.yml
   tags: [container.lb, lb]
-  when: container_enable_lb is defined
+  when: "'contrail-lb' in group_names"
 
 - include: controller.yml
   tags: [container.controller, controller]

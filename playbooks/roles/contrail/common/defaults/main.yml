@@ -3,6 +3,7 @@ cloud_orchestrator: openstack
 controller_ip: "{{ ansible_default_ipv4.address }}"
 controller_list: ["{{ controller_ip }}"]
 
+# Analytics dB defaults
 analyticsdb_list: "{{ controller_list }}"
 analyticsdb_port: 9160
 analyticsdb_cql_port: 9042
@@ -32,6 +33,9 @@ api_server_port: 8082
 api_server_use_ssl: False
 region: RegionOne
 
+# Analytics defaults
+# Analytics node list, defaults to controller node list.
+analytics_list: "{{ controller_list }}"
 analytics_ip: "{{ controller_ip }}"
 analytics_server_ip: "{{ analytics_ip }}"
 analytics_server_port: 8081

@@ -38,7 +38,7 @@ kernel_source_packages: []
 
 # docker_image_load_path: In case of no docker_registry, load the images from tar files under this path
 docker_image_load_path: "{{playbook_dir}}/container_images"
-lb_image_archive: "contrail-lb-{{ contrail_version }}.tar.gz"
+contrail_lb_image_archive: "contrail-lb-{{ contrail_version }}.tar.gz"
 contrail_controller_image_archive: "contrail-controller-{{ contrail_version }}.tar.gz"
 contrail_analytics_image_archive: "contrail-analytics-{{ contrail_version }}.tar.gz"
 contrail_analyticsdb_image_archive: "contrail-analyticsdb-{{ contrail_version }}.tar.gz"
