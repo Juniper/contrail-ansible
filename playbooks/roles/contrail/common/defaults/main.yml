@@ -59,3 +59,9 @@ log_local: 1
 #  it should default to localhost
 redis_server_ip: 127.0.0.1
 redis_server_port: 6379
+
+keystone_admin_user: admin
+keystone_admin_password: admin
+keystone_admin_tenant: admin
+
+provision_cmd_keystone_args: " --admin_user {{ keystone_admin_user }} --admin_password {{ keystone_admin_password }} --admin_tenant_name {{ keystone_admin_tenant }} "
