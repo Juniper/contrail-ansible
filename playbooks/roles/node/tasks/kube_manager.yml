@@ -19,5 +19,7 @@
     network_mode: host
     state: started
     tty: true
+    restart_policy: unless-stopped
+    restart_retries: 3
     env:
       CLOUD_ORCHESTRATOR: "{{ cloud_orchestrator }}"
