@@ -1,16 +1,23 @@
 ---
+- name: include OS specific code
+  include: "{{item}}"
+  with_first_found:
+    - "{{ansible_distribution}}-{{ansible_distribution_version}}.yml"
+    - default.yml
+
 - name: allow unauthenticated packages for ubuntu
   copy: content='APT::Get::AllowUnauthenticated "true";' dest=/etc/apt/apt.conf.d/99allowunauth owner=root group=root mode=0644
-  when: ansible_os_family == "Debian"
   tags: install
 
 - name: install policy-rc.d to selectively disable automated service start by apt
   copy: src=policy-rc.d dest=/usr/sbin/policy-rc.d mode=0755
   tags: install
-  when: ansible_os_family == 'Debian'
 
 # This is a workaround on issue https://github.com/Juniper/contrail-docker/issues/107
 - name: Add systemd-logind to /etc/sensitive_servies (WA for issue contrail-docker/107)
   lineinfile: dest=/etc/sensitive_services line=systemd-logind state=present create=yes
   tags: install
-  when: ansible_os_family == 'Debian'
+
+- name: Create directory /var/log/contrail
+  file: path=/var/log/contrail state=directory
+  tags: install
