@@ -70,6 +70,8 @@
     network_mode: host
     state: started
     tty: true
+    restart_policy: unless-stopped
+    restart_retries: 3
     capabilities:
       - AUDIT_WRITE
     env: "{{ agent_env }}"
