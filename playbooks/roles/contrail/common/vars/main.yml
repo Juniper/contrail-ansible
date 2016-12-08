@@ -19,3 +19,5 @@ analyticsdb_servers_with_cql_port: "{{ analyticsdb_list | map('regex_replace', '
 
 api_server_protocol: "{{ 'https' if api_server_use_ssl else 'http' }}"
 api_server_url: "{{ api_server_protocol }}://{{ api_server_ip }}:{{ api_server_port }}"
+
+provision_auth: "{% if cloud_orchestrator == 'openstack' %}keystone{% else %}noauth{% endif %}"
