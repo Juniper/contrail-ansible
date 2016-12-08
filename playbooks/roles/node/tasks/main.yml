@@ -41,4 +41,8 @@
 
 - include: kube_cni.yml
   tags: [container.kube_cni, kube_cni]
-  when: "'contrail-compute' in group_names and cloud_orchestrator == 'kubernetes'"
+  when: "'contrail-compute' in group_names and cloud_orchestrator in ['kubernetes', 'mesos']"
+
+- include: mesos_manager.yml
+  tags: [container.mesos_manager, mesos_manager]
+  when: "'contrail-compute' in group_names and cloud_orchestrator == 'mesos'"

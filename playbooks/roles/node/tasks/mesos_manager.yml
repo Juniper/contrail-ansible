@@ -1,0 +1,26 @@
+---
+- name: Copy contrail mesos_manager image
+  copy:
+    src: "{{ docker_image_load_path }}/{{ contrail_mesos_manager_packages }}"
+    dest: "/tmp/{{ contrail_mesos_manager_image_archive }}"
+  when: docker_registry is not defined or load_contrail_mesos_manager_image is defined
+
+- name: "Load contrail mesos_manager image"
+  docker_image:
+    name: contrail-mesos-manager
+    tag: "{{ contrail_version }}"
+    load_path: "/tmp/{{ contrail_mesos_manager_image_archive }}"
+  when: docker_registry is not defined  or load_contrail_mesos_manager_image is defined
+
+- name: "Start contrail mesos_manager container"
+  docker_container:
+    name: contrail-mesos-manager
+    image: "{{ contrail_mesos_manager_image }}"
+    network_mode: host
+    state: started
+    tty: true
+    privileged: true
+    restart_policy: unless-stopped
+    restart_retries: 3
+    env:
+      CLOUD_ORCHESTRATOR: "{{ cloud_orchestrator }}"
