@@ -1,26 +1,30 @@
 ---
 cloud_orchestrator: openstack
+# os_release - operaing system release code
+# ubuntu 14.04 - u14.04, ubuntu 16.04 - u16.04, centos 7.1 - c7.1
+valid_os_release: [u14.04, u16.04, c7.1, c7.2]
+os_release: u14.04
 lb_image: >-
-  {%- if docker_registry is defined and load_contrail_lb_image is not defined -%}{{ docker_registry }}/contrail-lb:{{ contrail_version }}
-  {%- else %}contrail-lb:{{ contrail_version }}{%- endif %}
+  {%- if docker_registry is defined and load_contrail_lb_image is not defined -%}{{ docker_registry }}/contrail-lb-{{ os_release }}:{{ contrail_version }}
+  {%- else %}contrail-lb-{{ os_release }}:{{ contrail_version }}{%- endif %}
 controller_image: >-
-  {%- if docker_registry is defined and load_contrail_controller_image is not defined -%}{{ docker_registry }}/contrail-controller:{{ contrail_version }}
-  {%- else %}contrail-controller:{{ contrail_version }}{%- endif %}
+  {%- if docker_registry is defined and load_contrail_controller_image is not defined -%}{{ docker_registry }}/contrail-controller-{{ os_release }}:{{ contrail_version }}
+  {%- else %}contrail-controller-{{ os_release }}:{{ contrail_version }}{%- endif %}
 analytics_image: >-
-  {%- if docker_registry is defined and load_contrail_analytics_image is not defined -%}{{docker_registry}}/contrail-analytics:{{ contrail_version }}
-  {%- else %}contrail-analytics:{{ contrail_version }}{%- endif %}
+  {%- if docker_registry is defined and load_contrail_analytics_image is not defined -%}{{docker_registry}}/contrail-analytics-{{ os_release }}:{{ contrail_version }}
+  {%- else %}contrail-analytics-{{ os_release }}:{{ contrail_version }}{%- endif %}
 analyticsdb_image: >-
-  {%- if docker_registry is defined and load_contrail_analyticsdb_image is not defined -%}{{docker_registry}}/contrail-analyticsdb:{{ contrail_version }}
-  {%- else %}contrail-analyticsdb:{{ contrail_version }}{%- endif %}
+  {%- if docker_registry is defined and load_contrail_analyticsdb_image is not defined -%}{{docker_registry}}/contrail-analyticsdb-{{ os_release }}:{{ contrail_version }}
+  {%- else %}contrail-analyticsdb-{{ os_release }}:{{ contrail_version }}{%- endif %}
 agent_image: >-
-  {%- if docker_registry is defined and load_contrail_agent_image is not defined -%}{{docker_registry}}/contrail-agent:{{ contrail_version }}
-  {%- else %}contrail-agent:{{ contrail_version }}{%- endif %}
+  {%- if docker_registry is defined and load_contrail_agent_image is not defined -%}{{docker_registry}}/contrail-agent-{{ os_release }}:{{ contrail_version }}
+  {%- else %}contrail-agent-{{ os_release }}:{{ contrail_version }}{%- endif %}
 vrouter_compiler_image_redhat7: >-
   {%- if docker_registry is defined and load_contrail_vrouter_module_compiler_redhat7_image is not defined -%}{{docker_registry}}/vrouter-module-compiler-redhat7:{{ contrail_version }}
   {%- else %}vrouter-module-compiler-redhat7:{{ contrail_version }}{%- endif %}
 contrail_kube_manager_image: >-
-  {%- if docker_registry is defined and load_contrail_kube_manager_image is not defined -%}{{docker_registry}}/contrail-kube-manager:{{ contrail_version }}
-  {%- else %}contrail-kube-manager:{{ contrail_version }}{%- endif %}
+  {%- if docker_registry is defined and load_contrail_kube_manager_image is not defined -%}{{docker_registry}}/contrail-kube-manager-{{ os_release }}:{{ contrail_version }}
+  {%- else %}contrail-kube-manager-{{ os_release }}:{{ contrail_version }}{%- endif %}
 contrail_repo_ubuntu_image: >-
   {%- if docker_registry is defined and load_contrail_repo_ubuntu_image is not defined -%}{{docker_registry}}/contrail-repo-ubuntu:{{ contrail_version }}
   {%- else %}contrail-repo-ubuntu:{{ contrail_version }}{%- endif %}
