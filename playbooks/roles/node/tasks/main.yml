@@ -1,4 +1,8 @@
 ---
+- name: fail in case of invalid os_release
+  fail: msg="os_release should be one of {{ valid_os_release }}"
+  when: "os_release not in valid_os_release"
+
 - name: Install python-setuptools
   package: name=python-setuptools state=present
 
