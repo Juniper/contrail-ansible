@@ -18,6 +18,7 @@
     image: "{{ contrail_kube_manager_image }}"
     network_mode: host
     state: started
+    privileged: true
     tty: true
     restart_policy: unless-stopped
     restart_retries: 3
