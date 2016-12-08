@@ -37,4 +37,4 @@
 # as ansible wrongly detect ansible_service_mgr as systemd
 - name: Setting fact to override ansible_service_mgr for docker. This is to wrongly detect service manager as systemd when ubuntu container run on top of centos
   set_fact: ansible_service_mgr=upstart
-  when: deployment_platform == "docker" and ansible_service_mgr == 'systemd' and ansible_distribution == 'Ubuntu' and ansible_distribution_version == '16.04'
+  when: deployment_platform == "docker" and ansible_service_mgr == 'systemd' and not (ansible_distribution == 'Ubuntu' and ansible_distribution_version == '16.04')
