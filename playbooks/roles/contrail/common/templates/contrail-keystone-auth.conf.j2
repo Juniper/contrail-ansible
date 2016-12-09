@@ -1,0 +1,13 @@
+[KEYSTONE]
+auth_url={{ keystone_auth_protocol }}://{{ keystone_ip }}:{{ keystone_admin_port }}/{{ keystone_version }}
+auth_host={{ keystone_ip }}
+auth_protocol={{ keystone_auth_protocol }}
+auth_port={{ keystone_admin_port }}
+admin_user={{ keystone_admin_user }}
+admin_password={{ keystone_admin_password }}
+admin_tenant_name={{ keystone_admin_tenant }}
+memcache_servers=127.0.0.1:11211
+;insecure=False
+;certfile=/etc/contrail/ssl/certs/keystone.pem
+;keyfile=/etc/contrail/ssl/certs/keystone.pem
+;cafile=/etc/contrail/ssl/certs/keystone_ca.pem

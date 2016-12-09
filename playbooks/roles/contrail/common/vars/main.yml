@@ -21,3 +21,17 @@ api_server_protocol: "{{ 'https' if api_server_use_ssl else 'http' }}"
 api_server_url: "{{ api_server_protocol }}://{{ api_server_ip }}:{{ api_server_port }}"
 
 provision_auth: "{% if cloud_orchestrator == 'openstack' %}keystone{% else %}noauth{% endif %}"
+
+# vnc api client input file's global configuration
+global_vnc_api_configs:
+  WEB_SERVER: "{{ controller_ip }}"
+  WEB_PORT: "{{ api_server_port }}"
+  BASE_URL: "/"
+
+# vnc api client input file's auth configuration
+auth_vnc_api_configs:
+  AUTHN_TYPE: "keystone"
+  AUTHN_PROTOCOL: "{{ keystone_auth_protocol }}"
+  AUTHN_SERVER: "{{ keystone_ip }}"
+  AUTHN_PORT: "{{ keystone_admin_port }}"
+  AUTHN_URL: "{{ keystone_version }}/tokens"

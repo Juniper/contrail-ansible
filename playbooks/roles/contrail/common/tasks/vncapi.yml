@@ -1,0 +1,9 @@
+---
+- name: configure vnc_api_lib.ini with  all common entries in global section
+  ini_file: dest={{ vncapi_conf }} section=global option={{ item.key }} value={{ item.value }}  create=yes
+  with_dict: "{{ global_vnc_api_configs }}"
+
+- name: configure vnc_api_lib.ini with all common entries in auth section
+  ini_file: dest={{ vncapi_conf }} section=auth option={{ item.key }} value={{ item.value }}  create=yes
+  with_dict: "{{ auth_vnc_api_configs }}"
+  when: cloud_orchestrator == 'openstack'

@@ -21,3 +21,10 @@
 - name: Create directory /var/log/contrail
   file: path=/var/log/contrail state=directory
   tags: install
+
+- include: keystoneauth.yml
+  when: cloud_orchestrator == "openstack" and ( "'contrail-controllers' in group_names" or "'contrail-analytics' in group_names" )
+  tags: [contrail.common.keystoneauth, contrail.common.keystoneauth.configure, configure]
+
+- include: vncapi.yml
+  tags: [contrail.common.vncapi, contrail.common.vncapi.configure, configure]
