@@ -23,4 +23,5 @@
     restart_policy: unless-stopped
     restart_retries: 3
     env:
-      CLOUD_ORCHESTRATOR: "{{ cloud_orchestrator }}"
+      CCTL_CLOUD_ORCHESTRATOR: "{{ cloud_orchestrator }}"
+      CCTL_CONFIG_IP: "{{ config_ip }}"
