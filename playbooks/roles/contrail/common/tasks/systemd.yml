@@ -1,0 +1,6 @@
+- name: Find systemd wants directories
+  shell: ls -d /etc/systemd/system/*.wants
+  register: systemd_wants_dirs
+
+- name: set fact systemd_wants_files
+  set_fact: systemd_wants_files="{{ systemd_wants_dirs.stdout_lines | map('regex_replace', '^(.*)$', '\\1/*') | list + systemd_wants_locations}}"

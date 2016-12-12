@@ -35,3 +35,14 @@ auth_vnc_api_configs:
   AUTHN_SERVER: "{{ keystone_ip }}"
   AUTHN_PORT: "{{ keystone_admin_port }}"
   AUTHN_URL: "{{ keystone_version }}/tokens"
+
+systemd_wants_locations:
+  - /lib/systemd/system/multi-user.target.wants/*
+  - /lib/systemd/system/local-fs.target.wants/*
+  - /lib/systemd/system/sockets.target.wants/*udev*
+  - /lib/systemd/system/sockets.target.wants/*initctl*
+  - /lib/systemd/system/basic.target.wants/*
+  - /lib/systemd/system/anaconda.target.wants/*
+  - /lib/systemd/system/plymouth*
+  - /lib/systemd/system/systemd-update-utmp*
+

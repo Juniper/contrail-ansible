@@ -12,6 +12,15 @@
   package: name="{{ item }}" state=present
   with_items: "{{ kernel_source_packages }}"
 
+- name: "Copy contrailctl/agent.conf"
+  copy: src={{ item }} dest={{ contrailctl_config_directory }}
+  with_first_found:
+    - files:
+      - contrailctl/agent.conf
+      - "{{ playbook_dir }}/contrailctl/agent.conf"
+      - /etc/contrailctl/agent.conf
+      skip: true
+
 - name: Copy vrouter compiler image
   copy:
     src: "{{ docker_image_load_path }}/{{ vrouter_module_compiler_redhat7_image_archive }}"
@@ -79,3 +88,4 @@
       - "/lib/modules:/lib/modules"
       - "/usr/src:/usr/src"
       - "{{ contrailctl_config_directory }}:/etc/contrailctl/"
+      - "/root/contrail-ansible:/contrail-ansible"
