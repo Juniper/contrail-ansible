@@ -19,6 +19,8 @@
 #
 ##################
 
+#### *** NOTE: Entries in this file can be part of all.yml *** ####
+
 ####
 # Controller specific config vars - this will be added to contrailctl/controller.conf
 ####

@@ -3,6 +3,8 @@
 # Below config params are used to configure contrailctl
 # All of below variables are a dict which form individual section of contrailctl/*.conf (controller.conf, agent.conf, etc)
 # they are just a dictionary form of config files found under contrailctl/*
+# i.e below mentioned global_config is a dictionary form of [GLOBAL] section in contrailct/*.conf - since this is
+#      global_config, they are available to all config files
 # where control_config is dictionary form of [CONTROL] section in contrailctl/controller.conf
 #       webui_config is dictionary form of [WEBUI] section in contrailctl/controller.conf
 # for example, if one add configuration  "webui_config: {http_listen_port: 8085}", [WEBUI] section of
@@ -12,18 +14,19 @@
 # [WEBUI]
 # http_listen_port = 8085
 #
-# For configuration details, please refer example configurations found in
-#  https://github.com/Juniper/contrail-docker/tree/master/tools/python-contrailctl/examples/configs/agent.conf
+# REFERENCE: For configuration details, please refer example configurations found in
+#  https://github.com/Juniper/contrail-docker/tree/master/tools/python-contrailctl/examples/configs/analyticsdb.conf
 #
 ##################
 
 #### *** NOTE: Entries in this file can be part of all.yml *** ####
 
 ####
-# Agent specific config vars these configs will be added to contrailctl/agent.conf
+# Analyticsdb specific config vars - this will be added to contrailctl/analyticsdb.conf
 ####
+# analyticsdb_config: analyticsdb specific global configs - contrailctl/analyticsdb.conf will have [GLOBAL] section with
+#  configs added in global_config + analyticsdb_config
+# analyticsdb_config: {}
 
-# agent_config: agent specific global configs (Configurations under [GLOBAL] section
-#    of agent - configs in global_config will be merged to this config, i.e contrailctl/agent.conf will have [GLOBAL]
-#    section with configs added in global_config + agent_config
-# agent_config: {}
+# cassandra_config: config params for cassandra - these will go to [CASSANDRA] section of contrailctl/analyticsdb.conf
+# cassandra_config: {}

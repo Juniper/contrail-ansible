@@ -12,14 +12,18 @@
     load_path: "/tmp/{{ contrail_analyticsdb_image_archive }}"
   when: docker_registry is not defined or load_contrail_analyticsdb_image is defined
 
-- name: "Copy contrailctl/analyticsdb.conf"
-  copy: src={{ item }} dest={{ contrailctl_config_directory }}
-  with_first_found:
-    - files:
-      - contrailctl/analyticsdb.conf
-      - "{{ playbook_dir }}/contrailctl/analyticsdb.conf"
-      - /etc/contrailctl/analyticsdb.conf
-      skip: true
+- name: Configure contrailctl/analyticsdb.conf GLOBAL section
+  ini_file: dest="{{ contrailctl_config_directory }}/analyticsdb.conf" section=GLOBAL option={{ item.key }} value={{ item.value }}  create=yes
+  with_dict: "{{ global_config_orig | combine(analyticsdb_config | default({})) }}"
+
+- name: Configure contrailctl/analyticsdb.conf KEYSTONE section
+  ini_file: dest="{{ contrailctl_config_directory }}/analyticsdb.conf" section=KEYSTONE option={{ item.key }} value={{ item.value }}  create=yes
+  with_dict: "{{ keystone_config | default({}) }}"
+  when: cloud_orchestrator == "openstack"
+
+- name: Configure contrailctl/analyticsdb.conf CASSANDRA section
+  ini_file: dest="{{ contrailctl_config_directory }}/analyticsdb.conf" section=CASSANDRA option={{ item.key }} value={{ item.value }}  create=yes
+  with_dict: "{{ cassandra_config | default({}) }}"
 
 - name: "Start contrail analyticsdb container"
   docker_container:
