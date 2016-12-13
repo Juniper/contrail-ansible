@@ -39,5 +39,3 @@
       - AUDIT_WRITE
     volumes:
       - "{{ contrailctl_config_directory }}:/etc/contrailctl/"
-    env:
-      CLOUD_ORCHESTRATOR: "{{ cloud_orchestrator }}"
