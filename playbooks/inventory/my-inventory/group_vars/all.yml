@@ -1,0 +1,43 @@
+# contrail version
+contrail_version: 4.0.0.0-3016
+
+# cloud_orchestrator - cloud orchestrators to be setup
+# Valid cloud orchestrators:
+# kubernetes, mesos, openstack
+cloud_orchestrator: kubernetes
+
+# ansible connection details
+ansible_user: root
+ansible_become: true
+# ansible_ssh_private_key_file: ~/.ssh/id_rsa
+
+# docker registry
+docker_registry: 10.84.34.155:5000
+docker_registry_insecure: True
+
+# install docker from package rather than installer from get.docker.com which is default method
+docker_install_method: package
+
+# Dont install any bridge utils packages for docker
+docker_network_bridge: False
+
+# custom image for kube-manager - image with ubuntu 16.04 and systemd
+# contrail_kube_manager_image: 10.84.34.155:5000/contrail-kube-manager-u16.04:4.0.0.0-3016
+
+# custom image for mesos-manager - image with ubuntu 16.04 and systemd
+# contrail_mesos_manager_image: 10.84.34.155:5000/contrail-mesos-manager-u16.04:4.0.0.0-3016
+
+# controller_list can be reused if required, optional variable - just setting it here so that it can be
+# reused in *_config dicts
+controller_list: [192.168.0.24]
+
+# controller_list, analytics_list, analyticsdb_list can be specified separately or reuse controller_list
+# controller_ip can be load ballanced IP, or one of the controller_list
+global_config:
+  controller_list: "{{ controller_list }}"
+  analytics_list: "{{ controller_list }}"
+  analyticsdb_list: "{{ controller_list }}"
+  controller_ip: "{{ controller_list[0] }}"
+
+agent_config:
+  vrouter_physical_interface: eth0

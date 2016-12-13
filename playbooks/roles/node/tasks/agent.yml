@@ -12,14 +12,14 @@
   package: name="{{ item }}" state=present
   with_items: "{{ kernel_source_packages }}"
 
-- name: "Copy contrailctl/agent.conf"
-  copy: src={{ item }} dest={{ contrailctl_config_directory }}
-  with_first_found:
-    - files:
-      - contrailctl/agent.conf
-      - "{{ playbook_dir }}/contrailctl/agent.conf"
-      - /etc/contrailctl/agent.conf
-      skip: true
+- name: override vrouter_physical_interface in case set in host_vars
+  set_fact:
+    agent_config_orig: "{{ agent_config_orig | combine({'vrouter_physical_interface': vrouter_physical_interface})}}"
+  when: vrouter_physical_interface is defined
+
+- name: Configure GLOBAL section of contrailctl/agent.conf
+  ini_file: dest="{{ contrailctl_config_directory }}/agent.conf" section=GLOBAL option={{ item.key }} value={{ item.value }}  create=yes
+  with_dict: "{{ global_config_orig | combine(agent_config_orig) }}"
 
 - name: Copy vrouter compiler image
   copy:
@@ -83,7 +83,6 @@
     restart_retries: 3
     capabilities:
       - AUDIT_WRITE
-    env: "{{ agent_env }}"
     volumes:
       - "/lib/modules:/lib/modules"
       - "/usr/src:/usr/src"

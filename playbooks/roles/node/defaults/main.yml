@@ -40,7 +40,6 @@ docker_py_version: 1.9.0
 
 container_agent_extra_env: {}
 external_vrouter_compile: false
-vrouter_physical_interface: "{{ ansible_default_ipv4.interface }}"
 kernel_source_packages: []
 
 # docker_image_load_path: In case of no docker_registry, load the images from tar files under this path
@@ -60,3 +59,6 @@ contrail_apt_repo_port: 1567
 contrail_apt_repo: "{% if 'contrail-repo' in groups -%}http://{{ hostvars[groups['contrail-repo'][0]]['ansible_default_ipv4']['address'] }}:{{ contrail_apt_repo_port }}{%- endif %}"
 contrail_yum_repo_port: 2567
 contrail_yum_repo: "{% if 'contrail-repo' in groups -%}http://{{ hostvars[groups['contrail-repo'][0]]['ansible_default_ipv4']['address'] }}:{{ contrail_yum_repo_port }}{%- endif %}"
+
+global_config_extra:
+  cloud_orchestrator: "{{ cloud_orchestrator }}"
