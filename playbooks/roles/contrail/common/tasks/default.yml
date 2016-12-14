@@ -1,4 +1,0 @@
----
-- name: Set fact contrail_service_mgr to supervisord for all systems other than ubuntu 16.04
-  set_fact: contrail_service_mgr=supervisord
-  tags: always

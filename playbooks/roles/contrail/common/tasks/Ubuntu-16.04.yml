@@ -1,4 +1,0 @@
----
-- name: Set fact contrail_service_mgr to systemd for ubuntu-16.04 and supervisord for the rest
-  set_fact: contrail_service_mgr=systemd
-  tags: always
