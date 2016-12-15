@@ -18,4 +18,5 @@
     image: "{{ contrail_repo_centos_image }}"
     network_mode: host
     state: started
+    pull: "{{ always_pull_image }}"
     tty: true

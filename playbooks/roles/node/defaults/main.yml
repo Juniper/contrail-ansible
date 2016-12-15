@@ -36,6 +36,8 @@ contrail_repo_centos_image: >-
   {%- else %}contrail-repo-centos:{{ contrail_version }}{%- endif %}
 
 
+always_pull_image: false
+
 docker_py_version: 1.9.0
 
 container_agent_extra_env: {}

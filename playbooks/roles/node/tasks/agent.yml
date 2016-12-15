@@ -41,6 +41,9 @@
     privileged: true
     state: started
     tty: true
+    pull: "{{ always_pull_image }}"
+    detach: true
+    cleanup: true
     capabilities:
       - AUDIT_WRITE
     env:
@@ -81,6 +84,7 @@
     tty: true
     restart_policy: unless-stopped
     restart_retries: 3
+    pull: "{{ always_pull_image }}"
     capabilities:
       - AUDIT_WRITE
     env: "{{ agent_env }}"
@@ -88,4 +92,3 @@
       - "/lib/modules:/lib/modules"
       - "/usr/src:/usr/src"
       - "{{ contrailctl_config_directory }}:/etc/contrailctl/"
-      - "/root/contrail-ansible:/contrail-ansible"

@@ -17,6 +17,7 @@
   tags: [contrail.common.keystoneauth, contrail.common.keystoneauth.configure, configure]
 
 - include: vncapi.yml
+  when: cloud_orchestrator == "openstack"
   tags: [contrail.common.vncapi, contrail.common.vncapi.configure, configure]
 
 - name: Include systemd specific code
