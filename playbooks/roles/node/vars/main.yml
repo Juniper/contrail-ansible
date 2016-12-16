@@ -1,9 +1,5 @@
 ---
 agent_compile_vrouter_module_orig: "{{(agent_compile_vrouter_module is defined) | ternary(agent_compile_vrouter_module, 'undef')}}"
-container_agent_common_env:
-  CCTL_CLOUD_ORCHESTRATOR: "{{ cloud_orchestrator }}"
-  CCTL_COMPILE_VROUTER_MODULE: "{{ (agent_compile_vrouter_module_orig != 'undef') | ternary(agent_compile_vrouter_module_orig|ternary('yes','no'), external_vrouter_compile|ternary('no','yes')) }}"
-  CCTL_VROUTER_PHYSICAL_INTERFACE: "{{ vrouter_physical_interface|default('') }}"
-  CCTL_CONFIG_IP: "{{ config_ip }}"
-
-agent_env: "{{ container_agent_common_env|combine(container_agent_extra_env) }}"
+global_config_orig: "{{ global_config|default({}) | combine(global_config_extra) }}"
+compile_vrouter_module_orig: "{{ (agent_compile_vrouter_module_orig != 'undef') | ternary(agent_compile_vrouter_module_orig|ternary(true, false), external_vrouter_compile|ternary(false,true)) }}"
+agent_config_orig: "{{ agent_config | default({}) | combine({'compile_vrouter_module': compile_vrouter_module_orig})}}"

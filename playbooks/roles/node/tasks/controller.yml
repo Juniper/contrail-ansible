@@ -12,14 +12,54 @@
     load_path: "/tmp/{{ contrail_controller_image_archive }}"
   when: docker_registry is not defined or load_contrail_controller_image is defined
 
-- name: "Copy contrailctl/controller.conf"
-  copy: src={{ item }} dest={{ contrailctl_config_directory }}
-  with_first_found:
-    - files:
-      - contrailctl/controller.conf
-      - "{{ playbook_dir }}/contrailctl/controller.conf"
-      - /etc/contrailctl/controller.conf
-      skip: true
+- name: Configure contrailctl/controller.conf GLOBAL section
+  ini_file: dest="{{ contrailctl_config_directory }}/controller.conf" section=GLOBAL option={{ item.key }} value={{ item.value }}  create=yes
+  with_dict: "{{ global_config_orig | combine(controller_config | default({})) }}"
+
+- name: Configure contrailctl/controller.conf KEYSTONE section
+  ini_file: dest="{{ contrailctl_config_directory }}/controller.conf" section=KEYSTONE option={{ item.key }} value={{ item.value }}  create=yes
+  with_dict: "{{ keystone_config | default({}) }}"
+  when: cloud_orchestrator == "openstack"
+
+- name: Configure contrailctl/controller.conf CONTROL section
+  ini_file: dest="{{ contrailctl_config_directory }}/controller.conf" section=CONTROL option={{ item.key }} value={{ item.value }}  create=yes
+  with_dict: "{{ control_config | default({}) }}"
+
+- name: Configure contrailctl/controller.conf CONFIG section
+  ini_file: dest="{{ contrailctl_config_directory }}/controller.conf" section=CONFIG option={{ item.key }} value={{ item.value }}  create=yes
+  with_dict: "{{ config_config | default({}) }}"
+
+- name: Configure contrailctl/controller.conf DNS section
+  ini_file: dest="{{ contrailctl_config_directory }}/controller.conf" section=DNS option={{ item.key }} value={{ item.value }}  create=yes
+  with_dict: "{{ dns_config | default({}) }}"
+
+- name: Configure contrailctl/controller.conf CONFIGDB section
+  ini_file: dest="{{ contrailctl_config_directory }}/controller.conf" section=CONFIGDB option={{ item.key }} value={{ item.value }}  create=yes
+  with_dict: "{{ configdb_config | default({}) }}"
+
+- name: Configure contrailctl/controller.conf API section
+  ini_file: dest="{{ contrailctl_config_directory }}/controller.conf" section=API option={{ item.key }} value={{ item.value }}  create=yes
+  with_dict: "{{ api_config | default({}) }}"
+
+- name: Configure contrailctl/controller.conf SCHEMA section
+  ini_file: dest="{{ contrailctl_config_directory }}/controller.conf" section=SCHEMA option={{ item.key }} value={{ item.value }}  create=yes
+  with_dict: "{{ schema_config | default({}) }}"
+
+- name: Configure contrailctl/controller.conf DISCOVERY section
+  ini_file: dest="{{ contrailctl_config_directory }}/controller.conf" section=DISCOVERY option={{ item.key }} value={{ item.value }}  create=yes
+  with_dict: "{{ discovery_config | default({}) }}"
+
+- name: Configure contrailctl/controller.conf DEVICE_MANAGER section
+  ini_file: dest="{{ contrailctl_config_directory }}/controller.conf" section=DEVICE_MANAGER option={{ item.key }} value={{ item.value }}  create=yes
+  with_dict: "{{ device_manager_config | default({}) }}"
+
+- name: Configure contrailctl/controller.conf SVC_MONITOR section
+  ini_file: dest="{{ contrailctl_config_directory }}/controller.conf" section=SVC_MONITOR option={{ item.key }} value={{ item.value }}  create=yes
+  with_dict: "{{ svc_monitor_config | default({}) }}"
+
+- name: Configure contrailctl/controller.conf WEBUI section
+  ini_file: dest="{{ contrailctl_config_directory }}/controller.conf" section=WEBUI option={{ item.key }} value={{ item.value }}  create=yes
+  with_dict: "{{ webui_config | default({}) }}"
 
 - name: "Start contrail controller container"
   docker_container:
@@ -36,5 +76,3 @@
       - AUDIT_WRITE
     volumes:
       - "{{ contrailctl_config_directory }}:/etc/contrailctl/"
-    env:
-      CLOUD_ORCHESTRATOR: "{{ cloud_orchestrator }}"

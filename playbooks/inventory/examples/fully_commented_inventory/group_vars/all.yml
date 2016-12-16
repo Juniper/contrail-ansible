@@ -1,0 +1,72 @@
+# contrail version
+contrail_version: 4.0.0.0-3016
+
+# cloud_orchestrator - cloud orchestrators to be setup
+# Valid cloud orchestrators:
+# kubernetes, mesos, openstack
+cloud_orchestrator: kubernetes
+
+# ansible connection details
+ansible_user: root
+ansible_become: true
+# ansible_ssh_private_key_file: ~/.ssh/id_rsa
+
+# docker registry
+docker_registry: 10.84.34.155:5000
+docker_registry_insecure: True
+
+# install docker from package rather than installer from get.docker.com which is default method
+docker_install_method: package
+
+# Dont install any bridge utils packages for docker
+docker_network_bridge: False
+
+# vrouter physical interface
+vrouter_physical_interface: eth0
+
+# custom image for kube-manager - image with ubuntu 16.04 and systemd
+# contrail_kube_manager_image: 10.84.34.155:5000/contrail-kube-manager-u16.04:4.0.0.0-3016
+
+# custom image for mesos-manager - image with ubuntu 16.04 and systemd
+# contrail_mesos_manager_image: 10.84.34.155:5000/contrail-mesos-manager-u16.04:4.0.0.0-3016
+
+# controller_list can be reused if required, optional variable - just setting it here so that it can be
+# reused in *_config dicts
+controller_list: [192.168.0.24]
+
+##################
+# Below config params are used to configure contrailctl
+# All of below variables are a dict which form individual section of contrailctl/*.conf (controller.conf, agent.conf, etc)
+# they are just a dictionary form of config files found under contrailctl/*
+# i.e below mentioned global_config is a dictionary form of [GLOBAL] section in contrailct/*.conf - since this is
+#      global_config, they are available to all config files
+# where control_config is dictionary form of [CONTROL] section in contrailctl/controller.conf
+#       webui_config is dictionary form of [WEBUI] section in contrailctl/controller.conf
+# for example, if one add configuration  "webui_config: {http_listen_port: 8085}", [WEBUI] section of
+# contrailctl/controller.conf will be configured as below - which infact configure webui to listen 8085 for http
+#  instead of 8080 which is default
+#
+# [WEBUI]
+# http_listen_port = 8085
+
+# For configuration details, please refer example configurations found in
+#  https://github.com/Juniper/contrail-docker/tree/master/tools/python-contrailctl/examples/configs
+#
+##################
+#
+# global_config: controller_list, analytics_list, analyticsdb_list can be specified separately or reuse controller_list
+#   controller_ip can be load ballanced IP, or one of the controller_list
+#   This vars will be configured in [GLOBAL] section of all contrailctl config files (contrailctl/*.conf)
+global_config:
+  controller_list: "{{ controller_list }}"
+  analytics_list: "{{ controller_list }}"
+  analyticsdb_list: "{{ controller_list }}"
+  controller_ip: "{{ controller_list[0] }}"
+
+# keystone_config: config params for keystone - these will go to [KEYSTONE] section of contrailctl/*.conf
+# keystone_config: {}
+
+# *** NOTE: Individual service/group commented configurations are kept in individual group based yaml files *** #
+# (e.g contrail-controller.yml for controller), - this is just to avoid one huge file, but all _config variables can be
+# kept in all.yml itself if needed. i.e one can just combine all files found in group_vars/ in this example into one yml
+# file named as all.yml
