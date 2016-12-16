@@ -62,6 +62,7 @@ redis_server_port: 6379
 
 # Keystone defaults
 keystone_version: v2.0
+keystone_ip: "{{ controller_ip }}"
 keystone_admin_port: 35357
 keystone_public_port: 5000
 keystone_auth_protocol: http
@@ -73,3 +74,5 @@ provision_cmd_keystone_args: " --admin_user {{ keystone_admin_user }} --admin_pa
 
 # Vnc api client input file
 vncapi_conf: "/etc/contrail/vnc_api_lib.ini"
+
+systemd_wants_files: []
