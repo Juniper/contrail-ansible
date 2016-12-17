@@ -30,9 +30,10 @@ vrouter_physical_interface: eth0
 # custom image for mesos-manager - image with ubuntu 16.04 and systemd
 # contrail_mesos_manager_image: 10.84.34.155:5000/contrail-mesos-manager-u16.04:4.0.0.0-3016
 
-# controller_list can be reused if required, optional variable - just setting it here so that it can be
-# reused in *_config dicts
-controller_list: [192.168.0.24]
+
+# controller_ip can be load ballanced IP, or one of the controller_list
+# if not configured, ansible use first ip address from [contrail-controllers]
+# controller_ip: 192.168.0.22
 
 ##################
 # Below config params (i.e the variables named .*_config) are used to configure contrailctl
@@ -41,15 +42,11 @@ controller_list: [192.168.0.24]
 # Please refer examples/fully_commented_inventory for full list of variables available
 ###################
 
-# global_config: controller_list, analytics_list, analyticsdb_list can be specified separately or reuse controller_list
-#   controller_ip can be load ballanced IP, or one of the controller_list
+# global_config: controller_list, analytics_list, analyticsdb_list etc would be automatically detected by ansible code based out of hosts file host group sections
+#  e.g controller_list is all ips added under [contrail-controllers]
 #   This vars will be configured in [GLOBAL] section of all contrailctl config files (contrailctl/*.conf)
 
-global_config:
-  controller_list: "{{ controller_list }}"
-  analytics_list: "{{ controller_list }}"
-  analyticsdb_list: "{{ controller_list }}"
-  controller_ip: "{{ controller_list[0] }}"
+# global_config:
 
 # To configure custom webui http port
 # webui_config: {http_listen_port: 8085}

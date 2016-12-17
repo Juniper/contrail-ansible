@@ -58,9 +58,17 @@ contrail_repo_ubuntu_image_archive: "contrail-repo-ubuntu-{{ contrail_version }}
 contrail_repo_centos_image_archive: "contrail-repo-centos-{{ contrail_version }}.tar.gz"
 contrailctl_config_directory: /etc/contrailctl
 contrail_apt_repo_port: 1567
-contrail_apt_repo: "{% if 'contrail-repo' in groups -%}http://{{ hostvars[groups['contrail-repo'][0]]['ansible_default_ipv4']['address'] }}:{{ contrail_apt_repo_port }}{%- endif %}"
+contrail_repo_ip: "{{ hostvars[groups['contrail-repo'][0]].get('ansible_default_ipv4', {}).get('address','') | default('') }}"
+contrail_apt_repo: "{{ contrail_repo_ip | ternary('http://' + contrail_repo_ip + ':' + contrail_apt_repo_port|string, '') if 'contrail-repo' in groups else ''}}"
 contrail_yum_repo_port: 2567
-contrail_yum_repo: "{% if 'contrail-repo' in groups -%}http://{{ hostvars[groups['contrail-repo'][0]]['ansible_default_ipv4']['address'] }}:{{ contrail_yum_repo_port }}{%- endif %}"
+contrail_yum_repo: "{{ contrail_repo_ip | ternary('http://' + contrail_repo_ip + ':' + contrail_yum_repo_port|string, '') if 'contrail-repo' in groups else ''}}"
+contrailctl_external_configured: false
 
-global_config_extra:
-  cloud_orchestrator: "{{ cloud_orchestrator }}"
+contrail_controller_list: "{{ groups['contrail-controllers'] | default(false)}}"
+contrail_repo_list: "{{ groups['contrail-repo'] | default(false)}}"
+contrail_analyticsdb_list: "{{ groups['contrail-analyticsdb'] | default(false)}}"
+contrail_analytics_list: "{{ groups['contrail-analytics'] | default(false)}}"
+contrail_kubernetes_list: "{{ groups['contrail-kubernetes'] | default(false)}}"
+contrail_compute_list: "{{ groups['contrail-compute'] | default(false)}}"
+controller_ip: ''
+analytics_ip: ''

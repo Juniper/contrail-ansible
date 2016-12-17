@@ -12,6 +12,29 @@
     load_path: "/tmp/{{ contrail_kube_manager_image_archive }}"
   when: docker_registry is not defined  or load_contrail_kube_manager_image is defined
 
+- name: Configure contrailctl/kubemanager.conf KUBERNETES section
+  ini_file: dest="{{ contrailctl_config_directory }}/kubemanager.conf" section=KUBERNETES option={{ item.key }} value={{ item.value }}  create=yes
+  with_dict: "{{ kubernetes_config | default({}) }}"
+
+- name: Configure contrailctl/kubemanager.conf VNC section
+  ini_file: dest="{{ contrailctl_config_directory }}/kubemanager.conf" section=VNC option={{ item.key }} value={{ item.value }}  create=yes
+  with_dict: "{{ vnc_config | default({}) }}"
+
+- name: Configure contrailctl/kubemanager.conf GLOBAL section
+  ini_file: dest="{{ contrailctl_config_directory }}/kubemanager.conf" section=GLOBAL option={{ item.key }} value={{ item.value }}  create=yes
+  with_dict: "{{ global_config_orig | combine(kube_manager_config | default({})) }}"
+
+- name: "Copy contrailctl/kubemanager.conf"
+  copy: src={{ item }} dest={{ contrailctl_config_directory }}
+  with_first_found:
+    - files:
+      - "{{ contrailctl_config_source |ternary(contrailctl_config_source + '/kubemanager.conf', 'contrailctl/kubemanager.conf') }}"
+      - contrailctl/kubemanager.conf
+      - "{{ playbook_dir }}/contrailctl/kubemanager.conf"
+      - /etc/contrailctl/kubemanager.conf
+      skip: true
+  when: contrailctl_external_configured
+
 - name: "Start contrail kube_manager container"
   docker_container:
     name: contrail-kube-manager
@@ -23,5 +46,5 @@
     tty: true
     restart_policy: unless-stopped
     restart_retries: 3
-    env:
-      CLOUD_ORCHESTRATOR: "{{ cloud_orchestrator }}"
+    volumes:
+      - "{{ contrailctl_config_directory }}:/etc/contrailctl/"

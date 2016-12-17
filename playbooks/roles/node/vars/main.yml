@@ -1,5 +1,15 @@
 ---
+contrail_controller_ip_orig: "{{ (contrail_controller_list[0] | default('')) if not controller_ip else controller_ip }}"
+contrail_analytics_ip_orig: "{{ contrail_analytics_list[0] | default('') if not analytics_ip else analytics_ip }}"
+global_config_detected:
+  cloud_orchestrator: "{{ cloud_orchestrator }}"
+  controller_list: "{{ contrail_controller_list }}"
+  analytics_list: "{{ contrail_analytics_list }}"
+  analyticsdb_list: "{{ contrail_analyticsdb_list }}"
+  compute_list: "{{ contrail_compute_list }}"
+  controller_ip: "{{ contrail_controller_ip_orig }}"
+  analytics_ip: "{{ contrail_analytics_ip_orig }}"
 agent_compile_vrouter_module_orig: "{{(agent_compile_vrouter_module is defined) | ternary(agent_compile_vrouter_module, 'undef')}}"
-global_config_orig: "{{ global_config|default({}) | combine(global_config_extra) }}"
+global_config_orig: "{{ global_config_detected | combine(global_config|default({})) | combine(global_config_extra|default({})) }} "
 compile_vrouter_module_orig: "{{ (agent_compile_vrouter_module_orig != 'undef') | ternary(agent_compile_vrouter_module_orig|ternary(true, false), external_vrouter_compile|ternary(false,true)) }}"
 agent_config_orig: "{{ agent_config | default({}) | combine({'compile_vrouter_module': compile_vrouter_module_orig})}}"

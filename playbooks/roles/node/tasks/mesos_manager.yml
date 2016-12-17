@@ -12,6 +12,29 @@
     load_path: "/tmp/{{ contrail_mesos_manager_image_archive }}"
   when: docker_registry is not defined  or load_contrail_mesos_manager_image is defined
 
+- name: Configure contrailctl/mesosmanager.conf MESOS section
+  ini_file: dest="{{ contrailctl_config_directory }}/mesosmanager.conf" section=MESOS option={{ item.key }} value={{ item.value }}  create=yes
+  with_dict: "{{ mesos_config | default({}) }}"
+
+- name: Configure contrailctl/mesosmanager.conf VNC section
+  ini_file: dest="{{ contrailctl_config_directory }}/mesosmanager.conf" section=VNC option={{ item.key }} value={{ item.value }}  create=yes
+  with_dict: "{{ vnc_config | default({}) }}"
+
+- name: Configure contrailctl/mesosmanager.conf GLOBAL section
+  ini_file: dest="{{ contrailctl_config_directory }}/mesosmanager.conf" section=GLOBAL option={{ item.key }} value={{ item.value }}  create=yes
+  with_dict: "{{ global_config_orig | combine(mesos_manager_config | default({})) }}"
+
+- name: "Copy contrailctl/mesosmanager.conf"
+  copy: src={{ item }} dest={{ contrailctl_config_directory }}
+  with_first_found:
+    - files:
+      - "{{ contrailctl_config_source |ternary(contrailctl_config_source + '/mesosmanager.conf', 'contrailctl/mesosmanager.conf') }}"
+      - contrailctl/mesosmanager.conf
+      - "{{ playbook_dir }}/contrailctl/mesosmanager.conf"
+      - /etc/contrailctl/mesosmanager.conf
+      skip: true
+  when: contrailctl_external_configured
+
 - name: "Start contrail mesos_manager container"
   docker_container:
     name: contrail-mesos-manager
@@ -23,6 +46,5 @@
     privileged: true
     restart_policy: unless-stopped
     restart_retries: 3
-    env:
-      CCTL_CLOUD_ORCHESTRATOR: "{{ cloud_orchestrator }}"
-      CCTL_CONFIG_IP: "{{ config_ip }}"
+    volumes:
+      - "{{ contrailctl_config_directory }}:/etc/contrailctl/"
