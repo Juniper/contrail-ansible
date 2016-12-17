@@ -25,6 +25,17 @@
   ini_file: dest="{{ contrailctl_config_directory }}/analyticsdb.conf" section=CASSANDRA option={{ item.key }} value={{ item.value }}  create=yes
   with_dict: "{{ cassandra_config | default({}) }}"
 
+- name: "Copy contrailctl/analyticsdb.conf"
+  copy: src={{ item }} dest={{ contrailctl_config_directory }}
+  with_first_found:
+    - files:
+      - "{{ contrailctl_config_source |ternary(contrailctl_config_source + '/analyticsdb.conf', 'contrailctl/analyticsdb.conf') }}"
+      - contrailctl/analyticsdb.conf
+      - "{{ playbook_dir }}/contrailctl/analyticsdb.conf"
+      - /etc/contrailctl/analyticsdb.conf
+      skip: true
+  when: contrailctl_external_configured
+
 - name: "Start contrail analyticsdb container"
   docker_container:
     name: analyticsdb

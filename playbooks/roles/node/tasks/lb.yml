@@ -20,6 +20,17 @@
   ini_file: dest="{{ contrailctl_config_directory }}/lb.conf" section=HAPROXY option={{ item.key }} value={{ item.value }}  create=yes
   with_dict: "{{ haproxy_config | default({}) }}"
 
+- name: "Copy contrailctl/lb.conf"
+  copy: src={{ item }} dest={{ contrailctl_config_directory }}
+  with_first_found:
+    - files:
+      - "{{ contrailctl_config_source |ternary(contrailctl_config_source + '/lb.conf', 'contrailctl/lb.conf') }}"
+      - contrailctl/lb.conf
+      - "{{ playbook_dir }}/contrailctl/lb.conf"
+      - /etc/contrailctl/lb.conf
+      skip: true
+  when: contrailctl_external_configured
+
 - name: "Start Loadbalancer container"
   docker_container:
     name: lb

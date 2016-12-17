@@ -67,6 +67,17 @@
     dest: "/tmp/{{ contrail_agent_image_archive }}"
   when: docker_registry is not defined or load_contrail_agent_image is defined
 
+- name: "Copy contrailctl/agent.conf"
+  copy: src={{ item }} dest={{ contrailctl_config_directory }}
+  with_first_found:
+    - files:
+      - "{{ contrailctl_config_source |ternary(contrailctl_config_source + '/agent.conf', 'contrailctl/agent.conf') }}"
+      - contrailctl/agent.conf
+      - "{{ playbook_dir }}/contrailctl/agent.conf"
+      - /etc/contrailctl/agent.conf
+      skip: true
+  when: contrailctl_external_configured
+
 - name: "Load contrail vrouter agent image"
   docker_image:
     name: contrail-agent

@@ -62,6 +62,7 @@ contrail_repo_ip: "{{ hostvars[groups['contrail-repo'][0]].get('ansible_default_
 contrail_apt_repo: "{{ contrail_repo_ip | ternary('http://' + contrail_repo_ip + ':' + contrail_apt_repo_port|string, '') if 'contrail-repo' in groups else ''}}"
 contrail_yum_repo_port: 2567
 contrail_yum_repo: "{{ contrail_repo_ip | ternary('http://' + contrail_repo_ip + ':' + contrail_yum_repo_port|string, '') if 'contrail-repo' in groups else ''}}"
+contrailctl_external_configured: false
 
 contrail_controller_list: "{{ groups['contrail-controllers'] | default(false)}}"
 contrail_repo_list: "{{ groups['contrail-repo'] | default(false)}}"
