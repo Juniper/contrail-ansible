@@ -22,4 +22,4 @@
 - name: Run apt-get update
   apt: update_cache=yes
   when: apt_update
-  tags: [package, install]
+  tags: [package]
