@@ -19,8 +19,3 @@
 - include: vncapi.yml
   when: cloud_orchestrator == "openstack"
   tags: [contrail.common.vncapi, contrail.common.vncapi.configure, configure]
-
-- name: Include systemd specific code
-  include: systemd.yml
-  tags: [package, install]
-  when: contrail_service_mgr == 'systemd'

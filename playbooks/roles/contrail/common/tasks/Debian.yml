@@ -21,4 +21,5 @@
 
 - name: Run apt-get update
   apt: update_cache=yes
-  tags: [package, install]
+  when: apt_update
+  tags: [package]
