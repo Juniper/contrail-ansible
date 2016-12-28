@@ -58,7 +58,7 @@ contrail_repo_ubuntu_image_archive: "contrail-repo-ubuntu-{{ contrail_version }}
 contrail_repo_centos_image_archive: "contrail-repo-centos-{{ contrail_version }}.tar.gz"
 contrailctl_config_directory: /etc/contrailctl
 contrail_apt_repo_port: 1567
-contrail_repo_ip: "{{ hostvars[groups['contrail-repo'][0]].get('ansible_default_ipv4', {}).get('address','') | default('') }}"
+contrail_repo_ip: "{{ hostvars[groups['contrail-repo'][0]].get('ansible_default_ipv4', {}).get('address','') | default('') if 'contrail-repo' in groups else ''}}"
 contrail_apt_repo: "{{ contrail_repo_ip | ternary('http://' + contrail_repo_ip + ':' + contrail_apt_repo_port|string, '') if 'contrail-repo' in groups else ''}}"
 contrail_yum_repo_port: 2567
 contrail_yum_repo: "{{ contrail_repo_ip | ternary('http://' + contrail_repo_ip + ':' + contrail_yum_repo_port|string, '') if 'contrail-repo' in groups else ''}}"
