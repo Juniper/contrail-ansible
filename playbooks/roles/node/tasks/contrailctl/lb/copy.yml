@@ -1,0 +1,10 @@
+---
+- name: "Copy contrailctl/lb.conf"
+  copy: src={{ item }} dest={{ contrailctl_config_directory }}
+  with_first_found:
+    - files:
+      - "{{ contrailctl_config_source |ternary(contrailctl_config_source + '/lb.conf', 'contrailctl/lb.conf') }}"
+      - contrailctl/lb.conf
+      - "{{ playbook_dir }}/contrailctl/lb.conf"
+      - /etc/contrailctl/lb.conf
+      skip: true

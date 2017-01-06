@@ -1,0 +1,8 @@
+---
+- name: Configure contrailctl/lb.conf GLOBAL section
+  ini_file: dest="{{ contrailctl_config_directory }}/lb.conf" section=GLOBAL option={{ item.key }} value={{ item.value }}  create=yes
+  with_dict: "{{ global_config_orig | combine(lb_config | default({})) }}"
+
+- name: Configure contrailctl/lb.conf HAPROXY section
+  ini_file: dest="{{ contrailctl_config_directory }}/lb.conf" section=HAPROXY option={{ item.key }} value={{ item.value }}  create=yes
+  with_dict: "{{ haproxy_config | default({}) }}"

@@ -1,0 +1,12 @@
+---
+- name: Configure contrailctl/mesosmanager.conf MESOS section
+  ini_file: dest="{{ contrailctl_config_directory }}/mesosmanager.conf" section=MESOS option={{ item.key }} value={{ item.value }}  create=yes
+  with_dict: "{{ mesos_config | default({}) }}"
+
+- name: Configure contrailctl/mesosmanager.conf VNC section
+  ini_file: dest="{{ contrailctl_config_directory }}/mesosmanager.conf" section=VNC option={{ item.key }} value={{ item.value }}  create=yes
+  with_dict: "{{ vnc_config | default({}) }}"
+
+- name: Configure contrailctl/mesosmanager.conf GLOBAL section
+  ini_file: dest="{{ contrailctl_config_directory }}/mesosmanager.conf" section=GLOBAL option={{ item.key }} value={{ item.value }}  create=yes
+  with_dict: "{{ global_config_orig | combine(mesos_manager_config | default({})) }}"

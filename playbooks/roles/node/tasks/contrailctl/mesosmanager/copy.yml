@@ -1,0 +1,10 @@
+---
+- name: "Copy contrailctl/mesosmanager.conf"
+  copy: src={{ item }} dest={{ contrailctl_config_directory }}
+  with_first_found:
+    - files:
+      - "{{ contrailctl_config_source |ternary(contrailctl_config_source + '/mesosmanager.conf', 'contrailctl/mesosmanager.conf') }}"
+      - contrailctl/mesosmanager.conf
+      - "{{ playbook_dir }}/contrailctl/mesosmanager.conf"
+      - /etc/contrailctl/mesosmanager.conf
+      skip: true

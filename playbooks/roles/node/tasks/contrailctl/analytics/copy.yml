@@ -1,0 +1,10 @@
+---
+- name: "Copy contrailctl/analytics.conf"
+  copy: src={{ item }} dest={{ contrailctl_config_directory }}
+  with_first_found:
+    - files:
+      - "{{ contrailctl_config_source |ternary(contrailctl_config_source + '/analytics.conf', 'contrailctl/analytics.conf') }}"
+      - contrailctl/analytics.conf
+      - "{{ playbook_dir }}/contrailctl/analytics.conf"
+      - /etc/contrailctl/analytics.conf
+      skip: true

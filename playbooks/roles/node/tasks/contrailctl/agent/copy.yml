@@ -1,0 +1,10 @@
+---
+- name: "Copy contrailctl/agent.conf"
+  copy: src={{ item }} dest={{ contrailctl_config_directory }}
+  with_first_found:
+    - files:
+      - "{{ contrailctl_config_source |ternary(contrailctl_config_source + '/agent.conf', 'contrailctl/agent.conf') }}"
+      - contrailctl/agent.conf
+      - "{{ playbook_dir }}/contrailctl/agent.conf"
+      - /etc/contrailctl/agent.conf
+      skip: true
