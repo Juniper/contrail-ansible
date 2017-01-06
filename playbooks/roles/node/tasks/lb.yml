@@ -12,24 +12,8 @@
     load_path: "/tmp/{{ contrail_lb_image_archive }}"
   when: docker_registry is not defined or load_contrail_lb_image is defined
 
-- name: Configure contrailctl/lb.conf GLOBAL section
-  ini_file: dest="{{ contrailctl_config_directory }}/lb.conf" section=GLOBAL option={{ item.key }} value={{ item.value }}  create=yes
-  with_dict: "{{ global_config_orig | combine(lb_config | default({})) }}"
-
-- name: Configure contrailctl/lb.conf HAPROXY section
-  ini_file: dest="{{ contrailctl_config_directory }}/lb.conf" section=HAPROXY option={{ item.key }} value={{ item.value }}  create=yes
-  with_dict: "{{ haproxy_config | default({}) }}"
-
-- name: "Copy contrailctl/lb.conf"
-  copy: src={{ item }} dest={{ contrailctl_config_directory }}
-  with_first_found:
-    - files:
-      - "{{ contrailctl_config_source |ternary(contrailctl_config_source + '/lb.conf', 'contrailctl/lb.conf') }}"
-      - contrailctl/lb.conf
-      - "{{ playbook_dir }}/contrailctl/lb.conf"
-      - /etc/contrailctl/lb.conf
-      skip: true
-  when: contrailctl_external_configured
+- name: Configure contrailctl/agent.conf
+  include: "contrailctl/agent/{{ contrailctl_config_mode }}.yml"
 
 - name: "Start Loadbalancer container"
   docker_container:

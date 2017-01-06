@@ -1,0 +1,10 @@
+---
+- name: "Copy contrailctl/kubemanager.conf"
+  copy: src={{ item }} dest={{ contrailctl_config_directory }}
+  with_first_found:
+    - files:
+      - "{{ contrailctl_config_source |ternary(contrailctl_config_source + '/kubemanager.conf', 'contrailctl/kubemanager.conf') }}"
+      - contrailctl/kubemanager.conf
+      - "{{ playbook_dir }}/contrailctl/kubemanager.conf"
+      - /etc/contrailctl/kubemanager.conf
+      skip: true

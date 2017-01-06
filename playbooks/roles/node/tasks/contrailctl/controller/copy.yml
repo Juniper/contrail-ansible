@@ -1,0 +1,10 @@
+---
+- name: "Copy contrailctl/controller.conf"
+  copy: src={{ item }} dest={{ contrailctl_config_directory }}
+  with_first_found:
+    - files:
+      - "{{ contrailctl_config_source |ternary(contrailctl_config_source + '/controller.conf', 'contrailctl/controller.conf') }}"
+      - contrailctl/controller.conf
+      - "{{ playbook_dir }}/contrailctl/controller.conf"
+      - /etc/contrailctl/controller.conf
+      skip: true

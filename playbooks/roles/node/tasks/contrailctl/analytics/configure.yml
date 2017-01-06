@@ -1,0 +1,33 @@
+---
+- name: Configure contrailctl/analytics.conf GLOBAL section
+  ini_file: dest="{{ contrailctl_config_directory }}/analytics.conf" section=GLOBAL option={{ item.key }} value={{ item.value }}  create=yes
+  with_dict: "{{ global_config_orig | combine(analytics_config | default({})) }}"
+
+- name: Configure contrailctl/analytics.conf KEYSTONE section
+  ini_file: dest="{{ contrailctl_config_directory }}/analytics.conf" section=KEYSTONE option={{ item.key }} value={{ item.value }}  create=yes
+  with_dict: "{{ keystone_config | default({}) }}"
+  when: cloud_orchestrator == "openstack"
+
+- name: Configure contrailctl/analytics.conf ALARM_GEN section
+  ini_file: dest="{{ contrailctl_config_directory }}/analytics.conf" section=ALARM_GEN option={{ item.key }} value={{ item.value }}  create=yes
+  with_dict: "{{ alarm_gen_config | default({}) }}"
+
+- name: Configure contrailctl/analytics.conf ANALYTICS_API section
+  ini_file: dest="{{ contrailctl_config_directory }}/analytics.conf" section=ANALYTICS_API option={{ item.key }} value={{ item.value }}  create=yes
+  with_dict: "{{ analytics_api_config | default({}) }}"
+
+- name: Configure contrailctl/analytics.conf ANALYTICS_COLLECTOR section
+  ini_file: dest="{{ contrailctl_config_directory }}/analytics.conf" section=ANALYTICS_COLLECTOR option={{ item.key }} value={{ item.value }}  create=yes
+  with_dict: "{{ analytics_collector_config | default({}) }}"
+
+- name: Configure contrailctl/analytics.conf QUERY_ENGINE section
+  ini_file: dest="{{ contrailctl_config_directory }}/analytics.conf" section=QUERY_ENGINE option={{ item.key }} value={{ item.value }}  create=yes
+  with_dict: "{{ query_engine_config | default({}) }}"
+
+- name: Configure contrailctl/analytics.conf SNMP_COLLECTOR section
+  ini_file: dest="{{ contrailctl_config_directory }}/analytics.conf" section=SNMP_COLLECTOR option={{ item.key }} value={{ item.value }}  create=yes
+  with_dict: "{{ snmp_collector_config | default({}) }}"
+
+- name: Configure contrailctl/analytics.conf TOPOLOGY section
+  ini_file: dest="{{ contrailctl_config_directory }}/analytics.conf" section=TOPOLOGY option={{ item.key }} value={{ item.value }}  create=yes
+  with_dict: "{{ topology_config | default({}) }}"
