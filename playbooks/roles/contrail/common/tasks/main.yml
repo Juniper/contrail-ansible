@@ -1,16 +1,28 @@
 ---
-- name: include OS specific code
+- name: include OS family specific package dependencies
   include: "{{item}}"
   with_first_found:
     - files:
-      - "{{ ansible_distribution }}-{{ ansible_distribution_version }}.yml"
-      - "{{ ansible_distribution }}.yml"
-      - "{{ ansible_os_family }}.yml"
+      - "install/{{ ansible_os_family }}.yml"
       skip: true
+  tags: [package]
+
+- name: include OS distribution specific code
+  include: "{{item}}"
+  with_first_found:
+    - files:
+      - "install/{{ ansible_distribution }}-{{ ansible_distribution_version }}.yml"
+      - "install/{{ ansible_distribution }}.yml"
+      skip: true
+  tags: [package]
 
 - name: Create directory /var/log/contrail
   file: path=/var/log/contrail state=directory
   tags: [package, install]
+
+- include: systemd.yml
+  when: contrail_service_mgr == 'systemd'
+  tags: [package]
 
 - include: keystoneauth.yml
   when: cloud_orchestrator == "openstack" and ( "'contrail-controllers' in group_names" or "'contrail-analytics' in group_names" )

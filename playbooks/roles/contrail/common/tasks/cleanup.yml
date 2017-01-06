@@ -1,0 +1,12 @@
+---
+- name: Call systemd specific cleanup code
+  include: cleanup/systemd.yml
+  when: contrail_service_mgr == "systemd"
+
+- name: Load OS distribution specific code
+  include: "{{item}}"
+  with_first_found:
+    - files:
+      - "cleanup/{{ansible_distribution}}-{{ansible_distribution_version}}.yml"
+      - "cleanup/{{ansible_distribution}}.yml"
+      skip: true

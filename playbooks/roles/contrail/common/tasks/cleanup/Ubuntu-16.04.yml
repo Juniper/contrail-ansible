@@ -1,0 +1,19 @@
+---
+- name: Install python-setuptools
+  package: name="{{ item_package }}" state=present
+  with_items:
+    - python-setuptools
+    - gcc
+    - python-dev
+  loop_control:
+    loop_var: item_package
+
+- name: Make sure pip is installed
+  easy_install: name=pip state=present
+
+# contrail-api fail to run with errors in ubuntu 16.04 which need geventhttpclient need to be upgraded
+- name: Workaround for ubuntu 16.04 to upgrade geventhttpclient
+  pip: name=geventhttpclient version=1.3.1 state=present
+
+- name: Need to remove geventhttpclient module from /usr/lib/python2.7
+  file: path=/usr/lib/python2.7/dist-packages/geventhttpclient state=absent
