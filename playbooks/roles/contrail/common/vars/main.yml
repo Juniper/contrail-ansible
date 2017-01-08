@@ -34,7 +34,7 @@ auth_vnc_api_configs:
   AUTHN_PROTOCOL: "{{ keystone_auth_protocol }}"
   AUTHN_SERVER: "{{ keystone_ip }}"
   AUTHN_PORT: "{{ keystone_admin_port }}"
-  AUTHN_URL: "{{ keystone_version }}/tokens"
+  AUTHN_URL: "/{{ keystone_version }}/tokens"
 
 systemd_wants_locations:
   - /lib/systemd/system/multi-user.target.wants/*
