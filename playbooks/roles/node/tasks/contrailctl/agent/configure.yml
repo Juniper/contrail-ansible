@@ -7,3 +7,8 @@
 - name: Configure GLOBAL section of contrailctl/agent.conf
   ini_file: dest="{{ contrailctl_config_directory }}/agent.conf" section=GLOBAL option={{ item.key }} value={{ item.value }}  create=yes
   with_dict: "{{ global_config_orig | combine(agent_config_orig) }}"
+
+- name: Configure contrailctl/controller.conf KEYSTONE section
+  ini_file: dest="{{ contrailctl_config_directory }}/agent.conf" section=KEYSTONE option={{ item.key }} value={{ item.value }}  create=yes
+  with_dict: "{{ keystone_config | default({}) }}"
+  when: cloud_orchestrator == "openstack"

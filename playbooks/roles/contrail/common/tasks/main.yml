@@ -23,11 +23,3 @@
 - include: systemd.yml
   when: contrail_service_mgr == 'systemd'
   tags: [package]
-
-- include: keystoneauth.yml
-  when: cloud_orchestrator == "openstack" and ( "'contrail-controllers' in group_names" or "'contrail-analytics' in group_names" )
-  tags: [contrail.common.keystoneauth, contrail.common.keystoneauth.configure, configure]
-
-- include: vncapi.yml
-  when: cloud_orchestrator == "openstack"
-  tags: [contrail.common.vncapi, contrail.common.vncapi.configure, configure]
