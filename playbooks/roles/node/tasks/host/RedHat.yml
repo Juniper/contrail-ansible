@@ -1,0 +1,21 @@
+---
+- name: Add contrail yum repository
+  yum_repository:
+    name: contrail
+    description: contrail repo
+    baseurl: "{{ contrail_yum_repo }}"
+    gpgcheck: no
+    enabled: yes
+  when: contrail_yum_repo
+
+- name: "Disable firewalld on redhat systems"
+  service: name=firewalld state=stopped enabled=no
+  ignore_errors: yes
+
+- name: "Disable iptables on redhat systems"
+  service: name=iptables state=stopped enabled=no
+  ignore_errors: yes
+
+- name: Set correct hostname on centos - this should always be only hostname and not hostname.domainname format
+  shell: hostnamectl set-hostname "{{ ansible_hostname }}"
+  when: ansible_hostname != ansible_nodename
