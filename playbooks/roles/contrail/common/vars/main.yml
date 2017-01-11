@@ -17,6 +17,10 @@ kafka_brokers_with_port: "{{ kafka_broker_list | map('regex_replace', '^(.*)$', 
 # "<ip1>:<port> <ip2>:port". i.e "10.0.0.11:9042 10.0.0.12:9042 10.0.0.3:9042"
 analyticsdb_servers_with_cql_port: "{{ analyticsdb_list | map('regex_replace', '^(.*)$', '\\1:' + analyticsdb_cql_port|string) | join(' ') }}"
 
+analytics_collectors_with_port: "{{ analytics_list | map('regex_replace', '^(.*)$', '\\1:' + analytics_collector_port|string) | join(' ') }}"
+control_servers_with_xmpp_port: "{{ control_node_list | map('regex_replace', '^(.*)$', '\\1:' + control_xmpp_port|string) | join(' ') }}"
+control_servers_with_dns_port: "{{ control_node_list | map('regex_replace', '^(.*)$', '\\1:' + control_dns_port|string) | join(' ') }}"
+
 api_server_protocol: "{{ 'https' if api_server_use_ssl else 'http' }}"
 api_server_url: "{{ api_server_protocol }}://{{ api_server_ip }}:{{ api_server_port }}"
 
