@@ -1,16 +1,6 @@
-# contrail version
-contrail_version: 4.0.0.0-3016
-
-# cloud_orchestrator - cloud orchestrators to be setup
-# Valid cloud orchestrators:
-# kubernetes, mesos, openstack
-cloud_orchestrator: kubernetes
-
-# ansible connection details
-ansible_user: root
-ansible_become: true
-# ansible_ssh_private_key_file: ~/.ssh/id_rsa
-
+###################################################
+# Docker configurations
+##
 # docker registry
 docker_registry: 10.84.34.155:5000
 docker_registry_insecure: True
@@ -20,6 +10,27 @@ docker_install_method: package
 
 # Dont install any bridge utils packages for docker
 docker_network_bridge: False
+
+###################################################
+# Ansible specific vars
+##
+
+# ansible connection details
+ansible_user: root
+ansible_become: true
+# ansible_ssh_private_key_file: ~/.ssh/id_rsa
+
+###################################################
+# Common settings for contrail
+##
+
+# contrail version
+contrail_version: 4.0.0.0-3016
+
+# cloud_orchestrator - cloud orchestrators to be setup
+# Valid cloud orchestrators:
+# kubernetes, mesos, openstack, openshift
+cloud_orchestrator: kubernetes
 
 # vrouter physical interface
 vrouter_physical_interface: eth0
@@ -50,3 +61,11 @@ vrouter_physical_interface: eth0
 
 # To configure custom webui http port
 # webui_config: {http_listen_port: 8085}
+
+###################################################
+# Openshift specific configuration
+##
+# ifmap port must be changed, to avoid conflict with kubernetes api port
+
+# ifmap_config: {server_port: 8445}
+# openshift_config: {token: <openshift token>}

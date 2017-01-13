@@ -10,3 +10,7 @@
 - name: Configure contrailctl/kubemanager.conf GLOBAL section
   ini_file: dest="{{ contrailctl_config_directory }}/kubemanager.conf" section=GLOBAL option={{ item.key }} value={{ item.value }}  create=yes
   with_dict: "{{ global_config_orig | combine(kube_manager_config | default({})) }}"
+
+- name: Configure contrailctl/kubemanager.conf OPENSHIFT section
+  ini_file: dest="{{ contrailctl_config_directory }}/kubemanager.conf" section=OPENSHIFT option={{ item.key }} value={{ item.value }}  create=yes
+  with_dict: "{{ openshift_config | default({}) }}"
