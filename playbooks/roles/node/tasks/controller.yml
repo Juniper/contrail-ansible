@@ -15,6 +15,26 @@
 - name: Configure contrailctl/controller.conf
   include: "contrailctl/controller/{{ contrailctl_config_mode }}.yml"
 
+# An issue on running command "su" is noticed in some kernel versions in ubuntu 14.04
+# https://github.com/docker/docker/issues/9213 - workaround for this for now
+- name: "Start contrail controller container for ubuntu 14.0x"
+  docker_container:
+    name: controller
+    image: "{{ controller_image }}"
+    privileged: true
+    network_mode: host
+    state: started
+    pull: "{{ always_pull_image }}"
+    tty: true
+    pid_mode: host
+    restart_policy: unless-stopped
+    restart_retries: 3
+    capabilities:
+      - AUDIT_WRITE
+    volumes:
+      - "{{ contrailctl_config_directory }}:/etc/contrailctl/"
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '14.04'
+
 - name: "Start contrail controller container"
   docker_container:
     name: controller
@@ -30,3 +50,4 @@
       - AUDIT_WRITE
     volumes:
       - "{{ contrailctl_config_directory }}:/etc/contrailctl/"
+  when: ansible_distribution_version != '14.04'
