@@ -1,0 +1,9 @@
+---
+- name: Install nova compute packages
+  apt: name={{ item }} state=installed force=yes
+  with_items:
+    - contrail-setup
+    - nova-compute
+
+- name: create a symlink from /bin/true to /sbin/chkconfig
+  file: src=/bin/true dest=/sbin/chkconfig state=link
