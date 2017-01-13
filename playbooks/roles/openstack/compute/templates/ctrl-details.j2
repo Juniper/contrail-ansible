@@ -1,0 +1,17 @@
+export SERVICE_TOKEN={{ keystone_admin_token }}
+export AUTH_PROTOCOL={{ keystone_auth_protocol }}
+export QUANTUM_PROTOCOL={{ neutron_protocol }}
+export ADMIN_TOKEN={{ keystone_admin_token }}
+export CONTROLLER={{ openstack_ip }}
+export AMQP_SERVER={{ openstack_ip }}
+export HYPERVISOR=libvirt
+export NOVA_PASSWORD={{ nova_password }}
+export NEUTRON_PASSWORD={{ neutron_password }}
+export SERVICE_TENANT_NAME={{ service_tenant_name }}
+export KEYSTONE_VERSION={{ keystone_version }}
+export REGION_NAME={{ region }}
+export QUANTUM={{ openstack_ip }}
+export QUANTUM_PORT={{ neutron_port }}
+export COMPUTE={{ ansible_default_ipv4.address }}
+export SELF_MGMT_IP={{ ansible_default_ipv4.address }}"
+export CONTROLLER_MGMT={{ openstack_ip }}

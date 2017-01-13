@@ -69,3 +69,10 @@ vrouter_physical_interface: eth0
 
 # ifmap_config: {server_port: 8445}
 # openshift_config: {token: <openshift token>}
+
+###################################################
+# Openstack specific configuration
+##
+# contrail_install_packages_url: "http://10.84.5.120/github-build/mainline/3023/ubuntu-14-04/mitaka/contrail-install-packages_4.0.0.0-3023~mitaka_all.deb"
+# keystone_config: {ip: 192.168.0.23, admin_password: contrail123}
+

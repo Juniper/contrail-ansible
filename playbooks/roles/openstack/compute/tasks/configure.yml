@@ -1,0 +1,16 @@
+- name: Create /etc/contrail/ctrl-details
+  template: src=ctrl-details.j2 dest=/etc/contrail/ctrl-details
+
+- name: Configure nova
+  shell: source /etc/contrail/ctrl-details; /opt/contrail/bin/compute-server-setup.sh
+
+- name: Copy vrouter-port-control from agent container to compute
+  shell: docker cp agent:/usr/bin/vrouter-port-control /usr/bin/vrouter-port-control
+  args:
+    creates: /usr/bin/vrouter-port-control
+
+- name: Workaround - commentout line which import vnc_api
+  lineinfile:
+    dest: /usr/bin/vrouter-port-control
+    regexp: '^from vnc_api.vnc_api'
+    line: '#from vnc_api.vnc_api import *'
