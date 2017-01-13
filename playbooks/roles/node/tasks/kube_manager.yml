@@ -26,5 +26,4 @@
     tty: true
     restart_policy: unless-stopped
     restart_retries: 3
-    volumes:
-      - "{{ contrailctl_config_directory }}:/etc/contrailctl/"
+    volumes: "{{ kube_manager_container_volumes }}"

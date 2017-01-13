@@ -76,3 +76,14 @@ contrail_kubernetes_list: "{{ groups['contrail-kubernetes'] | default(false)}}"
 contrail_compute_list: "{{ groups['contrail-compute'] | default(false)}}"
 controller_ip: ''
 analytics_ip: ''
+
+# Volumes to be mounted to the containers
+contrail_container_volumes:
+  - "{{ contrailctl_config_directory }}:/etc/contrailctl/"
+
+# In case of openshift, /etc/origin need to be mounted to the kube_manager container
+#  which contain certs to connect with openshift master
+openshift_cert_volumes:
+  - "/etc/origin:/etc/origin"
+
+kube_manager_container_volumes: "{{ contrail_container_volumes + openshift_cert_volumes if cloud_orchestrator == 'openshift' else contrail_container_volumes }}"

@@ -37,7 +37,7 @@
 
 - include: kube_manager.yml
   tags: [container.kube_manager, kube_manager]
-  when: "'contrail-kubernetes' in group_names and cloud_orchestrator == 'kubernetes'"
+  when: "'contrail-kubernetes' in group_names and cloud_orchestrator in ['kubernetes', 'openshift']"
 
 - include: agent.yml
   tags: [container.agent, agent]
@@ -45,7 +45,7 @@
 
 - include: kube_cni.yml
   tags: [container.kube_cni, kube_cni]
-  when: "'contrail-compute' in group_names and cloud_orchestrator in ['kubernetes', 'mesos']"
+  when: "'contrail-compute' in group_names and cloud_orchestrator in ['kubernetes', 'mesos', 'openshift']"
 
 - include: mesos_manager.yml
   tags: [container.mesos_manager, mesos_manager]
