@@ -5,7 +5,7 @@
     - pyroute2
 
 - name: Install contrail cni package
-  package: name=contrail-kube-cni state=present
+  package: name="contrail-kube-cni" state=present
 
 - name: Make sure cni directories exist
   file: path="{{ item }}" state=directory recurse=true

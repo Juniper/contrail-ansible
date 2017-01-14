@@ -16,7 +16,7 @@
   docker_container:
     name: contrail-repo-centos
     image: "{{ contrail_repo_centos_image }}"
-    network_mode: host
+    published_ports: "0.0.0.0:{{ contrail_yum_repo_port }}:{{ native_package_repo_internal_port }}"
     state: started
     pull: "{{ always_pull_image }}"
     tty: true
