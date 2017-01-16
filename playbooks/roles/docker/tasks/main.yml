@@ -1,0 +1,101 @@
+---
+- name: resolve platform specific vars
+  include_vars: "{{item}}"
+  with_first_found:
+    - "{{ansible_distribution}}-{{ansible_distribution_release}}.yml"
+    - "{{ansible_distribution}}.yml"
+    - "{{ansible_os_family}}.yml"
+
+- name: Install curl
+  package: name=curl state=present
+
+- name: install utils for fiddling with ethernet bridges...
+  become: yes
+  become_user: root
+  with_items:
+    - bridge-utils
+  package: name={{item}} state=present
+  when: docker_network_bridge
+
+- name: install docker using installer from get.docker.com
+  shell: curl -s -L {{docker_mirror}} | sh
+  args:
+    creates: /usr/bin/docker
+  when: docker_install_method == 'installer'
+
+- name: install docker using package
+  package: name="{{ docker_package_name }}" state=installed
+  when: docker_install_method == 'package'
+
+- name: Added OPTIONS to docker start in case of using installer
+  ini_file: dest="{{ item }}"
+            section=Service option=ExecStart
+            value="/usr/bin/dockerd ${{ docker_options_var }}"
+  with_first_found:
+    - /usr/lib/systemd/system/docker.service
+    - /lib/systemd/system/docker.service
+  register: docker_opt
+  when: ansible_service_mgr == "systemd" and docker_install_method == 'installer'
+
+- name: Adding EnvironmentFile to docker systemd file
+  #EnvironmentFile=-/etc/sysconfig/docker
+  ini_file: dest="{{ item }}"
+            section=Service option=EnvironmentFile
+            value="{{ docker_env_file }}"
+  with_first_found:
+    - /usr/lib/systemd/system/docker.service
+    - /lib/systemd/system/docker.service
+  register: docker_envfile
+  when: ansible_service_mgr == "systemd"
+  notify: restart docker
+
+- name: Adding DOCKER OPTIONS for docker init scripts
+  lineinfile: dest="{{ docker_env_file }}"
+              line="{{ docker_options_var }}={{ docker_opts }}"
+              regexp="^{{ docker_options_var }}="
+              state=present
+              create=yes
+  notify: restart docker
+
+- name: reload systemd config
+  command: /bin/systemctl daemon-reload
+  when: docker_envfile.changed or docker_opt.changed
+
+- name: create root user docker config directory
+  become: yes
+  become_user: root
+  file: >-
+    path=/root/.docker
+    state=directory
+    mode=0700
+
+- name: configuring docker access for the root user...
+  become: yes
+  become_user: root
+  when: docker_remote and docker_tls
+  with_items:
+    - {f: '{{docker_pki_cert_src}}', t: cert.pem, m: '0600'}
+    - {f: '{{docker_pki_ca_cert_src}}', t: ca.pem, m: '0600'}
+    - {f: '{{docker_pki_key_src}}', t: key.pem, m: '0400'}
+  copy: >-
+    src={{item.f}}
+    dest=/root/.docker/{{item.t}}
+    mode={{item.m}}
+  notify: restart docker
+
+- name: write /etc/profile.d/docker.sh
+  become: yes
+  become_user: root
+  with_items:
+    - etc/profile.d/docker.sh
+  template: >-
+    src={{item}}.j2
+    dest=/{{item}}
+    mode=0644
+
+- name : launch docker...
+  become: yes
+  become_user: root
+  service: name=docker state=started enabled=yes
+
+- meta: flush_handlers

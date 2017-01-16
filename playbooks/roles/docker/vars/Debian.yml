@@ -1,0 +1,7 @@
+---
+docker_ssl_key_pki_cacert_dir: /etc/ssl/certs
+docker_ssl_key_pki_cert_dir : /etc/ssl/certs
+docker_ssl_key_pki_key_dir : /etc/ssl/private
+
+docker_options_var: DOCKER_OPTS
+docker_env_file: /etc/default/docker

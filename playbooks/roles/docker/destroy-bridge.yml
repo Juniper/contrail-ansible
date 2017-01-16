@@ -1,0 +1,14 @@
+---
+- hosts: all
+  tasks:
+    - name: stopping docker...
+      service: name=docker state=stopped
+
+    - name: down docker0 bridge
+      command: ip link set docker0 down
+
+    - name: install bridge-utils
+      package: state=present name=bridge-utils
+      
+    - name: delete docker0
+      command: brctl delbr docker0
