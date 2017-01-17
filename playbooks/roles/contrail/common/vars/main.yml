@@ -5,6 +5,7 @@ configdb_servers_with_port: "{{ configdb_server_list | map('regex_replace', '^(.
 
 # This will construct a string with comma delimited list of all zookeeper server and port in form of "ip1:port, ip2:port"
 zk_servers_with_port: "{{ zk_server_list | map('regex_replace', '^(.*)$', '\\1:' + zk_port|string) | join(',') }}"
+zk_servers_with_port_space_delim: "{{ zk_servers_with_port | regex_replace(',', ' ') }}"
 
 # This will construct a string with comma delimited list of all rabbitmq server and port in form of "ip1:port, ip2:port"
 rabbitmq_servers_with_port: "{{ rabbit_server_list | map('regex_replace', '^(.*)$', '\\1:' + rabbit_port|string) | join(',') }}"
