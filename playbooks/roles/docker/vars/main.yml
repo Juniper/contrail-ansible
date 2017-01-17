@@ -1,0 +1,99 @@
+---
+docker_pki_key_file : '{{inventory_hostname}}{{docker_pki_key_suffix}}'
+docker_pki_key_src: '{{docker_pki_dir}}/{{docker_pki_key_file}}'
+docker_pki_key_dest : '{{docker_ssl_key_pki_key_dir}}/{{docker_pki_key_file}}'
+
+docker_pki_cert_file : '{{inventory_hostname}}{{docker_pki_cert_suffix}}'
+docker_pki_cert_src: '{{docker_pki_dir}}/{{docker_pki_cert_file}}'
+docker_pki_cert_dest : '{{docker_ssl_key_pki_cert_dir}}/{{docker_pki_cert_file}}'
+
+docker_pki_ca_file : 'ca{{docker_pki_cert_suffix}}'
+docker_pki_ca_cert_src: '{{docker_pki_dir}}/{{docker_pki_ca_file}}'
+docker_pki_ca_cert_dest : '{{docker_ssl_key_pki_cacert_dir}}/{{docker_pki_ca_file}}'
+
+docker_insecure_registries_daemon_args : >-
+  {% if docker_insecure_registries is defined %}
+  {% if docker_insecure_registries is string %}
+  {% if docker_insecure_registries %}
+  --insecure-registry {{docker_insecure_registries}}
+  {% endif %}
+  {% else %}
+  {% for ir in docker_insecure_registries %} --insecure-registry {{ir}}
+  {% endfor %}
+  {% endif %}
+  {% endif %}
+
+docker_eff_port: >-
+  {% if docker_tls %}{{docker_tls_port}}{% else %}{{docker_nontls_port}}{% endif %}
+  
+docker_tls_args: >-
+  {% if docker_tls %}
+  --tls=true
+  --tlscert={{docker_pki_cert_dest}}
+  --tlskey={{docker_pki_key_dest}}
+  --tlscacert={{docker_pki_ca_cert_dest}}
+  {% endif %}
+
+docker_remote_args: >-
+  {% if docker_remote %}
+  {{docker_tls_args}}
+  -H tcp://{{docker_remote_bind}}:{{docker_eff_port}}
+  {% endif %}
+  
+docker_dns_daemon_args : >-
+  {% if docker_dns_resolvers is defined %}
+  {% for dns in docker_dns_resolvers %} --dns {{dns}}
+  {% endfor %}
+  {% endif %}
+
+docker_redhat_opts: >-
+  {% if ansible_os_family == 'RedHat' %}--selinux-enabled --log-driver=journald{% endif %}
+
+docker_bip_daemon_args : >-
+  {% if docker_bip is defined %}--bip="{{ docker_bip }}"{% endif %}
+
+docker_cluster_advertise_args: >-
+  {% if docker_cluster_advertise_interface is defined %}
+  --cluster-advertise {{docker_cluster_advertise_interface}}:{{docker_eff_port}}
+  {% endif %}
+
+docker_cluster_store_args: >-
+  {% if docker_cluster_store is defined %}
+  --cluster-store {{docker_cluster_store}}
+  {% endif %}
+
+docker_storage_driver_args: >-
+  {% if docker_storage_driver is defined %}
+  --storage-driver={{docker_storage_driver}}
+  {% endif %}
+
+docker_opts : >-
+  "{% if docker_daemon_args is defined %}{{docker_daemon_args}}{% endif %}
+  {{docker_insecure_registries_daemon_args}}
+  {{docker_dns_daemon_args}}
+  {{docker_bip_daemon_args}}
+  {{docker_remote_args}}
+  {{docker_cluster_advertise_args}}
+  {{docker_cluster_store_args}}
+  {{docker_storage_driver_args}}
+  {{ docker_redhat_opts }}"
+
+docker_http_proxy: >-
+  {% if proxy_env is defined and proxy_env.http_proxy is defined %}
+  export http_proxy="{{proxy_env.http_proxy}}"
+  {% endif %}
+
+docker_https_proxy: >-
+  {% if proxy_env is defined and proxy_env.https_proxy is defined %}
+  export https_proxy="{{proxy_env.https_proxy}}"
+  {% endif %}
+
+docker_no_proxy: >-
+  {% if proxy_env is defined and proxy_env.no_proxy is defined %}
+  export no_proxy="{{proxy_env.no_proxy}}"
+  {% endif %}
+
+docker_proxy_args : |
+  {{docker_http_proxy}}
+  {{docker_https_proxy}}
+  {{docker_no_proxy}}
