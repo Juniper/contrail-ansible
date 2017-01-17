@@ -34,6 +34,12 @@ vrouter_physical_interface: eth0
 # reused in *_config dicts
 controller_list: [192.168.0.24]
 
+# Disable webui on controller container
+# enable_webui: false
+
+# Disable control services on controller container
+# enable_control: false
+
 ##################
 # Below config params are used to configure contrailctl
 # All of below variables are a dict which form individual section of contrailctl/*.conf (controller.conf, agent.conf, etc)
