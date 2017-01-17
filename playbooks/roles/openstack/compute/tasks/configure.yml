@@ -4,6 +4,14 @@
 - name: Configure nova
   shell: source /etc/contrail/ctrl-details; /opt/contrail/bin/compute-server-setup.sh
 
+# compute-server-setup.sh was not setting up below configs, which caused neutron auth issues while booting a vm
+- name: Configure neutron credentials in nova.conf to fix configuration problem by above command
+  ini_file: dest={{ api_conf }} section=neutron option={{ item.key }} value={{ item.value }}  create=yes
+  notify: restart nova-compute
+  with_dict:
+    password: "{{ neutron_password }}"
+    project_name: "{{ service_tenant_name }}"
+
 - name: Copy vrouter-port-control from agent container to compute
   shell: docker cp agent:/usr/bin/vrouter-port-control /usr/bin/vrouter-port-control
   args:
