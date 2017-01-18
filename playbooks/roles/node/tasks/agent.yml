@@ -14,21 +14,21 @@
 
 - name: Copy vrouter compiler image
   copy:
-    src: "{{ docker_image_load_path }}/{{ vrouter_module_compiler_redhat7_image_archive }}"
-    dest: "/tmp/{{ vrouter_module_compiler_redhat7_image_archive }}"
-  when: docker_registry is not defined or load_contrail_vrouter_module_compiler_redhat7_image is defined
+    src: "{{ docker_image_load_path }}/{{ vrouter_module_compiler_centos7_image_archive }}"
+    dest: "/tmp/{{ vrouter_module_compiler_centos7_image_archive }}"
+  when: docker_registry is not defined or load_contrail_vrouter_module_compiler_centos7_image is defined
 
 - name: "Load vrouter compiler image"
   docker_image:
-    name: vrouter-module-compiler-redhat7
+    name: vrouter-module-compiler-centos7
     tag: "{{ contrail_version }}"
-    load_path: "/tmp/{{ vrouter_module_compiler_redhat7_image_archive }}"
-  when: docker_registry is not defined or load_vrouter_module_compiler_redhat7_image is defined
+    load_path: "/tmp/{{ vrouter_module_compiler_centos7_image_archive }}"
+  when: docker_registry is not defined or load_vrouter_module_compiler_centos7_image is defined
 
 - name: "Compile vrouter module"
   docker_container:
     name: vrouter-compiler
-    image: "{{ vrouter_compiler_image_redhat7 }}"
+    image: "{{ vrouter_compiler_image_centos7 }}"
     privileged: true
     state: started
     tty: true
