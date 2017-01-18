@@ -57,7 +57,6 @@ contrail_mesos_manager_image_archive: "contrail-mesos-manager-{{ contrail_versio
 contrail_repo_ubuntu_image_archive: "contrail-repo-ubuntu-{{ contrail_version }}.tar.gz"
 contrail_repo_centos_image_archive: "contrail-repo-centos-{{ contrail_version }}.tar.gz"
 contrailctl_config_directory: /etc/contrailctl
-native_package_repo_internal_port: 1567
 contrail_apt_repo_port: 1567
 contrail_yum_repo_port: "{{ contrail_apt_repo_port }}"
 contrail_repo_ip: "{{ hostvars[groups['contrail-repo'][0]].get('ansible_default_ipv4', {}).get('address','') | default('') if 'contrail-repo' in groups else ''}}"

@@ -16,7 +16,7 @@
   docker_container:
     name: contrail-repo-ubuntu
     image: "{{ contrail_repo_ubuntu_image }}"
-    published_ports: "0.0.0.0:{{ contrail_apt_repo_port }}:{{ native_package_repo_internal_port }}"
+    network_mode: host
     state: started
     pull: "{{ always_pull_image }}"
     tty: true
