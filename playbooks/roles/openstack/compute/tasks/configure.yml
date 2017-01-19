@@ -6,7 +6,7 @@
 
 # compute-server-setup.sh was not setting up below configs, which caused neutron auth issues while booting a vm
 - name: Configure neutron credentials in nova.conf to fix configuration problem by above command
-  ini_file: dest={{ api_conf }} section=neutron option={{ item.key }} value={{ item.value }}  create=yes
+  ini_file: dest={{ nova_conf }} section=neutron option={{ item.key }} value={{ item.value }}  create=yes
   notify: restart nova-compute
   with_dict:
     password: "{{ neutron_password }}"
@@ -22,3 +22,15 @@
     dest: /usr/bin/vrouter-port-control
     regexp: '^from vnc_api.vnc_api'
     line: '#from vnc_api.vnc_api import *'
+
+- name: Configure qemu
+  blockinfile:
+    dest: /etc/libvirt/qemu.conf
+    block: |
+      cgroup_device_acl = [
+       "/dev/null", "/dev/full", "/dev/zero",
+        "/dev/random", "/dev/urandom",
+        "/dev/ptmx", "/dev/kvm", "/dev/kqemu",
+        "/dev/rtc", "/dev/hpet","/dev/net/tun",
+      ]
+  notify: restart libvirt
