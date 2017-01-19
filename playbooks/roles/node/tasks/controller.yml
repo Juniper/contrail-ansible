@@ -33,7 +33,7 @@
       - AUDIT_WRITE
     volumes:
       - "{{ contrailctl_config_directory }}:/etc/contrailctl/"
-  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '14.04'
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '14.04' and os_release != 'u16.04'
 
 - name: "Start contrail controller container"
   docker_container:
@@ -50,4 +50,4 @@
       - AUDIT_WRITE
     volumes:
       - "{{ contrailctl_config_directory }}:/etc/contrailctl/"
-  when: ansible_distribution_version != '14.04'
+  when: ansible_distribution_version != '14.04' or os_release == 'u16.04'
