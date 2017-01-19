@@ -1,0 +1,24 @@
+---
+- name: Install curl
+  package: name=curl state=present
+
+- name: install docker using installer from get.docker.com
+  shell: curl -s -L {{docker_mirror}} | sh
+  args:
+    creates: /usr/bin/docker
+
+- name: Added OPTIONS to docker start in case of using installer
+  ini_file: dest=/usr/lib/systemd/system/docker.service section=Service option=ExecStart value="/usr/bin/dockerd ${{ docker_options_var }}" create=no
+  ignore_errors: yes
+  when: ansible_service_mgr == "systemd"
+  notify:
+    - reload systemd
+    - restart docker
+
+- name: Added OPTIONS to docker start in case of using installer
+  ini_file: dest=/lib/systemd/system/docker.service section=Service option=ExecStart value="/usr/bin/dockerd ${{ docker_options_var }}" create=no
+  ignore_errors: yes
+  when: ansible_service_mgr == "systemd"
+  notify:
+    - reload systemd
+    - restart docker

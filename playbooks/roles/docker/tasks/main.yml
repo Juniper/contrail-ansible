@@ -6,9 +6,6 @@
     - "{{ansible_distribution}}.yml"
     - "{{ansible_os_family}}.yml"
 
-- name: Install curl
-  package: name=curl state=present
-
 - name: install utils for fiddling with ethernet bridges...
   become: yes
   become_user: root
@@ -17,37 +14,26 @@
   package: name={{item}} state=present
   when: docker_network_bridge
 
-- name: install docker using installer from get.docker.com
-  shell: curl -s -L {{docker_mirror}} | sh
-  args:
-    creates: /usr/bin/docker
-  when: docker_install_method == 'installer'
-
-- name: install docker using package
-  package: name="{{ docker_package_name }}" state=installed
-  when: docker_install_method == 'package'
-
-- name: Added OPTIONS to docker start in case of using installer
-  ini_file: dest="{{ item }}"
-            section=Service option=ExecStart
-            value="/usr/bin/dockerd ${{ docker_options_var }}"
-  with_first_found:
-    - /usr/lib/systemd/system/docker.service
-    - /lib/systemd/system/docker.service
-  register: docker_opt
-  when: ansible_service_mgr == "systemd" and docker_install_method == 'installer'
+- name: Include docker_install_method specific code
+  include: "{{ docker_install_method }}.yml"
 
 - name: Adding EnvironmentFile to docker systemd file
   #EnvironmentFile=-/etc/sysconfig/docker
-  ini_file: dest="{{ item }}"
-            section=Service option=EnvironmentFile
-            value="{{ docker_env_file }}"
-  with_first_found:
-    - /usr/lib/systemd/system/docker.service
-    - /lib/systemd/system/docker.service
-  register: docker_envfile
+  ini_file: dest=/usr/lib/systemd/system/docker.service section=Service option=EnvironmentFile value="{{ docker_env_file }}" create=no
   when: ansible_service_mgr == "systemd"
-  notify: restart docker
+  ignore_errors: yes
+  notify:
+    - reload systemd
+    - restart docker
+
+- name: Adding EnvironmentFile to docker systemd file
+  #EnvironmentFile=-/etc/sysconfig/docker
+  ini_file: dest=/lib/systemd/system/docker.service section=Service option=EnvironmentFile value="{{ docker_env_file }}" create=no
+  when: ansible_service_mgr == "systemd"
+  ignore_errors: yes
+  notify:
+    - reload systemd
+    - restart docker
 
 - name: Adding DOCKER OPTIONS for docker init scripts
   lineinfile: dest="{{ docker_env_file }}"
@@ -56,10 +42,6 @@
               state=present
               create=yes
   notify: restart docker
-
-- name: reload systemd config
-  command: /bin/systemctl daemon-reload
-  when: docker_envfile.changed or docker_opt.changed
 
 - name: create root user docker config directory
   become: yes
