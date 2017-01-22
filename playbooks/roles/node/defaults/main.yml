@@ -2,7 +2,7 @@
 cloud_orchestrator: openstack
 # os_release - operaing system release code
 # ubuntu 14.04 - u14.04, ubuntu 16.04 - u16.04, centos 7.1 - c7.1
-valid_os_release: [u14.04, u16.04, c7.1, c7.2]
+valid_os_release: [u14.04, u16.04, c7.1, c7.2, redhat, centos]
 os_release: u14.04
 lb_image: >-
   {%- if docker_registry is defined and load_contrail_lb_image is not defined -%}{{ docker_registry }}/contrail-lb-{{ os_release }}:{{ contrail_version }}
@@ -32,8 +32,8 @@ contrail_repo_ubuntu_image: >-
   {%- if docker_registry is defined and load_contrail_repo_ubuntu_image is not defined -%}{{docker_registry}}/contrail-repo-{{ os_release }}:{{ contrail_version }}
   {%- else %}contrail-repo-{{ os_release }}:{{ contrail_version }}{%- endif %}
 contrail_repo_centos_image: >-
-  {%- if docker_registry is defined and load_contrail_repo_centos_image is not defined -%}{{docker_registry}}/contrail-repo-c7.1:{{ contrail_version }}
-  {%- else %}contrail-repo-c7.1:{{ contrail_version }}{%- endif %}
+  {%- if docker_registry is defined and load_contrail_repo_centos_image is not defined -%}{{docker_registry}}/contrail-repo-{{os_release}}:{{ contrail_version }}
+  {%- else %}contrail-repo-{{os_release}}:{{ contrail_version }}{%- endif %}
 
 
 always_pull_image: false
