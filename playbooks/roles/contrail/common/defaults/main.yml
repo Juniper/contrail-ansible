@@ -22,6 +22,8 @@ zk_port: 2181
 # List of rabbitmq servers
 rabbit_server_list: "{{ controller_list }}"
 rabbit_port: 5672
+rabbit_user: guest
+rabbit_password: guest
 
 config_ip: "{{ controller_ip }}"
 disc_server_ip: "{{ config_ip }}"
