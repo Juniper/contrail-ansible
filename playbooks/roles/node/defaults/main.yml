@@ -32,7 +32,7 @@ contrail_repo_ubuntu_image: >-
   {%- if docker_registry is defined and load_contrail_repo_ubuntu_image is not defined -%}{{docker_registry}}/contrail-repo-{{ os_release }}:{{ contrail_version }}
   {%- else %}contrail-repo-{{ os_release }}:{{ contrail_version }}{%- endif %}
 contrail_repo_centos_image: >-
-  {%- if docker_registry is defined and load_contrail_repo_centos_image is not defined -%}{{docker_registry}}/contrail-repo-centos:{{ contrail_version }}
+  {%- if docker_registry is defined and load_contrail_repo_centos_image is not defined -%}{{docker_registry}}/contrail-repo-c7.1:{{ contrail_version }}
   {%- else %}contrail-repo-c7.1:{{ contrail_version }}{%- endif %}
 
 
