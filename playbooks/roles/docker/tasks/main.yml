@@ -6,14 +6,6 @@
     - "{{ansible_distribution}}.yml"
     - "{{ansible_os_family}}.yml"
 
-- name: install utils for fiddling with ethernet bridges...
-  become: yes
-  become_user: root
-  with_items:
-    - bridge-utils
-  package: name={{item}} state=present
-  when: docker_network_bridge
-
 - name: Include docker_install_method specific code
   include: "{{ docker_install_method }}.yml"
 

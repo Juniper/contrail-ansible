@@ -18,9 +18,6 @@ docker_registry_insecure: True
 # install docker from package rather than installer from get.docker.com which is default method
 docker_install_method: package
 
-# Dont install any bridge utils packages for docker
-docker_network_bridge: False
-
 # vrouter physical interface
 vrouter_physical_interface: eth0
 
