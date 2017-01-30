@@ -12,8 +12,8 @@
     load_path: "/tmp/{{ contrail_lb_image_archive }}"
   when: docker_registry is not defined or load_contrail_lb_image is defined
 
-- name: Configure contrailctl/agent.conf
-  include: "contrailctl/agent/{{ contrailctl_config_mode }}.yml"
+- name: Configure contrailctl/lb.conf
+  include: "contrailctl/lb/{{ contrailctl_config_mode }}.yml"
 
 - name: "Start Loadbalancer container"
   docker_container:
