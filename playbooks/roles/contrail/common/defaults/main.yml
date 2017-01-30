@@ -20,10 +20,15 @@ zk_server_list: "{{ controller_list }}"
 zk_port: 2181
 
 # List of rabbitmq servers
-rabbit_server_list: "{{ controller_list }}"
-rabbit_port: 5672
-rabbit_user: guest
-rabbit_password: guest
+# external_rabbitmq_servers - are list of rabbitmq servers managed externally
+external_rabbitmq_servers: []
+# In case of external_rabbitmq_servers, no need to setup rabbitmq here
+contrail_rabbitmq_setup: "{{ false if external_rabbitmq_servers else true }}"
+# external_rabbitmq_servers to be used as rabbitmq_server_list if it is set
+rabbitmq_server_list: "{{ external_rabbitmq_servers if external_rabbitmq_servers else controller_list }}"
+rabbitmq_port: 5672
+rabbitmq_user: guest
+rabbitmq_password: guest
 
 config_ip: "{{ controller_ip }}"
 disc_server_ip: "{{ config_ip }}"
