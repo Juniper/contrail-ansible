@@ -3,12 +3,17 @@ cloud_orchestrator: openstack
 controller_ip: "{{ ansible_default_ipv4.address }}"
 controller_list: ["{{ controller_ip }}"]
 
+contrail_api_server_list: "{{ config_server_list }}"
+contrail_discovery_server_list: "{{ config_server_list }}"
+
 # Analytics dB defaults
 analyticsdb_list: "{{ controller_list }}"
 analyticsdb_port: 9160
 analyticsdb_cql_port: 9042
-
-configdb_server_list: "{{ controller_list }}"
+# external_configdb_servers - are list of rabbitmq servers managed externally
+external_configdb_servers: []
+# external_configdb_servers to be used as configdb_server_list if it is set
+configdb_server_list: "{{ external_configdb_servers if external_configdb_servers else config_server_list }}"
 configdb_port: 9161
 configdb_cql_port: 9041
 configdb_rmi_port: 7198
@@ -16,16 +21,16 @@ configdb_storage_port: 7010
 configdb_ssl_storage_port: 7011
 
 # List of zookeeper servers
-zk_server_list: "{{ controller_list }}"
+# external_zookeeper_servers - are list of zookeeper servers managed externally
+external_zookeeper_servers: []
+zk_server_list: "{{ external_zookeeper_servers if external_zookeeper_servers else config_server_list }}"
 zk_port: 2181
 
 # List of rabbitmq servers
 # external_rabbitmq_servers - are list of rabbitmq servers managed externally
 external_rabbitmq_servers: []
-# In case of external_rabbitmq_servers, no need to setup rabbitmq here
-contrail_rabbitmq_setup: "{{ false if external_rabbitmq_servers else true }}"
 # external_rabbitmq_servers to be used as rabbitmq_server_list if it is set
-rabbitmq_server_list: "{{ external_rabbitmq_servers if external_rabbitmq_servers else controller_list }}"
+rabbitmq_server_list: "{{ external_rabbitmq_servers if external_rabbitmq_servers else config_server_list }}"
 rabbitmq_port: 5672
 rabbitmq_user: guest
 rabbitmq_password: guest
@@ -43,6 +48,7 @@ region: RegionOne
 # Analytics defaults
 # Analytics node list, defaults to controller node list.
 analytics_list: "{{ controller_list }}"
+contrail_analytics_api_list: "{{ analytics_list }}"
 analytics_ip: "{{ controller_ip }}"
 analytics_server_ip: "{{ analytics_ip }}"
 analytics_server_port: 8081
