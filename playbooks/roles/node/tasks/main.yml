@@ -19,6 +19,11 @@
 - include: host.yml
   tags: [always]
 
+- name: Create config_server_list
+  set_fact:
+    config_server_list: "{{config_server_list + [item] if 'config' in hostvars[item].get('controller_components', []) else config_server_list}}"
+  with_items: "{{ groups['contrail-controllers'] }}"
+
 - include: lb.yml
   tags: [container.lb, lb]
   when: "'contrail-lb' in group_names"
