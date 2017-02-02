@@ -1,0 +1,5 @@
+---
+enable_config_service: "{{ true if 'config' in controller_components else false }}"
+enable_control_service: "{{ true if 'control' in controller_components else false }}"
+enable_webui_service: "{{ true if 'webui' in controller_components else false }}"
+
