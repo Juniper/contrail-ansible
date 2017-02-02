@@ -87,3 +87,5 @@ openshift_cert_volumes:
   - "/etc/origin:/etc/origin"
 
 kube_manager_container_volumes: "{{ contrail_container_volumes + openshift_cert_volumes if cloud_orchestrator == 'openshift' else contrail_container_volumes }}"
+
+config_server_list: []
