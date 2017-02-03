@@ -1,0 +1,71 @@
+---
+- name: bare metal resolve platform specific vars
+  include_vars: "{{item}}"
+  with_first_found:
+    - files:
+      - "{{ansible_distribution}}-{{ansible_distribution_release}}.yml"
+      - "{{ansible_distribution}}.yml"
+      - "{{ansible_os_family}}.yml"
+      skip: true
+
+- name: Install kernel headers to compile vrouter module
+  package: name="{{ item }}" state=present
+  with_items: "{{ kernel_source_packages }}"
+
+- name: BARE METAL Copy vrouter compiler image
+  copy:
+    src: "{{ docker_image_load_path }}/{{ vrouter_module_compiler_centos7_image_archive }}"
+    dest: "/tmp/{{ vrouter_module_compiler_centos7_image_archive }}"
+  when: docker_registry is not defined or load_contrail_vrouter_module_compiler_centos7_image is defined
+
+- name: "Load vrouter compiler image"
+  docker_image:
+    name: vrouter-module-compiler-centos7
+    tag: "{{ contrail_version }}"
+    load_path: "/tmp/{{ vrouter_module_compiler_centos7_image_archive }}"
+  when: docker_registry is not defined or load_vrouter_module_compiler_centos7_image is defined
+
+- name: "Compile vrouter module"
+  docker_container:
+    name: vrouter-compiler
+    image: "{{ vrouter_compiler_image_centos7 }}"
+    privileged: true
+    state: started
+    tty: true
+    pull: "{{ always_pull_image }}"
+    detach: true
+    cleanup: true
+    capabilities:
+      - AUDIT_WRITE
+    env:
+      INSTALL_VROUTER_MODULE: true
+    volumes:
+      - "/lib/modules:/lib/modules"
+      - "/usr/src/kernels:/usr/src/kernels"
+  when: external_vrouter_compile and ansible_os_family == 'RedHat'
+
+- name: "Fail if external_vrouter_compile is true and unsupported OS family"
+  shell: "echo 'Unsupported OS family for external vrouter compilation {{ ansible_os_family }}';false"
+  when: external_vrouter_compile and ansible_os_family != 'RedHat'
+
+- name: Wait till vrouter module is installed
+  wait_for: path="/lib/modules/{{ ansible_kernel }}/kernel/net/contrail/vrouter.ko" state=present
+  when: external_vrouter_compile and ansible_os_family == 'RedHat'
+
+- name: Copy contrail vrouter agent image
+  copy:
+    src: "{{ docker_image_load_path }}/{{ contrail_agent_image_archive }}"
+    dest: "/tmp/{{ contrail_agent_image_archive }}"
+  when: docker_registry is not defined or load_contrail_agent_image is defined
+
+- name: "Load contrail vrouter agent image"
+  docker_image:
+    name: contrail-agent
+    tag: "{{ contrail_version }}"
+    load_path: "/tmp/{{ contrail_agent_image_archive }}"
+  when: docker_registry is not defined or load_contrail_agent_image is defined
+
+- name: Configure contrailctl/agent.conf
+  include: "contrailctl/agent/{{ contrailctl_config_mode }}.yml"
+
+
