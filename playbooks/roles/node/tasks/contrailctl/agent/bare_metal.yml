@@ -1,5 +1,4 @@
 ---
-- include: "{{ contrail_compute_mode }}.yml"
 
 - name: override vrouter_physical_interface in case set in host_vars
   set_fact:
@@ -15,23 +14,24 @@
   with_dict: "{{ keystone_config | default({}) }}"
   when: cloud_orchestrator == "openstack"
 
-- name: "FIXME: lineinfile does not replace lines. Temporarily removing it everytime"
+# FIXME: This task can be removed after making sure lineinfile module works.
+# Doesnt seem to work now. Temporary workaround.
+- name: "Start {{ playbook_dir }}/vars/contrail_agent.yml from scratch everytime"
   file: path="{{ playbook_dir }}/vars/contrail_agent.yml" state=absent
-  when: bare_metal_compute is defined
+  delegate_to: 127.0.0.1
 
 - name: Create new dict for contrail_agent.yml
   set_fact: 
     keystone_vars: "{{ keystone_vars|default({}) | combine( { 'keystone_' ~ item.key : item.value } ) }}"
   with_dict: "{{ keystone_config }}"
-  when: bare_metal_compute is defined
 
 
 - name: Create vars/agent.yml on remote for bare metal
   lineinfile: dest="{{ playbook_dir }}/vars/contrail_agent.yml" line="{{ global_config_orig | combine(agent_config_orig) | to_nice_yaml}}" create=yes
   delegate_to: 127.0.0.1
-  when: bare_metal_compute is defined
 
-- name: "Update vars/agent.yml on remote for bare metal with {{ keystone_vars }}"
+# FIXME: Move this file to {{playbookdir}}/vars/{{ansible_host}}/contrail_agent.yml later
+- name: "Update {{ playbook_dir }}/vars/agent.yml for bare metal with {{ keystone_vars }}"
   lineinfile: dest="{{ playbook_dir }}/vars/contrail_agent.yml" line="{{ keystone_vars | default({}) | to_nice_yaml}}"
   delegate_to: 127.0.0.1
-  when: cloud_orchestrator == "openstack" and bare_metal_compute is defined
+  when: cloud_orchestrator == "openstack"

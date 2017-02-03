@@ -41,11 +41,11 @@
 
 - include: agent.yml
   tags: [container.agent, agent]
-  when: "'contrail-compute' in group_names and bare_metal_compute is not defined"
+  when: "'contrail-compute' in group_names and contrail_compute_mode != 'bare_metal'"
 
 - include: bare_metal_agent.yml
   tags: [container.agent, agent]
-  when: "'contrail-compute' in group_names and bare_metal_compute is defined"
+  when: "'contrail-compute' in group_names and contrail_compute_mode == 'bare_metal'"
 
 - include: kube_cni.yml
   tags: [container.kube_cni, kube_cni]
