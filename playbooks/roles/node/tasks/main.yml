@@ -8,9 +8,15 @@
 
 - name: Make sure pip is installed
   easy_install: name=pip state=present
+  when: ansible_os_family != 'RedHat'
 
 - name: "Make sure docker-py is installed"
   pip: name=docker-py version={{ docker_py_version }}
+  when: ansible_os_family != 'RedHat'
+
+- name: "Install python-docker-py in RedHat"
+  package: name=python-docker-py state=present
+  when: ansible_os_family == 'RedHat'
 
 - include: "repo/{{ ansible_os_family }}.yml"
   tags: [repo]

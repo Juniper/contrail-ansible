@@ -6,6 +6,7 @@
     baseurl: "{{ contrail_yum_repo }}"
     gpgcheck: no
     enabled: yes
+    priority: 1
   when: contrail_yum_repo
 
 - name: "Disable firewalld on redhat systems"
