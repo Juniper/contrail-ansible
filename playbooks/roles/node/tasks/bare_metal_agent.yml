@@ -68,4 +68,6 @@
 - name: Configure contrailctl/agent.conf
   include: "contrailctl/agent/{{ contrailctl_config_mode }}.yml"
 
-
+- name: Run the contrail/agent role
+  include_role: 
+      name: contrail/agent
