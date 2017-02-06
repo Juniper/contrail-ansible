@@ -88,5 +88,5 @@ openshift_cert_volumes:
 
 kube_manager_container_volumes: "{{ contrail_container_volumes + openshift_cert_volumes if cloud_orchestrator == 'openshift' else contrail_container_volumes }}"
 
-contrail_compute_mode: "container"
+contrail_compute_mode: "bare_metal"
 config_server_list: []
