@@ -101,9 +101,6 @@ docker_registry_insecure=True
 # is default method
 ;docker_install_method=package
 
-# Dont install any bridge utils packages for docker
-docker_network_bridge=False
-
 # ansible connection details
 ansible_user=root
 ansible_connection=ssh
