@@ -24,3 +24,6 @@
     - role: common
     - role: node
       tags: [node]
+
+- include: contrail_agent.yml
+  when: contrail_compute_mode == 'bare_metal'

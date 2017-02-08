@@ -68,6 +68,9 @@
 - name: Configure contrailctl/agent.conf
   include: "contrailctl/agent/{{ contrailctl_config_mode }}.yml"
 
-- name: Run the contrail/agent role
-  include_role: 
-      name: contrail/agent
+#- name: Include the generated vars
+#  include_vars: contrail_agent.yml
+
+#- name: " Run the contrail/agent role with {{ controller_list }}"
+#  include_role: 
+#      name: contrail/agent
