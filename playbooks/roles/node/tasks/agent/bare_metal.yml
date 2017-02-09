@@ -1,0 +1,12 @@
+---
+- name: Install kernel headers to compile vrouter module
+  package: name="{{ item }}" state=present
+  with_items: "{{ kernel_source_packages }}"
+
+- name: "Fail if external_vrouter_compile is true and unsupported OS family"
+  shell: "echo 'Unsupported OS family for external vrouter compilation {{ ansible_os_family }}';false"
+  when: external_vrouter_compile and ansible_os_family != 'RedHat'
+
+- name: Configure contrailctl/agent.conf
+  include: "../contrailctl/agent/{{ contrailctl_config_mode }}.yml"
+
