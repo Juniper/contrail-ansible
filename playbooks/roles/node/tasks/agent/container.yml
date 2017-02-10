@@ -76,7 +76,6 @@
     network_mode: host
     state: started
     tty: true
-    restart_policy: unless-stopped
     restart_retries: 3
     pull: "{{ always_pull_image }}"
     capabilities:
