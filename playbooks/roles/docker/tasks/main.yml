@@ -34,6 +34,23 @@
               state=present
               create=yes
   notify: restart docker
+  when:
+    - ansible_os_family != 'RedHat'
+    - ansible_distribution != 'RedHat'
+
+- debug:
+    msg: "ansible_distribution={{ansible_distribution}}"
+
+- name: Adding Docker Insecure registries in RedHat
+  lineinfile: dest="{{ docker_env_file }}"
+              line="{{docker_opts_RedHat}}"
+              regexp="^{{docker_opts_RedHat}}"
+              state=present
+              create=yes
+  notify: restart docker
+  when:
+    - ansible_os_family == 'RedHat'
+    - ansible_distribution == 'RedHat'
 
 - name: create root user docker config directory
   become: yes

@@ -23,6 +23,19 @@ docker_insecure_registries_daemon_args : >-
   {% endif %}
   {% endif %}
 
+docker_insecure_registries_daemon_args_RedHat : >-
+  {% if docker_insecure_registries is defined %}
+  {% if docker_insecure_registries is string %}
+  {% if docker_insecure_registries %}
+  {% if ansible_os_family == 'RedHat' %}
+  {% if ansible_distribution == 'RedHat' %}
+  { "insecure-registries": ["{{docker_insecure_registries | trim}}"] }
+  {% endif %}
+  {% endif %}
+  {% endif %}
+  {% endif %}
+  {% endif %}
+  
 docker_eff_port: >-
   {% if docker_tls %}{{docker_tls_port}}{% else %}{{docker_nontls_port}}{% endif %}
   
@@ -77,6 +90,9 @@ docker_opts : >-
   {{docker_cluster_store_args}}
   {{docker_storage_driver_args}}
   {{ docker_redhat_opts }}"
+
+docker_opts_RedHat: >-
+  {{docker_insecure_registries_daemon_args_RedHat}}
 
 docker_http_proxy: >-
   {% if proxy_env is defined and proxy_env.http_proxy is defined %}
