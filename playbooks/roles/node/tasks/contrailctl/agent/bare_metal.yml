@@ -5,18 +5,12 @@
     agent_config_orig: "{{ agent_config_orig | combine({'vrouter_physical_interface': vrouter_physical_interface})}}"
   when: vrouter_physical_interface is defined
 
-# FIXME: This task can be removed after making sure lineinfile module works.
-# Doesnt seem to work now. Keeps appending to file if it exists. Temporary workaround.
-- name: "Start {{ playbook_dir }}/vars/contrail_agent.yml from scratch everytime"
-  file: path="{{ playbook_dir }}/vars/contrail_agent.yml" state=absent
-  delegate_to: 127.0.0.1
-
 - name: Create new dict for contrail_agent.yml
   set_fact: 
     keystone_vars: "{{ keystone_vars|default({}) | combine( { 'keystone_' ~ item.key : item.value } ) }}"
   with_dict: "{{ keystone_config }}"
 
-- name: Create "{{ playbook_dir }}/vars/agent.yml with global config"
+- name: "Update {{ playbook_dir }}/vars/agent.yml with global config"
   lineinfile: dest="{{ playbook_dir }}/vars/contrail_agent.yml" line="{{ global_config_orig | combine(agent_config_orig) | to_nice_yaml}}" create=yes
   delegate_to: 127.0.0.1
 
