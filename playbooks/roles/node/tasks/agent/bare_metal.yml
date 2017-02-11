@@ -7,6 +7,6 @@
   shell: "echo 'Unsupported OS family for external vrouter compilation {{ ansible_os_family }}';false"
   when: external_vrouter_compile and ansible_os_family != 'RedHat'
 
-- name: Configure contrailctl/agent.conf
-  include: "../contrailctl/agent/{{ contrailctl_config_mode }}.yml"
+- name: Create vars/contrail_agent.yml (tasks from ../contrailctl/agent/bare_metal.yml)
+  include: "../contrailctl/agent/configure.yml"
 
