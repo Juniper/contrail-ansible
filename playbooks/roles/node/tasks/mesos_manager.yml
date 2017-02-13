@@ -24,7 +24,6 @@
     tty: true
     pull: "{{ always_pull_image }}"
     privileged: true
-    restart_policy: unless-stopped
     restart_retries: 3
     volumes:
       - "{{ contrailctl_config_directory }}:/etc/contrailctl/"
