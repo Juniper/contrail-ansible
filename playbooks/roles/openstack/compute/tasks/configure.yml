@@ -11,17 +11,19 @@
   with_dict:
     password: "{{ neutron_password }}"
     project_name: "{{ service_tenant_name }}"
+    admin_tenant_name: "{{ keystone_admin_tenant }}"
+
+- name: Configure oslo rabbit hosts in nova.conf to fix configuration problem by compute-server-setup
+  ini_file: dest={{ nova_conf }} section=oslo_messaging_rabbit option={{ item.key }} value={{ item.value }}  create=yes
+  notify: restart nova-compute
+  with_dict:
+    rabbit_hosts: "{{ rabbitmq_servers_with_port }}"
 
 - name: Copy vrouter-port-control from agent container to compute
   shell: docker cp agent:/usr/bin/vrouter-port-control /usr/bin/vrouter-port-control
   args:
     creates: /usr/bin/vrouter-port-control
-
-- name: Workaround - commentout line which import vnc_api
-  lineinfile:
-    dest: /usr/bin/vrouter-port-control
-    regexp: '^from vnc_api.vnc_api'
-    line: '#from vnc_api.vnc_api import *'
+  when: "'contrail-compute' in group_names and contrail_compute_mode != 'bare_metal'"
 
 - name: Configure qemu
   blockinfile:

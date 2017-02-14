@@ -85,6 +85,7 @@ keystone_auth_protocol: http
 keystone_admin_user: admin
 keystone_admin_password: admin
 keystone_admin_tenant: admin
+keystone_admin_token: admin
 
 neutron_metadata_ip: "{{ keystone_ip }}"
 neutron_metadata_port: 8775
