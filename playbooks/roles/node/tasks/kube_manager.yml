@@ -24,6 +24,5 @@
     privileged: true
     pull: "{{ always_pull_image }}"
     tty: true
-    restart_policy: unless-stopped
     restart_retries: 3
     volumes: "{{ kube_manager_container_volumes }}"
