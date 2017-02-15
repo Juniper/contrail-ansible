@@ -34,10 +34,7 @@
               state=present
               create=yes
   notify: restart docker
-  when: ansible_os_family == 'Debian'
-
-- debug:
-    msg: "ansible_distribution={{ansible_distribution}}"
+  when: ansible_os_family == 'Debian' or ansible_distribution == 'CentOS'
 
 - name: Adding Docker Insecure registries in RedHat
   lineinfile: dest="{{ docker_env_file }}"
