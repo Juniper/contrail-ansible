@@ -11,7 +11,8 @@
   with_dict:
     password: "{{ neutron_password }}"
     project_name: "{{ service_tenant_name }}"
-    admin_tenant_name: "{{ keystone_admin_tenant }}"
+    admin_tenant_name: "{{ service_tenant_name }}"
+    auth_url: "{{ keystone_auth_protocol }}://{{ keystone_ip }}:{{ keystone_admin_port }}/"
 
 - name: Configure oslo rabbit hosts in nova.conf to fix configuration problem by compute-server-setup
   ini_file: dest={{ nova_conf }} section=oslo_messaging_rabbit option={{ item.key }} value={{ item.value }}  create=yes
@@ -19,6 +20,7 @@
   with_dict:
     rabbit_hosts: "{{ rabbitmq_servers_with_port }}"
 
+# Workaround for bug https://bugs.launchpad.net/juniperopenstack/+bug/1655543
 - name: Copy vrouter-port-control from agent container to compute
   shell: docker cp agent:/usr/bin/vrouter-port-control /usr/bin/vrouter-port-control
   args:
