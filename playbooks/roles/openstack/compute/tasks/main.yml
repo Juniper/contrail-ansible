@@ -1,7 +1,7 @@
 ---
-- name: Read facts from openstack/controller
-  include_role: name=openstack/controller tasks_from=facts
-
+#- name: Read facts from openstack/controller
+#  include_role: name=openstack/controller tasks_from=facts
+#
 - include: install.yml
 
 - include: configure.yml

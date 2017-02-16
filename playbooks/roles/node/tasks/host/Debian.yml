@@ -4,7 +4,7 @@
     repo: "deb {{ contrail_apt_repo }} ./"
     state: present
   register: apt_repo_added
-  when: contrail_apt_repo
+  when: contrail_apt_repo is defined
 
 - name: Allow unauthenticated packages for contrail packages to work
   copy: content='APT::Get::AllowUnauthenticated "true";' dest=/etc/apt/apt.conf.d/99allowunauth

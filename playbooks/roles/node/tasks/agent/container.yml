@@ -66,7 +66,7 @@
   when: docker_registry is not defined or load_contrail_agent_image is defined
 
 - name: Configure contrailctl/agent.conf
-  include: "contrailctl/agent/{{ contrailctl_config_mode }}.yml"
+  include: "../contrailctl/agent/{{ contrailctl_config_mode }}.yml"
 
 - name: "Start contrail agent container"
   docker_container:

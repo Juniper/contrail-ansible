@@ -1,7 +1,7 @@
 neutron_protocol: http
 nova_password: "{{ keystone_admin_password }}"
 neutron_password: "{{ keystone_admin_password }}"
-service_tenant_name: service
+service_tenant_name: "{{ service_tenant_name }}"
 region: RegionOne
-openstack_ip: "{{ groups['openstack-controllers'][0] }}"
+openstack_ip: "{{ groups['openstack-controllers'][0] if groups['openstack-controllers'][0] else keystone_ip }}"
 neutron_port: 9696
