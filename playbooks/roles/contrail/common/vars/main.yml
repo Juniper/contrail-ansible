@@ -57,3 +57,9 @@ systemd_wants_locations:
   - /lib/systemd/system/systemd-update-utmp*
 
 contrail_service_mgr: "{{ 'systemd' if ansible_distribution + ansible_distribution_version == 'Ubuntu16.04' else 'supervisord' }}"
+
+# analytics_aaa_mode is cloud-admin in case of openstack, and no-auth in non-openstack - also this can be overridden
+# by providing the variable in the inventory - this is configured in
+# contrail_analytics_api.conf DEFAULTS.aaa_mode
+# contrail_svc-monitor.conf SCHEDULER.aaa_mode
+analytics_aaa_mode_orig: "{{ analytics_aaa_mode is defined|ternary(analytics_aaa_mode, (cloud_orchestrator == 'openstack')|ternary('cloud-admin', 'no-auth')) }}"
