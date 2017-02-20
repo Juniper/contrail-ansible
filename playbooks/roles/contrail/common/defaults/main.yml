@@ -5,7 +5,6 @@ controller_list: ["{{ controller_ip }}"]
 
 config_server_list: "{{ controller_list }}"
 contrail_api_server_list: "{{ config_server_list }}"
-contrail_discovery_server_list: "{{ config_server_list }}"
 
 # Analytics dB defaults
 analyticsdb_list: "{{ controller_list }}"
@@ -37,8 +36,6 @@ rabbitmq_user: guest
 rabbitmq_password: guest
 
 config_ip: "{{ controller_ip }}"
-disc_server_ip: "{{ config_ip }}"
-disc_server_port: 5998
 ifmap_server_ip: "{{ ansible_default_ipv4.address }}"
 ifmap_server_port: 8443
 api_server_ip: "{{ config_ip }}"
