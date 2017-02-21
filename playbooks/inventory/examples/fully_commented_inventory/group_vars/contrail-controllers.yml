@@ -46,9 +46,6 @@
 # schema_config: config params for schema - these will go to [SCHEMA] section of contrailctl/controller.conf
 # schema_config: {}
 
-# discovery_config: config params for discovery - these will go to [DISCOVERY] section of contrailctl/controller.conf
-# discovery_config: {}
-
 # device_manager_config: config params for device_manager - these will go to [DEVICE_MANAGER] section of contrailctl/controller.conf
 # device_manager_config: {}
 

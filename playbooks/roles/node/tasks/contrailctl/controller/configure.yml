@@ -32,10 +32,6 @@
   ini_file: dest="{{ contrailctl_config_directory }}/controller.conf" section=SCHEMA option={{ item.key }} value={{ item.value }}  create=yes
   with_dict: "{{ schema_config | default({}) }}"
 
-- name: Configure contrailctl/controller.conf DISCOVERY section
-  ini_file: dest="{{ contrailctl_config_directory }}/controller.conf" section=DISCOVERY option={{ item.key }} value={{ item.value }}  create=yes
-  with_dict: "{{ discovery_config | default({}) }}"
-
 - name: Configure contrailctl/controller.conf DEVICE_MANAGER section
   ini_file: dest="{{ contrailctl_config_directory }}/controller.conf" section=DEVICE_MANAGER option={{ item.key }} value={{ item.value }}  create=yes
   with_dict: "{{ device_manager_config | default({}) }}"
