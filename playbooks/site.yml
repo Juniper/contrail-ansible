@@ -27,3 +27,6 @@
 
 - include: contrail_agent.yml
   when: contrail_compute_mode == 'bare_metal'
+
+- include: openstack_compute.yml
+  when: cloud_orchestrator == "openstack"
