@@ -27,7 +27,7 @@
     pull: "{{ always_pull_image }}"
     tty: true
     pid_mode: host
-    restart_retries: 3
+    restart_policy: unless-stopped
     capabilities:
       - AUDIT_WRITE
     volumes:
@@ -43,7 +43,7 @@
     state: started
     pull: "{{ always_pull_image }}"
     tty: true
-    restart_retries: 3
+    restart_policy: unless-stopped
     capabilities:
       - AUDIT_WRITE
     volumes:
