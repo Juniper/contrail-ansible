@@ -64,3 +64,6 @@ contrail_service_mgr: "{{ 'systemd' if ansible_distribution + ansible_distributi
 # contrail_analytics_api.conf DEFAULTS.aaa_mode
 # contrail_svc-monitor.conf SCHEDULER.aaa_mode
 analytics_aaa_mode_orig: "{{ analytics_aaa_mode is defined|ternary(analytics_aaa_mode, (cloud_orchestrator == 'openstack')|ternary('cloud-admin', 'no-auth')) }}"
+my_controller_ip: "{{ controller_list | intersect(ansible_all_ipv4_addresses)|first }}"
+my_analytics_ip: "{{ analytics_list | intersect(ansible_all_ipv4_addresses)|first }}"
+my_analyticsdb_ip: "{{ analyticsdb_list | intersect(ansible_all_ipv4_addresses)|first }}"
