@@ -25,7 +25,7 @@
     state: started
     tty: true
     pull: "{{ always_pull_image }}"
-    restart_retries: 3
+    restart_policy: unless-stopped
     capabilities:
       - AUDIT_WRITE
     volumes:
