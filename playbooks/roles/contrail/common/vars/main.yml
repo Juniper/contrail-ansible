@@ -25,6 +25,7 @@ analyticsdb_servers_with_cql_port: "{{ analyticsdb_list | map('regex_replace', '
 analytics_collectors_with_port: "{{ analytics_list | map('regex_replace', '^(.*)$', '\\1:' + analytics_collector_port|string) | join(' ') }}"
 control_servers_with_xmpp_port: "{{ control_node_list | map('regex_replace', '^(.*)$', '\\1:' + control_xmpp_port|string) | join(' ') }}"
 control_servers_with_dns_port: "{{ control_node_list | map('regex_replace', '^(.*)$', '\\1:' + control_dns_port|string) | join(' ') }}"
+api_servers_with_port: "{{ controller_list | map('regex_replace', '^(.*)$', '\\1:' + api_server_port|string) | join(' ') }}" 
 
 api_server_protocol: "{{ 'https' if api_server_use_ssl else 'http' }}"
 api_server_url: "{{ api_server_protocol }}://{{ api_server_ip }}:{{ api_server_port }}"
