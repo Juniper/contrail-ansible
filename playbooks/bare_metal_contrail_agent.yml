@@ -1,0 +1,3 @@
+---
+- name: "Calling contrail_agent.yml"
+  include: contrail_agent.yml
