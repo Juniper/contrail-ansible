@@ -2,6 +2,7 @@
 
 - name: "Start {{ playbook_dir }}/vars/contrail_agent.yml from scratch everytime"
   file: path="{{ playbook_dir }}/vars/contrail_agent.yml" state=absent
+  ignore_errors: yes
   delegate_to: 127.0.0.1
 
 - name: Create vars/contrail_agent.yml as a yaml file
