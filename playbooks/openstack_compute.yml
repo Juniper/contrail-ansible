@@ -1,0 +1,8 @@
+---
+- name: "Setup Openstack compute with contrail agent"
+  hosts: contrail-compute
+
+  roles:
+    - role: common
+    - role: openstack/compute
+      tags: [openstack.compute]
