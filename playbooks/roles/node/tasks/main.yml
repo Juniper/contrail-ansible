@@ -24,9 +24,9 @@
 - include: host.yml
   tags: [always]
 
-- name: Create config_server_list
+- name: Create config_server_list_derived
   set_fact:
-    config_server_list: "{{config_server_list + [item] if 'config' in hostvars[item].get('controller_components', []) else config_server_list}}"
+    config_server_list_derived: "{{config_server_list_derived + [item] if 'config' in hostvars[item].get('controller_components', []) else config_server_list_derived}}"
   with_items: "{{ groups['contrail-controllers'] }}"
 
 - include: lb.yml
