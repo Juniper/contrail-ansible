@@ -5,7 +5,7 @@
     - pyroute2
 
 - name: Install contrail cni package
-  package: name="contrail-kube-cni" state=present
+  package: name="{{ contrail_cni_package_name }}" state=present
 
 - name: Make sure cni directories exist
   file: path="{{ item }}" state=directory recurse=true
@@ -19,3 +19,4 @@
 
 - name: Create softlink contrail cni binary to /opt/cni/bin
   file: src=/usr/bin/contrail-kube-cni  dest=/opt/cni/bin/contrail-kube-cni state=link
+  when: cloud_orchestrator != 'mesos'
