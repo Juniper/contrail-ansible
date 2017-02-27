@@ -26,7 +26,10 @@
       tags: [node]
 
 - include: contrail_agent.yml
-  when: contrail_compute_mode == 'bare_metal'
+  when: contrail_compute_mode == 'bare_metal' and setup_vnc_compute == false
+
+- include: contrail_agent_script.yml
+  when: contrail_compute_mode == 'bare_metal' and setup_vnc_compute == true
 
 - include: openstack_compute.yml
   when: cloud_orchestrator == "openstack"

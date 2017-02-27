@@ -1,0 +1,20 @@
+---
+
+- name: "Start {{ playbook_dir }}/vars/contrail_agent_script.yml from scratch everytime"
+  file: path="{{ playbook_dir }}/vars/contrail_agent_script.yml" state=absent
+  delegate_to: 127.0.0.1
+
+- name: Create vars/contrail_agent_script.yml as a yaml file
+  lineinfile: dest="{{ playbook_dir }}/vars/contrail_agent_script.yml" line="---" create=yes
+  delegate_to: 127.0.0.1
+
+- set_fact:
+      tmp_var:
+          contrail_compute_mode: "{{ contrail_compute_mode }}"
+
+- name: Store the contrail_compute_mode flag for the contrail_agent playbook to pick up
+  lineinfile: dest="{{ playbook_dir }}/vars/contrail_agent_script.yml" line="{{ tmp_var | to_nice_yaml}}"
+  delegate_to: 127.0.0.1
+
+- include: "{{ contrail_compute_mode }}.yml"
+
