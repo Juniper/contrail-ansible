@@ -25,11 +25,8 @@
     - role: node
       tags: [node]
 
-- name: Setup optional top level playbooks for compute setup
-  hosts: contrail-compute
-  tasks:
-    - name: Include Optional top level playbooks like agent, compute setup
-      include: "{{ item }}"
-      with_fileglob:
-        - "{{ contrail_compute_mode | default('container') }}_contrail_agent.yml"
-        - "{{ cloud_orchestrator | default('kubernetes') }}_compute.yml"
+- include: contrail_agent.yml
+  when: contrail_compute_mode == 'bare_metal'
+
+- include: openstack_compute.yml
+  when: cloud_orchestrator == "openstack"
