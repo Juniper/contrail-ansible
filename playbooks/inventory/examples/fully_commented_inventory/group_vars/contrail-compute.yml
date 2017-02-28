@@ -1,13 +1,14 @@
 ---
-##################
 # Below config params are used to configure contrailctl
-# All of below variables are a dict which form individual section of contrailctl/*.conf (controller.conf, agent.conf, etc)
-# they are just a dictionary form of config files found under contrailctl/*
-# where control_config is dictionary form of [CONTROL] section in contrailctl/controller.conf
-#       webui_config is dictionary form of [WEBUI] section in contrailctl/controller.conf
-# for example, if one add configuration  "webui_config: {http_listen_port: 8085}", [WEBUI] section of
-# contrailctl/controller.conf will be configured as below - which infact configure webui to listen 8085 for http
-#  instead of 8080 which is default
+# All of below variables are a dict which form individual section of
+# contrailctl/*.conf (controller.conf, agent.conf, etc)
+# they are just a dictionary form of config files found under contrailctl/*, where
+# control_config is dictionary form of [CONTROL] section in contrailctl/controller.conf
+# webui_config is dictionary form of [WEBUI] section in contrailctl/controller.conf
+
+# for example, if one add configuration  "webui_config: {http_listen_port: 8085}",
+# [WEBUI] section of contrailctl/controller.conf will be configured as below -
+# which infact configure webui to listen 8085 for http instead of 8080
 #
 # [WEBUI]
 # http_listen_port = 8085
@@ -24,6 +25,7 @@
 ####
 
 # agent_config: agent specific global configs (Configurations under [GLOBAL] section
-#    of agent - configs in global_config will be merged to this config, i.e contrailctl/agent.conf will have [GLOBAL]
-#    section with configs added in global_config + agent_config
+#    of agent - configs in global_config will be merged to this config,
+# i.e contrailctl/agent.conf will have [GLOBAL] section with configs
+# added in global_config + agent_config
 # agent_config: {}

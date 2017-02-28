@@ -1,14 +1,18 @@
 ---
 ##################
 # Below config params are used to configure contrailctl
-# All of below variables are a dict which form individual section of contrailctl/*.conf (controller.conf, agent.conf, etc)
+# All of below variables are a dict which form individual section of
+# contrailctl/*.conf (controller.conf, agent.conf, etc)
 # they are just a dictionary form of config files found under contrailctl/*
-# i.e below mentioned global_config is a dictionary form of [GLOBAL] section in contrailct/*.conf - since this is
+# i.e below mentioned global_config is a dictionary form of [GLOBAL] section
+# in contrailct/*.conf - since this is
 #      global_config, they are available to all config files
-# where control_config is dictionary form of [CONTROL] section in contrailctl/controller.conf
-#       webui_config is dictionary form of [WEBUI] section in contrailctl/controller.conf
-# for example, if one add configuration  "webui_config: {http_listen_port: 8085}", [WEBUI] section of
-# contrailctl/controller.conf will be configured as below - which infact configure webui to listen 8085 for http
+# where control_config is dictionary form of [CONTROL] section in
+# contrailctl/controller.conf
+# webui_config is dictionary form of [WEBUI] section in contrailctl/controller.conf
+# for example, if one add configuration  "webui_config: {http_listen_port: 8085}",
+# [WEBUI] section of contrailctl/controller.conf will be configured as below -
+# which infact configure webui to listen 8085 for http
 #  instead of 8080 which is default
 #
 # [WEBUI]
@@ -24,9 +28,10 @@
 ####
 # LB specific config vars - this will be added to contrailctl/lb.conf
 ####
-# lb_config: lb specific global configs - contrailctl/lb.conf will have [GLOBAL] section with
-#  configs added in global_config + lb_config
+# lb_config: lb specific global configs - contrailctl/lb.conf will have
+# [GLOBAL] section with configs added in global_config + lb_config
 # lb_config: {}
 
-# haproxy_config: config params for haproxy - these will go to [HAPROXY] section of contrailctl/lb.conf
+# haproxy_config: config params for haproxy - these will go to
+# [HAPROXY] section of contrailctl/lb.conf
 # haproxy_config: {}
