@@ -1,7 +1,7 @@
 ---
 - name: Copy contrail kube_manager image
   copy:
-    src: "{{ docker_image_load_path }}/{{ contrail_kube_manager_packages }}"
+    src: "{{ docker_image_load_path }}/{{ contrail_kube_manager_image_archive }}"
     dest: "/tmp/{{ contrail_kube_manager_image_archive }}"
   when: docker_registry is not defined or load_contrail_kube_manager_image is defined
 
