@@ -51,11 +51,7 @@
 
 - include: "agent/{{ contrail_compute_mode }}.yml"
   tags: [container.agent, agent]
-  when: "'contrail-compute' in group_names and setup_vnc_compute == false"
-
-- include: "agent_script/bare_metal.yml"
-  tags: [container.agent_script, agent_script]
-  when: "'contrail-compute' in group_names and contrail_compute_mode == 'bare_metal' and setup_vnc_compute == true"
+  when: "'contrail-compute' in group_names"
 
 - include: kube_cni.yml
   tags: [container.kube_cni, kube_cni]

@@ -1,5 +1,0 @@
----
-
-- name: Create vars/contrail_agent_script.yml (tasks from ../contrailctl/agent_script/bare_metal.yml)
-  include: "../contrailctl/agent_script/configure.yml"
-
