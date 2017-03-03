@@ -1,2 +1,2 @@
 ---
-contrail_compute_mode: "container"
+contrail_compute_mode: "bare_metal"
