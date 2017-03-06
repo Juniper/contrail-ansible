@@ -7,6 +7,10 @@
   package: name={{ item }} state=latest
   with_items: "{{ agent_packages }}"
 
+- name: install packages specific to RedHat Platforms
+  package: name={{ item }} state=latest
+  with_items: "{{ redhat_agent_packages }}"
+
 # This is a workaround on issue https://github.com/Juniper/contrail-docker/issues/82
 - name: Remove supervisor-vrouter from /etc/sensitive_servies (WA for issue contrail-docker/82)
   lineinfile: dest=/etc/sensitive_services line=supervisor-vrouter state=absent

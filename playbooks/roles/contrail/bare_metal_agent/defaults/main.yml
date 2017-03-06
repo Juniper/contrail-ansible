@@ -7,6 +7,9 @@ agent_packages:
   - python-ecdsa
   - haproxy
 
+redhat_agent_packages:
+  - python-Fabric
+
 compile_vrouter_module: "{{ true if ansible_os_family == 'Debian' and contrail_compute_mode != 'bare_metal' else false }}"
 reload_vrouter_module: false
 nodemanager_conf: "/etc/contrail/contrail-vrouter-nodemgr.conf"
