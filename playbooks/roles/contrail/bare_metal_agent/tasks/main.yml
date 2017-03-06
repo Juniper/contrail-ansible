@@ -1,0 +1,18 @@
+---
+- include: install/{{ ansible_os_family }}.yml
+  tags: [contrail.bare_metal_agent.package, package]
+
+# Due to a bug in ansible include_role is failing when add a contidional, as a workaround,
+# added conditional inside systemd-cleanup.yml for now
+# This is what I tried -   when: contrail_service_mgr == "systemd"
+- include_role: name=contrail/common tasks_from=cleanup
+  tags: [install, contrail.bare_metal_agent.install]
+
+- name: Include systemd specific code
+  include: install/systemd.yml
+  when: contrail_service_mgr == 'systemd' or ansible_os_family == 'RedHat'
+  tags: [install, contrail.bare_metal_agent.install]
+
+- include: provision/main.yml
+  tags: [contrail.bare_metal_agent.provision, provision]
+
