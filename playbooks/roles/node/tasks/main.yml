@@ -49,13 +49,9 @@
   tags: [container.kube_manager, kube_manager]
   when: "'contrail-kubernetes' in group_names and cloud_orchestrator in ['kubernetes', 'openshift']"
 
-- include: agent/container.yml
+- include: agent/{{ contrail_compute_mode }}.yml
   tags: [container.agent, agent]
-  when: "'contrail-compute' in group_names and contrail_compute_mode == 'container'"
-
-- include: bare_metal_agent/bare_metal.yml
-  tags: [container.agent, agent]
-  when: "'contrail-compute' in group_names and contrail_compute_mode == 'bare_metal'"
+  when: "'contrail-compute' in group_names"
 
 - include: kube_cni.yml
   tags: [container.kube_cni, kube_cni]
