@@ -1,5 +1,0 @@
----
-
-- include: reboot.yml
-  when: "'contrail-compute' in group_names and contrail_compute_mode == 'bare_metal'"
-  tags: [contrail.post_provision.reboot, reboot]
