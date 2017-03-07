@@ -44,6 +44,3 @@
   ini_file: dest="{{ contrailctl_config_directory }}/controller.conf" section=WEBUI option={{ item.key }} value={{ item.value }}  create=yes
   with_dict: "{{ webui_config | default({}) }}"
 
-- name: Configure contrailctl/controller.conf IFMAP section
-  ini_file: dest="{{ contrailctl_config_directory }}/controller.conf" section=IFMAP option={{ item.key }} value={{ item.value }}  create=yes
-  with_dict: "{{ ifmap_config | default({}) }}"

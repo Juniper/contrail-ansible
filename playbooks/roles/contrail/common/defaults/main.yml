@@ -36,8 +36,6 @@ rabbitmq_user: guest
 rabbitmq_password: guest
 
 config_ip: "{{ controller_ip }}"
-ifmap_server_ip: "{{ ansible_default_ipv4.address }}"
-ifmap_server_port: 8443
 api_server_ip: "{{ config_ip }}"
 api_server_port: 8082
 api_server_use_ssl: False
