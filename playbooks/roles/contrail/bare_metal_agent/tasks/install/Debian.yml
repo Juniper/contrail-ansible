@@ -1,0 +1,16 @@
+---
+# This is a workaround on issue https://github.com/Juniper/contrail-docker/issues/82
+- name: Do not auto start supervisor-vrouter (WA for issue contrail-docker/82)
+  lineinfile: dest=/etc/sensitive_services line=supervisor-vrouter state=present create=yes
+
+- name: install contrail-vrouter-common and related packages
+  apt: name={{ item }} state=latest force=yes
+  with_items: "{{ agent_packages }}"
+
+# This is a workaround on issue https://github.com/Juniper/contrail-docker/issues/82
+- name: Remove supervisor-vrouter from /etc/sensitive_servies (WA for issue contrail-docker/82)
+  lineinfile: dest=/etc/sensitive_services line=supervisor-vrouter state=absent
+
+- name: install supervisor
+  apt: name=supervisor state=latest force=yes
+  when: contrail_service_mgr == 'supervisord'
