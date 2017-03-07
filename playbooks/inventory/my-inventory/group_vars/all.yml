@@ -65,9 +65,6 @@ vrouter_physical_interface: eth0
 ###################################################
 # Openshift specific configuration
 ##
-# ifmap port must be changed, to avoid conflict with kubernetes api port
-
-# ifmap_config: {server_port: 8445}
 # openshift_config: {token: <openshift token>}
 
 ###################################################
