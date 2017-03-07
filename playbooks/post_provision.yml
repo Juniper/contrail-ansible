@@ -1,8 +1,0 @@
----
-- name: "Post Provision tasks"
-  hosts: all
-
-  roles:
-    - role: common
-    - role: contrail/post_provision
-      tags: [contrail.post_provision]
