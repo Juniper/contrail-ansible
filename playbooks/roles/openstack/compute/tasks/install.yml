@@ -4,9 +4,6 @@
   with_items:
     - contrail-setup
     - nova-compute
-    - contrail-nova-vif
-    - python-novaclient
-    - python-barbicanclient
 
 - name: create a symlink from /bin/true to /sbin/chkconfig
   file: src=/bin/true dest=/sbin/chkconfig state=link

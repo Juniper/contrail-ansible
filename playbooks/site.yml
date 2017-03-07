@@ -30,5 +30,3 @@
 
 - include: openstack_compute.yml
   when: cloud_orchestrator == "openstack"
-
-- include: post_provision.yml
