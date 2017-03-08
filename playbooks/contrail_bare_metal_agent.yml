@@ -3,7 +3,7 @@
   hosts: contrail-compute
 
   pre_tasks:
-    - include_vars: vars/contrail_bare_metal_agent.yml
+    - include_vars: contrail_bare_metal_agent.yml
       tags: always
 
   roles:
