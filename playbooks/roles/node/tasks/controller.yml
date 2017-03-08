@@ -9,6 +9,7 @@
   docker_image:
     name: contrail-controller
     tag: "{{ contrail_version }}"
+    timeout: "{{ container_image_load_timeout }}"
     load_path: "/tmp/{{ contrail_controller_image_archive }}"
   when: docker_registry is not defined or load_contrail_controller_image is defined
 
