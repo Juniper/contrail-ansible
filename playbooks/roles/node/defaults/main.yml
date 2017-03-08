@@ -49,16 +49,16 @@ kernel_source_packages: []
 
 # docker_image_load_path: In case of no docker_registry, load the images from tar files under this path
 docker_image_load_path: "{{playbook_dir}}/container_images"
-contrail_lb_image_archive: "contrail-lb-{{ contrail_version }}.tar.gz"
-contrail_controller_image_archive: "contrail-controller-{{ contrail_version }}.tar.gz"
-contrail_analytics_image_archive: "contrail-analytics-{{ contrail_version }}.tar.gz"
-contrail_analyticsdb_image_archive: "contrail-analyticsdb-{{ contrail_version }}.tar.gz"
-contrail_agent_image_archive: "contrail-agent-{{ contrail_version }}.tar.gz"
+contrail_lb_image_archive: "contrail-lb-{{ os_release }}-{{ contrail_version }}.tar.gz"
+contrail_controller_image_archive: "contrail-controller-{{ os_release }}-{{ contrail_version }}.tar.gz"
+contrail_analytics_image_archive: "contrail-analytics-{{ os_release }}-{{ contrail_version }}.tar.gz"
+contrail_analyticsdb_image_archive: "contrail-analyticsdb-{{ os_release }}-{{ contrail_version }}.tar.gz"
+contrail_agent_image_archive: "contrail-agent-{{ os_release }}-{{ contrail_version }}.tar.gz"
 vrouter_module_compiler_centos7_image_archive: "contrail-vrouter-compiler-c7.1-{{ contrail_version }}.tar.gz"
-contrail_kube_manager_image_archive: "contrail-kube-manager-{{ contrail_version }}.tar.gz"
-contrail_mesos_manager_image_archive: "contrail-mesos-manager-{{ contrail_version }}.tar.gz"
+contrail_kube_manager_image_archive: "contrail-kube-manager-{{ os_release }}-{{ contrail_version }}.tar.gz"
+contrail_mesos_manager_image_archive: "contrail-mesos-manager-{{ os_release }}-{{ contrail_version }}.tar.gz"
 contrail_repo_ubuntu_image_archive: "contrail-repo-ubuntu-{{ contrail_version }}.tar.gz"
-contrail_repo_centos_image_archive: "contrail-repo-centos-{{ contrail_version }}.tar.gz"
+contrail_repo_centos_image_archive: "contrail-repo-c7.1-{{ contrail_version }}.tar.gz"
 contrailctl_config_directory: /etc/contrailctl
 contrail_apt_repo_port: 1567
 contrail_yum_repo_port: "{{ contrail_apt_repo_port }}"
@@ -98,3 +98,5 @@ config_ip: "{{ contrail_controller_list[0] }}"
 
 # contrail-cni for mesos and contrail-kub-cni for others
 contrail_cni_package_name: "{{ 'contrail-cni' if cloud_orchestrator == 'mesos' else 'contrail-kube-cni' }}"
+
+container_image_load_timeout: 300
