@@ -68,3 +68,4 @@ analytics_aaa_mode_orig: "{{ analytics_aaa_mode is defined|ternary(analytics_aaa
 my_controller_ip: "{{ controller_list | intersect(ansible_all_ipv4_addresses)|first }}"
 my_analytics_ip: "{{ analytics_list | intersect(ansible_all_ipv4_addresses)|first }}"
 my_analyticsdb_ip: "{{ analyticsdb_list | intersect(ansible_all_ipv4_addresses)|first }}"
+my_compute_ip: "{{ compute_list | intersect(ansible_all_ipv4_addresses)|first }}"
