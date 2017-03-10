@@ -42,3 +42,4 @@ no_of_controllers: "{{ controller_list | length }}"
 vrouter_max_control_nodes: 3
 contrail_compute_mode: "bare_metal"
 hypervisor: "libvirt"
+my_compute_ip: "{{ compute_list | intersect(ansible_all_ipv4_addresses)|first }}"

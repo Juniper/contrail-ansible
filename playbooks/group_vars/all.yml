@@ -1,3 +1,0 @@
-# Setting the variable cloud_orchestrator to anything other than openstack make controller containers
-# to disable certain stuffs only required for openstack
-cloud_orchestrator: kubernetes
