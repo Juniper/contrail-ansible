@@ -1,8 +1,7 @@
 ---
 cloud_orchestrator: openstack
-controller_ip: "{{ ansible_default_ipv4.address }}"
-controller_list: ["{{ controller_ip }}"]
-
+controller_list: ["{{ ansible_default_ipv4.address }}"]
+controller_ip: "{{ controller_list[0] }}"
 config_server_list: "{{ controller_list }}"
 contrail_api_server_list: "{{ config_server_list }}"
 
