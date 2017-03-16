@@ -24,10 +24,98 @@
 - include: host.yml
   tags: [always]
 
+- name: Create contrail_analytics_list_derived
+  set_fact:
+    contrail_analytics_list_derived: "{{ contrail_analytics_list_derived|default({}) | combine( {item: (hostvars[item]['ansible_all_ipv4_addresses'] | ipaddr( ctrl_data_network ) | count != 0) | ternary(hostvars[item]['ansible_all_ipv4_addresses'] | ipaddr( ctrl_data_network ) | first, item)} ) }}"
+  with_items:
+      - "{{ groups['contrail-analytics'] }}"
+  when: ctrl_data_network is defined
+
+- name: Create contrail_analytics_list with ctrl_data_ip if defined and ctrl_data_network is not defined
+  set_fact:
+    contrail_analytics_list: "{{ contrail_analytics_list + [hostvars[item].get('ctrl_data_ip', item)] }}"
+  with_items: "{{ groups['contrail-analytics'] }}"
+  when: ctrl_data_network is not defined
+
+- name: Create contrail_analytics_list when ctrl_data_network is defined
+  set_fact:
+    contrail_analytics_list: "{{ contrail_analytics_list + [hostvars[item].get('ctrl_data_ip', contrail_analytics_list_derived.get(item, item))] }}"
+  with_items: "{{ groups['contrail-analytics'] }}"
+  when: ctrl_data_network is defined
+
+- name: Create contrail_analyticsdb_list_derived
+  set_fact:
+    contrail_analyticsdb_list_derived: "{{ contrail_analyticsdb_list_derived|default({}) | combine( {item: (hostvars[item]['ansible_all_ipv4_addresses'] | ipaddr( ctrl_data_network ) | count != 0) | ternary(hostvars[item]['ansible_all_ipv4_addresses'] | ipaddr( ctrl_data_network ) | first, item)} ) }}"
+  with_items:
+      - "{{ groups['contrail-analyticsdb'] }}"
+  when: ctrl_data_network is defined
+
+- name: Create contrail_analyticsdb_list with ctrl_data_ip if defined and ctrl_data_network is not defined
+  set_fact:
+    contrail_analyticsdb_list: "{{ contrail_analyticsdb_list + [hostvars[item].get('ctrl_data_ip', item)] }}"
+  with_items: "{{ groups['contrail-analyticsdb'] }}"
+  when: ctrl_data_network is not defined
+
+- name: Create contrail_analyticsdb_list when ctrl_data_network is defined
+  set_fact:
+    contrail_analyticsdb_list: "{{ contrail_analyticsdb_list + [hostvars[item].get('ctrl_data_ip', contrail_analyticsdb_list_derived.get(item, item))] }}"
+  with_items: "{{ groups['contrail-analyticsdb'] }}"
+  when: ctrl_data_network is defined
+
+- name: Create contrail_controller_list_derived
+  set_fact:
+    contrail_controller_list_derived: "{{ contrail_controller_list_derived|default({}) | combine( {item: (hostvars[item]['ansible_all_ipv4_addresses'] | ipaddr( ctrl_data_network ) | count != 0) | ternary(hostvars[item]['ansible_all_ipv4_addresses'] | ipaddr( ctrl_data_network ) | first, item)} ) }}"
+  with_items:
+      - "{{ groups['contrail-controllers'] }}"
+  when: ctrl_data_network is defined
+
+- name: Create contrail_controller_list with ctrl_data_ip if defined and ctrl_data_network is not defined
+  set_fact:
+    contrail_controller_list: "{{ contrail_controller_list + [hostvars[item].get('ctrl_data_ip', item)] }}"
+  with_items: "{{ groups['contrail-controllers'] }}"
+  when: ctrl_data_network is not defined
+
+- name: Create contrail_controller_list when ctrl_data_network is defined
+  set_fact:
+    contrail_controller_list: "{{ contrail_controller_list + [hostvars[item].get('ctrl_data_ip', contrail_controller_list_derived.get(item, item))] }}"
+  with_items: "{{ groups['contrail-controllers'] }}"
+  when: ctrl_data_network is defined
+
+- name: Create contrail_compute_list_derived
+  set_fact:
+    contrail_compute_list_derived: "{{ contrail_compute_list_derived|default({}) | combine( {item: (hostvars[item]['ansible_all_ipv4_addresses'] | ipaddr( ctrl_data_network ) | count != 0) | ternary(hostvars[item]['ansible_all_ipv4_addresses'] | ipaddr( ctrl_data_network ) | first, item)} ) }}"
+  with_items:
+      - "{{ groups['contrail-compute'] }}"
+  when: ctrl_data_network is defined
+
+- name: Create contrail_compute_list with ctrl_data_ip if defined and ctrl_data_network is not defined
+  set_fact:
+    contrail_compute_list: "{{ contrail_compute_list + [hostvars[item].get('ctrl_data_ip', item)] }}"
+  with_items: "{{ groups['contrail-compute'] }}"
+  when: ctrl_data_network is not defined
+
+- name: Create contrail_compute_list when ctrl_data_network is defined
+  set_fact:
+    contrail_compute_list: "{{ contrail_compute_list + [hostvars[item].get('ctrl_data_ip', contrail_compute_list_derived.get(item, item))] }}"
+  with_items: "{{ groups['contrail-compute'] }}"
+  when: ctrl_data_network is defined
+
 - name: Create config_server_list_derived
   set_fact:
-    config_server_list_derived: "{{config_server_list_derived + [item] if 'config' in hostvars[item].get('controller_components', []) else config_server_list_derived}}"
+      config_server_list_derived: "{{config_server_list_derived + [hostvars[item].get('ctrl_data_ip', contrail_controller_list_derived.get(item, item))] if 'config' in hostvars[item].get('controller_components', []) else config_server_list_derived}}"
   with_items: "{{ groups['contrail-controllers'] }}"
+  when: ctrl_data_network is defined
+
+- name: Create config_server_list_derived when ctrl_data_network is not defined
+  set_fact:
+      config_server_list_derived: "{{config_server_list_derived + [hostvars[item].get('ctrl_data_ip', item)] if 'config' in hostvars[item].get('controller_components', []) else config_server_list_derived}}"
+  with_items: "{{ groups['contrail-controllers'] }}"
+  when: ctrl_data_network is not defined
+
+- name: Set config_ip
+  set_fact:
+      config_ip: "{{ contrail_controller_list[0] }}"
+  when: config_ip is not defined
 
 - include: lb.yml
   tags: [container.lb, lb]
