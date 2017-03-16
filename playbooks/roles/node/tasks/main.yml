@@ -112,21 +112,6 @@
   with_items: "{{ groups['contrail-controllers'] }}"
   when: ctrl_data_network is not defined
 
-- name: Set config_ip
-  set_fact:
-      config_ip: "{{ controller_list[0] }}"
-  when: config_ip is not defined
-
-- name: Set controller_ip
-  set_fact:
-      controller_ip: "{{ controller_list[0] }}"
-  when: controller_ip is not defined
-
-- name: Set analytics_ip
-  set_fact:
-      analytics_ip: "{{ controller_list[0] }}"
-  when: analytics_ip is not defined
-
 - include: lb.yml
   tags: [container.lb, lb]
   when: "'contrail-lb' in group_names"
