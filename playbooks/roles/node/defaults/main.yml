@@ -71,10 +71,8 @@ contrail_yum_repo: "{{ contrail_repo_ip | ternary('http://' + contrail_repo_ip +
 #  copy - ansible skip writnig confg entries, but expect the config files in specific location and it just deploy those files
 contrailctl_config_mode: configure
 
-controller_list: []
-analyticsdb_list: []
-analytics_list: []
-compute_list: []
+controller_ip: "{{ controller_list[0] | default('') }}"
+analytics_ip: "{{ analytics_list[0] | default('') }}"
 
 # Volumes to be mounted to the containers
 contrail_container_volumes:
@@ -90,6 +88,7 @@ kube_manager_container_volumes: "{{ contrail_container_volumes + openshift_cert_
 contrail_compute_mode: "container"
 config_server_list: []
 config_server_list_derived: []
+config_ip: "{{ controller_list[0] }}"
 
 # contrail-cni for mesos and contrail-kub-cni for others
 contrail_cni_package_name: "{{ 'contrail-cni' if cloud_orchestrator == 'mesos' else 'contrail-kube-cni' }}"
