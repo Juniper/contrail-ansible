@@ -71,10 +71,6 @@ contrail_yum_repo: "{{ contrail_repo_ip | ternary('http://' + contrail_repo_ip +
 #  copy - ansible skip writnig confg entries, but expect the config files in specific location and it just deploy those files
 contrailctl_config_mode: configure
 
-controller_list: "{{ groups['contrail-controllers'] | default(false)}}"
-analyticsdb_list: "{{ groups['contrail-analyticsdb'] | default(false)}}"
-analytics_list: "{{ groups['contrail-analytics'] | default(false)}}"
-compute_list: "{{ groups['contrail-compute'] | default(false)}}"
 controller_ip: "{{ controller_list[0] | default('') }}"
 analytics_ip: "{{ analytics_list[0] | default('') }}"
 
