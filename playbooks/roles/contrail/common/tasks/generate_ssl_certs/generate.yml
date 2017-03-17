@@ -1,0 +1,12 @@
+---
+- name: Install openssl package if missing
+  apt: name=openssl state=installed force=yes
+
+- name: Generate SSL Private Key
+  command: "openssl genrsa -out {{ ssl_cert_key_path }}"
+
+- name: Generate CSR
+  command: "openssl req -new -key {{ ssl_cert_key_path }} -out {{ ssl_cert_csr_path }} -subj {{ ssl_cert_subj }}"
+
+- name: Generate CA signed SSL Certs with Given name in given location
+  command: "openssl x509 -req -in {{ ssl_cert_csr_path }} -CA {{ ssl_ca_cert_path }} -CAkey {{ ssl_ca_cert_key_path }} -CAcreateserial -out {{ ssl_cert_path }} -days {{ ssl_cert_days_valid }}"

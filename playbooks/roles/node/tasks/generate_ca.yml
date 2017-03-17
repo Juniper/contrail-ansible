@@ -1,0 +1,12 @@
+---
+- name: Install openssl package if missing
+  apt: name=openssl state=installed force=yes
+  delegate_to: 127.0.0.1
+
+- name: Generate SSL Private Key
+  command: "openssl genrsa -out {{ ssl_cert_key_path }}"
+  delegate_to: 127.0.0.1
+
+- name: Generate self-signed SSL Certs with Given name in given location
+  command: "openssl req -x509 -new -nodes -key {{ ssl_cert_key_path }} -days {{ ssl_cert_days_valid }} -out {{ ssl_cert_path }} -subj {{ ssl_cert_subj }}"
+  delegate_to: 127.0.0.1

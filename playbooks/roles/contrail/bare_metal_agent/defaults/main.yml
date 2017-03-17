@@ -45,5 +45,3 @@ hypervisor: "libvirt"
 
 xmpp_auth_enable: false
 xmpp_dns_auth_enable: false
-xmpp_certs_src_dir: "/etc/contrail_smgr/puppet/ssl"
-xmpp_certs_dest_dir: "/etc/contrail/ssl"

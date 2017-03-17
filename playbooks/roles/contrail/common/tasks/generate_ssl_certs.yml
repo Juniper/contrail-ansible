@@ -1,0 +1,8 @@
+---
+- name: Generate SSL Certs if not supplied
+  include: generate_ssl_certs/generate.yml
+  when: ssl_certs_supplied == false
+
+- name: Copy SSL Certs if supplied
+  include: generate_ssl_certs/copy.yml
+  when: ssl_certs_supplied == true
