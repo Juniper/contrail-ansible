@@ -1,4 +1,9 @@
 ---
+docker_insecure_registries: >-
+  {% if docker_registry_insecure is defined and docker_registry is defined %}
+  {%- if docker_registry_insecure|bool and docker_registry %}
+  {{ docker_registry }}{% endif %}{% endif %}
+
 docker_pki_key_file : '{{inventory_hostname}}{{docker_pki_key_suffix}}'
 docker_pki_key_src: '{{docker_pki_dir}}/{{docker_pki_key_file}}'
 docker_pki_key_dest : '{{docker_ssl_key_pki_key_dir}}/{{docker_pki_key_file}}'

@@ -6,5 +6,8 @@
   copy: content='' dest=/var/run/utmp owner=root group=root mode=0644 force=no
   tags: always
 
+- name: set /etc/hosts entry for hostname
+  lineinfile: dest=/etc/hosts line="127.0.0.1 {{ ansible_hostname }}"
+
 - include: facts.yml
   tags: always
