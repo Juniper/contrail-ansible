@@ -18,4 +18,7 @@ non_bare_metal_vrouter_compile: "{{ (agent_compile_vrouter_module_orig != 'undef
 
 #For bare-metal compute in Debian, make sure  compile_vrouter_module is not true
 compile_vrouter_module_orig: "{{ (contrail_compute_mode == 'bare_metal') | ternary(false, non_bare_metal_vrouter_compile) }}"
-agent_config_orig: "{{ agent_config | default({}) | combine({'compile_vrouter_module': compile_vrouter_module_orig})}}"
+agent_config_orig: "{{ agent_config | default({}) | combine(\
+  {'compile_vrouter_module': compile_vrouter_module_orig,\
+  'vrouter_physical_interface': vrouter_physical_interface\
+  })}}"
