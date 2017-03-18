@@ -85,7 +85,8 @@ openshift_cert_volumes:
 
 kube_manager_container_volumes: "{{ contrail_container_volumes + openshift_cert_volumes if cloud_orchestrator == 'openshift' else contrail_container_volumes }}"
 
-contrail_compute_mode: "container"
+vrouter_physical_interface: eth0
+
 config_server_list: []
 config_server_list_derived: []
 config_ip: "{{ controller_list[0] }}"

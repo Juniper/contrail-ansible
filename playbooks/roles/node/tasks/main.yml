@@ -222,7 +222,7 @@
   tags: [container.kube_manager, kube_manager]
   when: "'contrail-kubernetes' in group_names and cloud_orchestrator in ['kubernetes', 'openshift']"
 
-- include: "agent/{{ contrail_compute_mode }}.yml"
+- include: "agent.yml"
   tags: [container.agent, agent]
   when: "'contrail-compute' in group_names"
 
