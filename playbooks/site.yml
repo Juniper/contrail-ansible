@@ -2,33 +2,41 @@
 - name: Common system settings on base hosts
   hosts: all
 
-  vars:
-    docker_insecure_registries: >-
-      {% if docker_registry_insecure is defined and docker_registry is defined %}
-      {%- if docker_registry_insecure|bool and docker_registry %}
-      {{ docker_registry }}{% endif %}{% endif %}
-  tasks:
-    - name: set /etc/hosts entry for hostname
-      lineinfile: dest=/etc/hosts
-        line="127.0.0.1 {{ ansible_hostname }}"
-
   roles:
-    - role: common
-    - role: docker
+    - name: Run common code
+      role: common
+    - name: Setup docker engine on nodes
+      role: docker
       tags: [contrail.containers, contrail.containers.docker]
       when: deployment_platform == "docker"
-
-- name: Setup controller containers
-  hosts: all
-  roles:
-    - role: common
-    - role: node
+    - name: Setup the containers
+      role: node
       tags: [node]
 
-- include: contrail_bare_metal_agent.yml
-  when: contrail_compute_mode == 'bare_metal'
+- name: Setup compute node
+  hosts: contrail-compute
+  roles:
+    - name: Run common code
+      role: common
+    - name: Setup baremetal agent
+      role: contrail/bare_metal_agent
+      tags: [contrail.bare_metal_agent]
+      when: contrail_compute_mode == 'bare_metal'
+    - name: Setup openstack compute in case of openstack
+      role: openstack/compute
+      tags: [openstack.compute]
+      when: cloud_orchestrator == "openstack"
 
-- include: openstack_compute.yml
-  when: cloud_orchestrator == "openstack"
+  post_tasks:
+    - name: Reboot node
+      shell: sleep 5 && /etc/contrail/contrail_reboot
+      async: 1
+      poll: 0
+      sudo: true
+      ignore_errors: true
+      when: contrail_compute_mode == 'bare_metal'
 
-- include: post_provision.yml
+    - name: Waiting for server to come back
+      local_action: wait_for host={{ ansible_hostname }} state=started delay=30 timeout=300
+      sudo: false
+      when: contrail_compute_mode == 'bare_metal'
