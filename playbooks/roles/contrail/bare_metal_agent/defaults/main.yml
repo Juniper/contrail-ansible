@@ -44,4 +44,3 @@ contrail_compute_mode: "bare_metal"
 hypervisor: "libvirt"
 
 xmpp_auth_enable: false
-xmpp_dns_auth_enable: false
