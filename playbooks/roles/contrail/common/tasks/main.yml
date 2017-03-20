@@ -23,3 +23,17 @@
 - include: systemd.yml
   when: contrail_service_mgr == 'systemd'
   tags: [package]
+
+# Copy SSL CA Cert onto Container/BareMetal
+
+- name: Create SSL Cert dir on container
+  file: path="{{ item }}" state=directory
+  with_items:
+    - "{{ ssl_certs_dir }}"
+
+- name: Copy SSL CA Cert file for use by container
+  copy: src={{ item.src}} dest={{ item.dest }}
+  with_items:
+      - { src: "{{ ssl_ca_cert_src_dir }}/ca-cert.pem", dest: "{{ ssl_ca_cert_path }}" }
+      - { src: "{{ ssl_ca_cert_src_dir }}/ca-cert-privkey.pem", dest: "{{ ssl_ca_cert_key_path }}" }
+  when: ssl_certs_supplied == false

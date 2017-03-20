@@ -8,6 +8,9 @@
 - include_role: name=contrail/common tasks_from=cleanup
   tags: [install, contrail.bare_metal_agent.install]
 
+- include_role: name=contrail/common tasks_from=generate_ssl_certs
+  tags: [install, contrail.bare_metal_agent.install]
+
 - name: Include systemd specific code
   include: install/systemd.yml
   when: contrail_service_mgr == 'systemd' or ansible_os_family == 'RedHat'

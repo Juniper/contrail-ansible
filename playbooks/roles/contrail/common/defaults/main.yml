@@ -89,3 +89,20 @@ vncapi_conf: "/etc/contrail/vnc_api_lib.ini"
 
 systemd_wants_files: []
 apt_update: true
+
+# SSL Cert Generation Config
+ssl_certs_supplied: "{{ true if ssl_certs_src_dir else false }}"
+self_signed_ssl_cert: false
+ssl_cert_days_valid: 3640
+ssl_cert_subj: "/CN={{ ansible_hostname }}"
+
+# SSL Cert directoy and paths
+contrailctl_config_directory: /etc/contrailctl
+ssl_certs_src_dir: ""
+ssl_certs_dir: "/etc/contrail/ssl"
+ssl_ca_cert_src_dir: "{{ ssl_certs_src_dir if ssl_certs_src_dir else ssl_certs_dir }}"
+ssl_cert_key_path: "{{ ssl_certs_dir }}/server-privkey.pem"
+ssl_cert_path: "{{ ssl_certs_dir }}/server.pem"
+ssl_cert_csr_path: "{{ ssl_certs_dir }}/server.csr"
+ssl_ca_cert_path: "{{ ssl_certs_dir }}/ca-cert.pem"
+ssl_ca_cert_key_path: "{{ ssl_certs_dir }}/ca-cert-privkey.pem"

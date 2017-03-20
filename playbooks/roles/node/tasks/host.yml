@@ -8,3 +8,14 @@
 - name: set /etc/hosts entry for all nodes with their hostname so that they can be reached with hostnames
   lineinfile: dest=/etc/hosts line="{{ hostvars[item].get('ansible_hostname','') | ternary(item + ' ' + hostvars[item].get('ansible_hostname',''), '') }}"
   with_items: "{{ groups['all'] }}"
+
+- name: Create SSL CA Cert dir on Ansible host
+  file: path="{{ item }}" state=directory
+  with_items:
+    - "{{ ssl_ca_cert_src_dir }}"
+  delegate_to: 127.0.0.1
+  when: ssl_certs_supplied == false
+
+- name: Generate SSL CA Cert if not supplied
+  include: generate_ca.yml
+  when: ssl_certs_supplied == false
