@@ -1,11 +1,14 @@
 ---
-- name: Configure GLOBAL section of contrailctl/agent.conf
-  ini_file: dest="{{ contrailctl_config_directory }}/agent.conf" section=GLOBAL option={{ item.key }} value={{ item.value }}  create=yes
-  with_dict: "{{ global_config_orig }}"
-
-- name: Configure AGENT section of contrailctl/agent.conf
-  ini_file: dest="{{ contrailctl_config_directory }}/agent.conf" section=GLOBAL option={{ item.key }} value={{ item.value }}  create=yes
-  with_dict: "{{ agent_config_orig }}"
+- name: Configure contrailctl/agent.conf
+  ini_file:
+    dest: "{{ contrailctl_config_directory }}/agent.conf"
+    section: "{{ item.section }}"
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+    create: yes
+  with_inidata:
+    GLOBAL: "{{ global_config_orig }}"
+    AGENT: "{{ agent_config_orig }}"
 
 - name: Configure contrailctl/controller.conf KEYSTONE section
   ini_file: dest="{{ contrailctl_config_directory }}/agent.conf" section=KEYSTONE option={{ item.key }} value={{ item.value }}  create=yes
