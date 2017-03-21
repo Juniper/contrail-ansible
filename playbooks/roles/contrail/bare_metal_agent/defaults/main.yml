@@ -27,3 +27,5 @@ no_of_controllers: "{{ controller_list | length }}"
 vrouter_max_control_nodes: 3
 contrail_compute_mode: "bare_metal"
 hypervisor: "libvirt"
+
+xmpp_auth_enable: false
