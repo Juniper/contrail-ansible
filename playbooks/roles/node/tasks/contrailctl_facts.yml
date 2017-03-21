@@ -1,0 +1,32 @@
+---
+# Simulate what contrailctl does for container to baremetal
+# it create facts
+# for global_config and agent_config it write same variable -
+#   in fact for any <container_role_name>_config are treated as
+#   global_config for that component
+# For others, write variable in form <component>_<variable name> - i,e
+# for keystone_config={ip: 192.168.0.11}, variable name will be "keystone_ip"
+
+# NOTE: this code only support very minimal logic that contrailctl
+# use to add ansible vars
+
+#
+# This will set facts only for global vars and any <container_role_name>
+# vars - container_role_names are controller, agent, analytics, analyticsdb,etc
+# Used with_inidata just to make the code more readable, especially if you need
+# to pass more dicts, it is more readable if you specify as multiple dicts rather
+# than use combine() to combine all dicts together
+- name: set facts for global vars
+  set_fact:
+    "{{ item.option }}": "{{ item.value }}"
+  with_inidata:
+    global: "{{ global_config_orig }}"
+    agent: "{{ agent_config_orig }}"
+
+# facts for non-global vars, these variables have variable names appended with
+# the key of the dict it is passing from with_inidata
+- name: set facts for non-global vars
+  set_fact:
+    "{{item.section}}_{{ item.option }}": "{{ item.value }}"
+  with_inidata:
+    keystone: "{{ keystone_config |default({}) }}"

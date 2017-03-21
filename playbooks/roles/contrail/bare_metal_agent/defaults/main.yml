@@ -29,3 +29,4 @@ contrail_compute_mode: "bare_metal"
 hypervisor: "libvirt"
 
 xmpp_auth_enable: false
+vrouter_agent_conf: "/etc/contrail/contrail-vrouter-agent.conf"
