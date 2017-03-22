@@ -1,16 +1,13 @@
 ---
-- name: Configure contrailctl/kubemanager.conf KUBERNETES section
-  ini_file: dest="{{ contrailctl_config_directory }}/kubemanager.conf" section=KUBERNETES option={{ item.key }} value={{ item.value }}  create=yes
-  with_dict: "{{ kubernetes_config | default({}) }}"
-
-- name: Configure contrailctl/kubemanager.conf VNC section
-  ini_file: dest="{{ contrailctl_config_directory }}/kubemanager.conf" section=VNC option={{ item.key }} value={{ item.value }}  create=yes
-  with_dict: "{{ vnc_config | default({}) }}"
-
-- name: Configure contrailctl/kubemanager.conf GLOBAL section
-  ini_file: dest="{{ contrailctl_config_directory }}/kubemanager.conf" section=GLOBAL option={{ item.key }} value={{ item.value }}  create=yes
-  with_dict: "{{ global_config_orig | combine(kube_manager_config | default({})) }}"
-
-- name: Configure contrailctl/kubemanager.conf OPENSHIFT section
-  ini_file: dest="{{ contrailctl_config_directory }}/kubemanager.conf" section=OPENSHIFT option={{ item.key }} value={{ item.value }}  create=yes
-  with_dict: "{{ openshift_config | default({}) }}"
+- name: Configure contrailctl/kubemanager.conf
+  ini_file:
+    dest: "{{ contrailctl_config_directory }}/kubemanager.conf"
+    section: "{{ item.section }}"
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+    create: yes
+  with_inidata:
+    GLOBAL: "{{ global_config_orig }}"
+    KUBERNETES: "{{ kubernetes_config | default({}) }}"
+    VNC: "{{ vnc_config | default({}) }}"
+    OPENSHIFT: "{{ openshift_config | default({}) }}"

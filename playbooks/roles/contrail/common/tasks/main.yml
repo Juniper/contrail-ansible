@@ -7,19 +7,13 @@
       skip: true
   tags: [package]
 
-- name: include OS distribution specific code
-  include: "{{item}}"
-  with_first_found:
-    - files:
-      - "install/{{ ansible_distribution }}-{{ ansible_distribution_version }}.yml"
-      - "install/{{ ansible_distribution }}.yml"
-      skip: true
-  tags: [package]
-
 - name: Create directory /var/log/contrail
   file: path=/var/log/contrail state=directory
   tags: [package, install]
 
-- include: systemd.yml
-  when: contrail_service_mgr == 'systemd'
-  tags: [package]
+# Call node/contrailctl_facts.yml which simulate contrailctl effect
+# to rewrite variables
+# NOTE: This is only required for non-container code.
+# For containers, contrailctl does the job
+- name: Read contrailctl like variables
+  include_role: name=node tasks_from=contrailctl_facts

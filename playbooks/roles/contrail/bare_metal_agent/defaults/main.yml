@@ -10,9 +10,6 @@ agent_packages:
 redhat_agent_packages:
   - python-Fabric
 
-compile_vrouter_module: "{{ true if ansible_os_family == 'Debian' and contrail_compute_mode != 'bare_metal' else false }}"
-reload_vrouter_module: false
-nodemanager_conf: "/etc/contrail/contrail-vrouter-nodemgr.conf"
 vrouter_physical_interface: "{{ ansible_default_ipv4.interface }}"
 vrouter_physical_ansible_interface: "ansible_{{ vrouter_physical_interface | regex_replace('-', '_') }}"
 vhost_interface: vhost0
@@ -22,18 +19,6 @@ vhost_interface: vhost0
 vhost_ansible_interface: "{{ 'ansible_' + vhost_interface if vhost_interface in ansible_interfaces else vrouter_physical_ansible_interface }}"
 
 vhost_address: "{{ hostvars[inventory_hostname][vhost_ansible_interface]['ipv4']['address'] }}"
-vhost_netmask: "{{ hostvars[inventory_hostname][vhost_ansible_interface]['ipv4']['netmask'] }}"
-vhost_network: "{{ hostvars[inventory_hostname][vhost_ansible_interface]['ipv4']['network'] }}"
-
-vrouter_physical_interface_mac_address: "{{ hostvars[inventory_hostname][vrouter_physical_ansible_interface]['macaddress'] }}"
-vhost_address_with_netmask: "{{ vhost_address }}/{{ vhost_netmask }}"
-vhost_address_with_prefix: "{{ vhost_address_with_netmask | ipaddr('host/prefix') }}"
-vhost_gateway: "{{ ansible_default_ipv4.gateway }}"
-
-vrouter_agent_conf: "/etc/contrail/contrail-vrouter-agent.conf"
-vrouter_platform: default
-vrouter_agent_log: /var/log/contrail/contrail-vrouter-agent.log
-vrouter_agent_log_level: "{{ log_level }}"
 
 non_mgmt_ip_config: "--non_mgmt_ip {{ vhost_address }}"
 single_intf_config: ""
@@ -44,3 +29,4 @@ contrail_compute_mode: "bare_metal"
 hypervisor: "libvirt"
 
 xmpp_auth_enable: false
+vrouter_agent_conf: "/etc/contrail/contrail-vrouter-agent.conf"

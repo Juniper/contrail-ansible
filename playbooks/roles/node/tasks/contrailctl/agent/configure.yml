@@ -1,21 +1,16 @@
 ---
+- name: Configure contrailctl/agent.conf
+  ini_file:
+    dest: "{{ contrailctl_config_directory }}/agent.conf"
+    section: "{{ item.section }}"
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+    create: yes
+  with_inidata:
+    GLOBAL: "{{ global_config_orig }}"
+    AGENT: "{{ agent_config_orig }}"
 
-- name: "Start {{ playbook_dir }}/vars/contrail_agent.yml from scratch everytime"
-  file: path="{{ playbook_dir }}/vars/contrail_agent.yml" state=absent
-  ignore_errors: yes
-  delegate_to: 127.0.0.1
-
-- name: Create vars/contrail_agent.yml as a yaml file
-  lineinfile: dest="{{ playbook_dir }}/vars/contrail_agent.yml" line="---" create=yes
-  delegate_to: 127.0.0.1
-
-- set_fact:
-      tmp_var:
-          contrail_compute_mode: "{{ contrail_compute_mode }}"
-
-- name: Store the contrail_compute_mode flag for the contrail_agent playbook to pick up
-  lineinfile: dest="{{ playbook_dir }}/vars/contrail_agent.yml" line="{{ tmp_var | to_nice_yaml}}"
-  delegate_to: 127.0.0.1
-
-- include: "{{ contrail_compute_mode }}.yml"
-
+- name: Configure contrailctl/controller.conf KEYSTONE section
+  ini_file: dest="{{ contrailctl_config_directory }}/agent.conf" section=KEYSTONE option={{ item.key }} value={{ item.value }}  create=yes
+  with_dict: "{{ keystone_config | default({}) }}"
+  when: cloud_orchestrator == "openstack"
