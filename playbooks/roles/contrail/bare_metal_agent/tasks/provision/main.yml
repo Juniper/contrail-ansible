@@ -19,7 +19,7 @@
           --keystone_ip {{ keystone_ip }} \
           --service_token {{ keystone_admin_password }} \
           --self_ip {{ my_compute_ip }} {{ multi_intf_config }} \
-          --hypervisor {{ hypervisor }} --ncontrols {{ no_of_controllers }} \
+          --hypervisor {{ hypervisor }} \
           --keystone_auth_protocol {{ keystone_auth_protocol }} \
           --keystone_auth_port {{ keystone_admin_port }} \
           --keystone_admin_user {{ keystone_admin_user }} \
