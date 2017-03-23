@@ -1,6 +1,8 @@
 ---
 # python-paramiko and ecdsa installed as workaround for bug https://bugs.launchpad.net/juniperopenstack/+bug/1669918
+# contrail-vrouter-dkms installed as workaround for bug https://bugs.launchpad.net/juniperopenstack/+bug/1664421
 agent_packages:
+  - contrail-vrouter-dkms
   - contrail-vrouter-common
   - contrail-setup
   - python-paramiko
