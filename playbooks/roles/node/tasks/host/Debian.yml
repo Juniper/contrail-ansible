@@ -11,7 +11,7 @@
   copy: content='APT::Get::AllowUnauthenticated "true";' dest=/etc/apt/apt.conf.d/99allowunauth
 
 - name: Pin contrail apt repo "contrail" release to priority 999
-  template: src=apt-preferences.j2 dest=/etc/apt/preferences.d/contrail_repo.pref
+  copy: src=apt-preferences.conf dest=/etc/apt/preferences.d/contrail_repo.pref
 
 - name: Run apt-get update
   apt: update_cache=yes
