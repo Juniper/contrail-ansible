@@ -9,5 +9,9 @@
 - name: set /etc/hosts entry for hostname
   lineinfile: dest=/etc/hosts line="127.0.0.1 {{ ansible_hostname }}"
 
+- name: Disable selinux for redhat systems
+  command: setenforce 0
+  when: ansible_os_family == 'RedHat'
+
 - include: facts.yml
   tags: always
