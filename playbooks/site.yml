@@ -25,7 +25,7 @@
     - name: Setup openstack compute in case of openstack
       role: openstack/compute
       tags: [openstack.compute]
-      when: cloud_orchestrator == "openstack"
+      when: cloud_orchestrator == "openstack" and enable_openstack_compute
 
   post_tasks:
     - name: Reboot node
