@@ -69,6 +69,11 @@ os_release: u14.04
 #
 # keystone_config: config params for keystone - these will go to [KEYSTONE] section of contrailctl/*.conf
 # keystone_config: {}
+#
+
+# Enable or disable openstack compute setup
+# This variable is only effective on cloud_controller is openstack
+# enable_openstack_compute: true
 
 # *** NOTE: Individual service/group commented configurations are kept in individual group based yaml files *** #
 # (e.g contrail-controller.yml for controller), - this is just to avoid one huge file, but all _config variables can be

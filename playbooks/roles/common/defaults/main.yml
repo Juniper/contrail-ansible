@@ -1,4 +1,5 @@
 ---
 contrail_compute_mode: bare_metal
+enable_openstack_compute: true
 deployment_platform: docker
 no_upstart: "{{ true if deployment_platform == 'docker' }}"
