@@ -19,4 +19,3 @@
   apt: update_cache=yes
   when: apt_repo_added.get('changed',false)
   ignore_errors: yes
-
