@@ -1,0 +1,10 @@
+---
+
+- name: Install python-setuptools
+  package: name=python-setuptools state=present
+
+- name: Make sure pip is installed
+  easy_install: name=pip state=present
+
+- name: Make sure docker-py is installed
+  pip: name=docker-py version={{ docker_py_version }}
