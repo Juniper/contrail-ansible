@@ -20,3 +20,6 @@
 - name: Set correct hostname on centos - this should always be only hostname and not hostname.domainname format
   shell: hostnamectl set-hostname "{{ ansible_hostname }}"
   when: ansible_hostname != ansible_nodename
+
+- name: "Install python-docker-py in RedHat"
+  package: name=python-docker-py state=present
