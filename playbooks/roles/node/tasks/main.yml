@@ -3,26 +3,12 @@
   fail: msg="os_release should be one of {{ valid_os_release }}"
   when: "os_release not in valid_os_release"
 
-- name: Install python-setuptools
-  package: name=python-setuptools state=present
-
-- name: Make sure pip is installed
-  easy_install: name=pip state=present
-
-- name: "Make sure docker-py is installed"
-  pip: name=docker-py version={{ docker_py_version }}
-  when: ansible_os_family != 'RedHat'
-
-- name: "Install python-docker-py in RedHat"
-  package: name=python-docker-py state=present
-  when: ansible_os_family == 'RedHat'
+- include: host.yml
+  tags: [always]
 
 - include: "repo/{{ ansible_os_family }}.yml"
   tags: [repo]
   when: "'contrail-repo' in group_names"
-
-- include: host.yml
-  tags: [always]
 
 # Intermediate dictionary necessary to derive the final analytics_list. This
 # dictionary will contain the ip address of each host in  the contrail-analytics

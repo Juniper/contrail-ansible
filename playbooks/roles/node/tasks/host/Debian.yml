@@ -1,4 +1,6 @@
 ---
+# Install all required packages from the contrail-install-packages repo
+#
 - name: Add contrail apt repository
   apt_repository:
     repo: "deb {{ contrail_apt_repo }} ./"
@@ -17,3 +19,14 @@
   apt: update_cache=yes
   when: apt_repo_added.get('changed',false)
   ignore_errors: yes
+
+# python-docker should ideally list python-ipaddr as a dependency and the other
+# packages should automatically get installed. This is a workaround for this missed
+# upstream package dependency listing in the python-docker upstream deb
+# definition. Manually installing missed dependencies of python-docker
+- name: "Install python-docker and associated dependencies in Debian"
+  package: name={{ item }} state=latest
+  with_items:
+      - python-docker
+      - python-ipaddress
+      - python-urllib3
