@@ -1,4 +1,6 @@
 ---
+# Install all required packages from the contrail-install-packages repo
+#
 - name: Add contrail apt repository
   apt_repository:
     repo: "deb {{ contrail_apt_repo }} ./"

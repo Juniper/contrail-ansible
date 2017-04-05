@@ -1,0 +1,16 @@
+---
+# python-docker should ideally list python-ipaddr as a dependency and the other
+# packages should automatically get installed. This is a workaround for this missed
+# upstream package dependency listing in the python-docker upstream deb
+# definition. Manually installing missed dependencies of python-docker
+- name: "Install python-docker and associated dependencies in Debian"
+  package: name={{ item }} state=latest
+  with_items:
+      - python-docker
+      - python-ipaddress
+      - python-urllib3
+  when: ansible_os_family != 'RedHat'
+
+- name: "Install python-docker-py in RedHat"
+  package: name=python-docker-py state=present
+  when: ansible_os_family == 'RedHat'
