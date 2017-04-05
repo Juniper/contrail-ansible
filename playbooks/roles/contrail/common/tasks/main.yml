@@ -17,3 +17,17 @@
 # For containers, contrailctl does the job
 - name: Read contrailctl like variables
   include_role: name=node tasks_from=contrailctl_facts
+
+# Copy SSL CA Cert onto Container/BareMetal
+
+- name: Create SSL Cert dir on container
+  file: path="{{ item }}" state=directory
+  with_items:
+    - "{{ ssl_certs_dir }}"
+
+- name: Copy SSL CA Cert file for use by container
+  copy: src={{ item.src}} dest={{ item.dest }}
+  with_items:
+    - { src: "{{ ssl_certs_src_dir }}/ca-cert.pem", dest: "{{ ssl_ca_cert_path }}" }
+    - { src: "{{ ssl_certs_src_dir }}/ca-cert-privkey.pem", dest: "{{ ssl_ca_cert_key_path }}" }
+  when: ssl_certs_supplied == true

@@ -2,5 +2,8 @@
 - include: install/{{ ansible_os_family }}.yml
   tags: [contrail.bare_metal_agent.package, package]
 
+- include_role: name=contrail/common tasks_from=copy_ssl_certs
+  tags: [install, contrail.bare_metal_agent.install]
+
 - include: provision/main.yml
   tags: [contrail.bare_metal_agent.provision, provision]

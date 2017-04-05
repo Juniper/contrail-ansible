@@ -1,0 +1,7 @@
+---
+- name: Copy cert files onto container
+  copy: src={{ item.src}} dest={{ item.dest }}
+  with_items:
+    - { src: "{{ ssl_certs_src_dir }}/{{ ansible_hostname }}.pem", dest: "{{ ssl_cert_path }}"}
+    - { src: "{{ ssl_certs_src_dir }}/{{ ansible_hostname }}-privkey.pem", dest: "{{ ssl_cert_key_path }}" }
+  when: ssl_certs_supplied == true
