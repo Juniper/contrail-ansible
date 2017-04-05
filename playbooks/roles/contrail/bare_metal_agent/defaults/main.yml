@@ -22,9 +22,10 @@ vhost_ansible_interface: "{{ 'ansible_' + vhost_interface if vhost_interface in 
 
 vhost_address: "{{ hostvars[inventory_hostname][vhost_ansible_interface]['ipv4']['address'] }}"
 
+num_ips: "{{ ansible_all_ipv4_addresses | length }}"
 non_mgmt_ip_config: "--non_mgmt_ip {{ vhost_address }}"
 single_intf_config: ""
-multi_intf_config: "{{ non_mgmt_ip_config if vhost_address != ansible_default_ipv4.address else single_intf_config }}"
+multi_intf_config: "{{ non_mgmt_ip_config if num_ips > 1 else single_intf_config }}"
 no_of_controllers: "{{ controller_list | length }}"
 vrouter_max_control_nodes: 3
 contrail_compute_mode: "bare_metal"
