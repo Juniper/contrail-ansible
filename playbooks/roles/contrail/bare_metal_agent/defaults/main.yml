@@ -7,7 +7,6 @@ agent_packages:
   - contrail-setup
   - python-paramiko
   - python-ecdsa
-  - haproxy
 
 redhat_agent_packages:
   - python-Fabric
