@@ -40,8 +40,8 @@
           ternary(hostvars[item]['ansible_all_ipv4_addresses'] |\
           ipaddr( ctrl_data_network ) | first, item)} ) }}"
   with_items:
-      - "{{ groups['contrail-analytics'] }}"
-  when: ctrl_data_network is defined and analytics_list is not defined and 'contrail-analytics' in groups
+      - "{{ groups['contrail-analytics'] | default([]) }}"
+  when: ctrl_data_network is defined and analytics_list is not defined
 
 # Uses the analytics_dict dict created above and creates the final list
 # using the ctrl_data_ip defined per host using the logic below:
