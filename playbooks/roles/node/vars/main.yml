@@ -22,3 +22,8 @@ agent_config_orig: "{{ agent_config | default({}) | combine(\
   {'compile_vrouter_module': compile_vrouter_module_orig,\
   'vrouter_physical_interface': vrouter_physical_interface\
   })}}"
+
+controller_group: "{{ groups['contrail-controllers'] | default([]) }}"
+analytics_group: "{{ groups['contrail-analytics'] | default([]) }}"
+analyticsdb_group: "{{ groups['contrail-analyticsdb'] | default([]) }}"
+compute_group: "{{ groups['contrail-compute'] | default([]) }}"
