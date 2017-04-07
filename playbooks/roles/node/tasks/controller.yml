@@ -50,3 +50,6 @@
     volumes:
       - "{{ contrailctl_config_directory }}:/etc/contrailctl/"
   when: ansible_distribution_version != '14.04' or os_release == 'u16.04'
+
+# Copy SSL certs to container
+- include: copy_ssl_certs.yml
