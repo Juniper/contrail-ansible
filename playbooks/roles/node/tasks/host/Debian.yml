@@ -6,7 +6,7 @@
     repo: "deb {{ contrail_apt_repo }} ./"
     state: present
   register: apt_repo_added
-  when: contrail_apt_repo is defined
+  when: contrail_apt_repo is defined and contrail_apt_repo != ""
   ignore_errors: yes
 
 - name: Allow unauthenticated packages for contrail packages to work
