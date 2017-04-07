@@ -4,12 +4,6 @@
 agent_packages:
   - contrail-vrouter-dkms
   - contrail-vrouter-common
-  - contrail-setup
-  - python-paramiko
-  - python-ecdsa
-
-redhat_agent_packages:
-  - python-Fabric
 
 vrouter_physical_interface: "{{ ansible_default_ipv4.interface }}"
 vrouter_physical_ansible_interface: "ansible_{{ vrouter_physical_interface | regex_replace('-', '_') }}"
