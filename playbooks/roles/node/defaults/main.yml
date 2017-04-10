@@ -96,3 +96,8 @@ contrail_cni_package_name: "{{ 'contrail-cni' if cloud_orchestrator == 'mesos' e
 
 container_image_load_timeout: 300
 docker_py_pkg_install_method: package
+
+controller_group: "{{ groups['contrail-controllers'] | default([]) }}"
+analytics_group: "{{ groups['contrail-analytics'] | default([]) }}"
+analyticsdb_group: "{{ groups['contrail-analyticsdb'] | default([]) }}"
+compute_group: "{{ groups['contrail-compute'] | default([]) }}"
