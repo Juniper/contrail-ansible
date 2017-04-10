@@ -63,8 +63,8 @@ contrailctl_config_directory: /etc/contrailctl
 contrail_apt_repo_port: 1567
 contrail_yum_repo_port: "{{ contrail_apt_repo_port }}"
 contrail_repo_ip: "{{ hostvars[groups['contrail-repo'][0]].get('ansible_default_ipv4', {}).get('address','') | default('') if 'contrail-repo' in groups else ''}}"
-contrail_apt_repo: "{{ contrail_repo_ip | ternary('http://' + contrail_repo_ip + ':' + contrail_apt_repo_port|string, '') if 'contrail-repo' in groups else ''}}"
-contrail_yum_repo: "{{ contrail_repo_ip | ternary('http://' + contrail_repo_ip + ':' + contrail_yum_repo_port|string, '') if 'contrail-repo' in groups else ''}}"
+contrail_apt_repo: "{{ contrail_repo_ip | ternary('http://' + contrail_repo_ip + ':' + contrail_apt_repo_port|string, '') if 'contrail-repo' in groups and ansible_os_family == 'Debian' else '' }}"
+contrail_yum_repo: "{{ contrail_repo_ip | ternary('http://' + contrail_repo_ip + ':' + contrail_yum_repo_port|string, '') if 'contrail-repo' in groups and ansible_os_family == 'RedHat' else '' }}"
 
 # contrailctl_config_mode should be either
 #  configure - let ansible write contrailctl config entries using inifile module
