@@ -20,7 +20,8 @@
           --keystone_admin_password {{ keystone_admin_password }} \
           --keystone_admin_tenant_name {{ keystone_admin_tenant }} \
           --control-nodes '{{ controllers_with_space_delim }}' \
-          --collectors '{{ collectors_with_space_delim }}'"
+          --collectors '{{ collectors_with_space_delim }}' \
+          {{ dpdk_config }}"
 
 # Configure XMPP Auth enable status
 - name: Configure vrouter agent conf file if xmpp is enabled
