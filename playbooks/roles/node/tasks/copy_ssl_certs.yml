@@ -2,9 +2,7 @@
 # Copy SSL CA Cert onto Container/BareMetal
 
 - name: Create SSL Cert dir on container
-  file: path="{{ item }}" state=directory
-  with_items:
-    - "{{ ssl_certs_dir }}"
+  file: path="{{ ssl_certs_dir }}" state=directory
   when: ssl_certs_supplied == true
 
 - name: Copy SSL CA Cert file for use by container
