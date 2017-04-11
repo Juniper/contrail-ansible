@@ -96,3 +96,12 @@ contrail_cni_package_name: "{{ 'contrail-cni' if cloud_orchestrator == 'mesos' e
 
 container_image_load_timeout: 300
 docker_py_pkg_install_method: package
+
+# SSL Cert directoy and paths
+ssl_certs_src_dir: ""
+ssl_certs_supplied: "{{ true if ssl_certs_src_dir else false }}"
+ssl_certs_dir: "/etc/contrailctl/ssl"
+ssl_cert_key_path: "{{ ssl_certs_dir }}/server-privkey.pem"
+ssl_cert_path: "{{ ssl_certs_dir }}/server.pem"
+ssl_ca_cert_path: "{{ ssl_certs_dir }}/ca-cert.pem"
+ssl_ca_cert_key_path: "{{ ssl_certs_dir }}/ca-cert-privkey.pem"

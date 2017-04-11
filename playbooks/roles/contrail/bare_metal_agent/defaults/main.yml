@@ -27,6 +27,7 @@ vrouter_max_control_nodes: 3
 contrail_compute_mode: "bare_metal"
 hypervisor: "libvirt"
 
+ssl_certs_dir: "/etc/contrail/ssl"
 xmpp_auth_enable: false
 vrouter_agent_conf: "/etc/contrail/contrail-vrouter-agent.conf"
 

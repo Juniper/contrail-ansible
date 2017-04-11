@@ -31,3 +31,6 @@
       - AUDIT_WRITE
     volumes:
       - "{{ contrailctl_config_directory }}:/etc/contrailctl/"
+
+# Copy SSL certs to container
+- include: copy_ssl_certs.yml

@@ -1,0 +1,20 @@
+---
+# Copy SSL CA Cert onto Container/BareMetal
+
+- name: Create SSL Cert dir on container
+  file: path="{{ ssl_certs_dir }}" state=directory
+  when: ssl_certs_supplied
+
+- name: Copy SSL CA Cert file for use by container
+  copy: src={{ item.src}} dest={{ item.dest }}
+  with_items:
+    - { src: "{{ ssl_certs_src_dir }}/ca-cert.pem", dest: "{{ ssl_ca_cert_path }}" }
+    - { src: "{{ ssl_certs_src_dir }}/ca-cert-privkey.pem", dest: "{{ ssl_ca_cert_key_path }}" }
+  when: ssl_certs_supplied
+
+- name: Copy cert files onto container
+  copy: src={{ item.src}} dest={{ item.dest }}
+  with_items:
+    - { src: "{{ ssl_certs_src_dir }}/{{ ansible_hostname }}.pem", dest: "{{ ssl_cert_path }}"}
+    - { src: "{{ ssl_certs_src_dir }}/{{ ansible_hostname }}-privkey.pem", dest: "{{ ssl_cert_key_path }}" }
+  when: ssl_certs_supplied
