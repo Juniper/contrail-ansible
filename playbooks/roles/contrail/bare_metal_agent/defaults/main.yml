@@ -1,8 +1,12 @@
 ---
 # python-paramiko and ecdsa installed as workaround for bug https://bugs.launchpad.net/juniperopenstack/+bug/1669918
 # contrail-vrouter-dkms installed as workaround for bug https://bugs.launchpad.net/juniperopenstack/+bug/1664421
-agent_packages:
+kernel_compute_packages:
   - contrail-vrouter-dkms
+  - contrail-vrouter-common
+
+dpdk_compute_packages:
+  - contrail-vrouter-dpdk-init
   - contrail-vrouter-common
 
 vrouter_physical_interface: "{{ ansible_default_ipv4.interface }}"
@@ -25,3 +29,16 @@ hypervisor: "libvirt"
 
 xmpp_auth_enable: false
 vrouter_agent_conf: "/etc/contrail/contrail-vrouter-agent.conf"
+
+# Dpdk defaults
+dpdk_huge_pages: "{{ hostvars[inventory_hostname].get('huge_pages') | default('')}}"
+dpdk_coremask: "{{ hostvars[inventory_hostname].get('coremask') | default('')}}"
+dpdk_uio_driver: "{{ hostvars[inventory_hostname].get('uio_driver') | default('')}}"
+
+mandatory_dpdk_params: "{{ 'coremask=' + dpdk_coremask + ',huge_pages=' + dpdk_huge_pages if dpdk_huge_pages else '' }}"
+optional_dpdk_params: "{{ ',uio_driver=' + dpdk_uio_driver if dpdk_uio_driver else '' }}"
+dpdk_params: "{{ mandatory_dpdk_params + optional_dpdk_params }}"
+dpdk_config: "{{ '--dpdk ' + dpdk_params if dpdk_params else '' }}"
+
+# compute packages
+compute_packages: "{{ dpdk_compute_packages if dpdk_config else kernel_compute_packages }}"
