@@ -36,6 +36,23 @@
   notify: restart docker
   when: ansible_os_family == 'Debian' or ansible_distribution == 'CentOS'
 
+- name: Added OPTIONS to docker start in /usr/lib/systemd/system/docker.service
+  ini_file: dest=/usr/lib/systemd/system/docker.service section=Service option=ExecStart value="/usr/bin/dockerd ${{ docker_options_var }}" create=no
+  ignore_errors: yes
+  when: ansible_service_mgr == "systemd"
+  notify:
+    - reload systemd
+    - restart docker
+
+- name: Added OPTIONS to docker start in /lib/systemd/system/docker.service
+  ini_file: dest=/lib/systemd/system/docker.service section=Service option=ExecStart value="/usr/bin/dockerd ${{ docker_options_var }}" create=no
+  ignore_errors: yes
+  when: ansible_service_mgr == "systemd"
+  notify:
+    - reload systemd
+    - restart docker
+
+
 - name: Adding Docker Insecure registries in RedHat
   lineinfile: dest="{{ docker_env_file }}"
               line="{{docker_opts_RedHat}}"
