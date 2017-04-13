@@ -33,6 +33,8 @@
       - AUDIT_WRITE
     volumes:
       - "{{ contrailctl_config_directory }}:/etc/contrailctl/"
+      - "{{ configdb_data_dir }}:/var/lib/cassandra"
+      - "/var/lib/zookeeper:/var/lib/zookeeper"
   when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '14.04' and os_release != 'u16.04'
 
 - name: "Start contrail controller container"
@@ -49,6 +51,8 @@
       - AUDIT_WRITE
     volumes:
       - "{{ contrailctl_config_directory }}:/etc/contrailctl/"
+      - "{{ configdb_data_dir }}:/var/lib/cassandra"
+      - "/var/lib/zookeeper:/var/lib/zookeeper"
   when: ansible_distribution_version != '14.04' or os_release == 'u16.04'
 
 # Copy SSL certs to container
