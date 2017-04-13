@@ -30,6 +30,7 @@
       - AUDIT_WRITE
     volumes:
       - "{{ contrailctl_config_directory }}:/etc/contrailctl/"
+      - "{{ analyticsdb_data_dir }}:/var/lib/cassandra"
 
 # Copy SSL certs to container
 - include: copy_ssl_certs.yml
