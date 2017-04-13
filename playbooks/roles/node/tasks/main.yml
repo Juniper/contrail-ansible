@@ -190,6 +190,49 @@
   with_items: "{{ controller_group }}"
   when: ctrl_data_network is not defined
 
+# Create ceph-controller list
+- name: Create ceph_controller_list - step 1 (ceph_controller_dict)
+  set_fact:
+    ceph_controller_dict: "{{ ceph_controller_dict|default({}) | combine( \
+                      {item: (hostvars[item]['ansible_all_ipv4_addresses'] | \
+                      ipaddr( ctrl_data_network ) | count != 0) | \
+                      ternary(hostvars[item]['ansible_all_ipv4_addresses'] | \
+                      ipaddr( ctrl_data_network ) | first, item)} ) }}"
+  with_items:
+      - "{{ ceph_controller_group }}"
+  when: ctrl_data_network is defined and ceph_controller_list is undefined
+
+- debug:
+    msg:
+      - "hostname test"
+      - "hostname {{ hostvars[item]['ansible_hostname'] }}"
+  with_items: "{{ ceph_controller_group }}"
+
+- name: Create ceph_controller_list - step 2 (when ctrl_data_network is defined)
+  set_fact:
+    ceph_controller_list_tmp: "{{ ceph_controller_list_tmp | default([]) + \
+                      [hostvars[item].get('ctrl_data_ip', item)] }}"
+    ceph_hostname_list_tmp: "{{ ceph_hostname_list_tmp | default([]) }} + \
+                          [ '{{ hostvars[item]['ansible_hostname'] }}' ]"
+  with_items: "{{ ceph_controller_group }}"
+  when: ctrl_data_network is not defined and ceph_controller_list is not defined
+
+- name: Create ceph_controller_list - step 3 (with ctrl_data_ip if defined)
+  set_fact:
+    ceph_controller_list_tmp: "{{ ceph_controller_list_tmp | default([]) + \
+                          [hostvars[item].get('ctrl_data_ip', \
+                          ceph_controller_dict.get(item, item))] }}"
+    ceph_hostname_list_tmp: "{{ ceph_hostname_list_tmp | default([]) }} + \
+                          [ '{{ hostvars[item]['ansible_hostname'] }}' ]"
+  with_items: "{{ ceph_controller_group }}"
+  when: ctrl_data_network is defined and ceph_controller_list is not defined
+
+- name: Create ceph_controller_list - step 4 (Assign from tmp if not defined)
+  set_fact:
+      ceph_controller_list: "{{ ceph_controller_list_tmp | default([]) }}"
+      ceph_hostname_list: "{{ ceph_hostname_list_tmp | default([]) }}"
+  when: ceph_controller_list is not defined
+
 - include: lb.yml
   tags: [container.lb, lb]
   when: "'contrail-lb' in group_names"
@@ -221,3 +264,7 @@
 - include: mesos_manager.yml
   tags: [container.mesos_manager, mesos_manager]
   when: "'contrail-compute' in group_names and cloud_orchestrator == 'mesos'"
+
+- include: storage_ceph_controller.yml
+  tags: [container.ceph_controller, ceph_controller]
+  when: "'ceph-controller' in group_names"

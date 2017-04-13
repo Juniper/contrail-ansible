@@ -1,0 +1,33 @@
+---
+- name: Copy storage ceph_controller image
+  copy:
+    src: "{{ docker_image_load_path }}/{{ storage_ceph_controller_image_archive }}"
+    dest: "/tmp/{{ storage_ceph_controller_image_archive }}"
+  when: docker_registry is not defined or load_storage_ceph_controller_image is defined
+
+- name: "Load storage ceph controller image"
+  docker_image:
+    name: ceph-controller
+    tag: "{{ contrail_version }}"
+    timeout: "{{ container_image_load_timeout }}"
+    load_path: "/tmp/{{ storage_ceph_controller_image_archive }}"
+  when: docker_registry is not defined or load_storage_ceph_controller_image is defined
+
+- name: Configure contrailctl/cephcontroller.conf
+  include: "contrailctl/cephcontroller/{{ contrailctl_config_mode }}.yml"
+
+- name: "Start storage ceph controller container"
+  docker_container:
+    name: ceph-master
+    image: "{{ storage_ceph_controller_image }}"
+    privileged: true
+    pid_mode: host
+    network_mode: host
+    state: started
+    tty: true
+    pull: "{{ always_pull_image }}"
+    restart_policy: unless-stopped
+    capabilities:
+      - AUDIT_WRITE
+    volumes:
+      - "{{ contrailctl_config_directory }}:/etc/contrailctl/"
