@@ -1,0 +1,10 @@
+---
+- name: "Copy contrailctl/cephcontroller.conf"
+  copy: src={{ item }} dest={{ contrailctl_config_directory }}
+  with_first_found:
+    - files:
+      - "{{ contrailctl_config_source |ternary(contrailctl_config_source + '/cephcontroller.conf', 'contrailctl/cephcontroller.conf') }}"
+      - contrailctl/cephcontroller.conf
+      - "{{ playbook_dir }}/contrailctl/cephcontroller.conf"
+      - /etc/contrailctl/cephcontroller.conf
+      skip: true

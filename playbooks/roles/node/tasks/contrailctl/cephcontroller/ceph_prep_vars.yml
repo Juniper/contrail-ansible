@@ -1,0 +1,156 @@
+---
+#- name: Local facts
+#  set_fact:
+#    ceph_key_config_store_file: /etc/contrailctl/ceph_config_store.txt
+#  delegate_to: 127.0.0.1
+
+- name: resolve platform specific vars
+  include_vars: "{{item}}"
+  with_first_found:
+    - files:
+      - "storage_vars.yml"
+
+
+- name: Display all variables/facts known for a host
+  debug:
+    var: hostvars[item]
+    verbosity: 4
+
+- debug:
+    msg:
+      - "hostname {{ inventory_hostname }}"
+      - "path {{ ceph_key_config_store_file }}"
+
+- name: init mon host list
+  set_fact:
+    mon_host_list: ''
+    mon_hostname_list: ''
+  delegate_to: 127.0.0.1
+  delegate_facts: True
+
+- debug:
+    msg:
+      - "ceph {{ ceph_controller_list }}"
+      - "ceph {{ ceph_hostname_list }}"
+
+#- name: set mon host list
+#  set_fact:
+#    mon_host_list: hostvars['localhost']['mon_host_list'] + ', ' + {{ inventory_
+#    mon_hostname_list: ''
+#  delegate_to: 127.0.0.1
+#  delegate_facts: True
+
+- fetch:
+    src: "{{ ceph_key_config_store_file }}"
+    dest: "/tmp/storage"
+
+- name: Check if ceph local storage file  exists
+  stat:
+    path: "/tmp/storage/{{ inventory_hostname }}{{ ceph_key_config_store_file }}"
+  register: stat_result
+  delegate_to: 127.0.0.1
+
+- debug:
+    msg:
+      - "stat_result {{ stat_result }}"
+
+- name: Read fsid from file
+  set_fact:
+    ceph_fsid: "{{ lookup('ini', 'fsid section=DEFAULT file=/tmp/storage/{{ inventory_hostname}}{{ ceph_key_config_store_file }}') }}"
+  when: stat_result.stat.exists == True and hostvars['localhost']['ceph_fsid'] is not defined
+  delegate_to: 127.0.0.1
+  delegate_facts: True
+
+- name: Read mon_key from file
+  set_fact:
+    mon_key: "{{ lookup('ini', 'mon_key section=DEFAULT file=/tmp/storage/{{ inventory_hostname}}{{ ceph_key_config_store_file }}') }}"
+  when: stat_result.stat.exists == True and hostvars['localhost']['mon_key'] is not defined
+  delegate_to: 127.0.0.1
+  delegate_facts: True
+
+- name: Read osd_key from file
+  set_fact:
+    osd_key: "{{ lookup('ini', 'osd_key section=DEFAULT file=/tmp/storage/{{ inventory_hostname}}{{ ceph_key_config_store_file }}') }}"
+  when: stat_result.stat.exists == True and hostvars['localhost']['osd_key'] is not defined
+  delegate_to: 127.0.0.1
+  delegate_facts: True
+
+- name: Read adm_key from file
+  set_fact:
+    adm_key: "{{ lookup('ini', 'adm_key section=DEFAULT file=/tmp/storage/{{ inventory_hostname}}{{ ceph_key_config_store_file }}') }}"
+  when: stat_result.stat.exists == True and hostvars['localhost']['adm_key'] is not defined
+  delegate_to: 127.0.0.1
+  delegate_facts: True
+
+- name: Generate fsid
+  command: /usr/bin/uuidgen
+  register: var1
+  delegate_to: 127.0.0.1
+
+- set_fact:
+    ceph_fsid: "{{ var1.stdout }}"
+  when: (stat_result.stat.exists == False) and
+        (hostvars['localhost']['ceph_fsid'] is not defined)
+  delegate_to: 127.0.0.1
+  delegate_facts: True
+
+- name: Generate mon_key
+  command: /usr/bin/ceph-authtool -C  -g --gen-print-key
+  register: var1
+  delegate_to: 127.0.0.1
+
+- set_fact:
+    mon_key: "{{ var1.stdout }}"
+  when: (stat_result.stat.exists == False) and
+        (hostvars['localhost']['mon_key'] is not defined)
+  delegate_to: 127.0.0.1
+  delegate_facts: True
+
+- name: Generate osd_key
+  command: /usr/bin/ceph-authtool -C  -g --gen-print-key
+  register: var1
+  delegate_to: 127.0.0.1
+
+- set_fact:
+    osd_key: "{{ var1.stdout }}"
+  when: (stat_result.stat.exists == False) and
+        (hostvars['localhost']['osd_key'] is not defined)
+  delegate_to: 127.0.0.1
+  delegate_facts: True
+
+- name: Generate adm_key
+  command: /usr/bin/ceph-authtool -C  -g --gen-print-key
+  register: var1
+  delegate_to: 127.0.0.1
+
+- set_fact:
+    adm_key: "{{ var1.stdout }}"
+  when: (stat_result.stat.exists == False) and
+        (hostvars['localhost']['adm_key'] is not defined)
+  delegate_to: 127.0.0.1
+  delegate_facts: True
+
+- name: Configure contrailctl/cephcontainer.conf
+  ini_file:
+    dest: "{{ ceph_key_config_store_file }}"
+    section: "{{ item.section }}"
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+    create: yes
+  with_inidata:
+    DEFAULT: {'fsid':    "{{ hostvars['localhost']['ceph_fsid'] }}",
+              'mon_key': "{{ hostvars['localhost']['mon_key'] }}",
+              'osd_key': "{{ hostvars['localhost']['osd_key'] }}",
+              'adm_key': "{{ hostvars['localhost']['adm_key'] }}",
+              'ceph_hostip_list': "{{ ceph_controller_list }}",
+              'ceph_hostname_list': "{{ ceph_hostname_list }}"}
+
+- debug:
+    msg:
+      - "fsid {{ hostvars['localhost']['ceph_fsid'] }}"
+      - "mon_key {{ hostvars['localhost']['mon_key'] }}"
+      - "osd_key {{ hostvars['localhost']['osd_key'] }}"
+      - "adm_key {{ hostvars['localhost']['adm_key'] }}"
+      - "ceph_hostip_list {{ ceph_controller_list }}"
+      - "ceph_hostname_list {{ ceph_hostname_list }}"
+

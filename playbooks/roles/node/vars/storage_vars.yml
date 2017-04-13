@@ -1,0 +1,7 @@
+ceph_key_config_store_file: /etc/contrailctl/ceph_config_store.txt
+ceph_fsid: []
+mon_key: []
+osd_key: []
+adm_key: []
+mon_host_list: ''
+mon_hostname_list: ''
