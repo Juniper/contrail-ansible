@@ -10,6 +10,9 @@
     GLOBAL: "{{ global_config_orig }}"
     ANALYTICSDB: "{{ analyticsdb_config | default({}) }}"
     CASSANDRA: "{{ cassandra_config | default({}) }}"
+  notify:
+    - check analyticsdb container
+    - contrailctl for analyticsdb
 
 - name: Configure contrailctl/analyticsdb.conf KEYSTONE section
   ini_file: dest="{{ contrailctl_config_directory }}/analyticsdb.conf" section=KEYSTONE option={{ item.key }} value={{ item.value }}  create=yes
