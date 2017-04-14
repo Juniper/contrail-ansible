@@ -5,6 +5,7 @@ global_config_detected:
   analytics_list: "{{ analytics_list }}"
   analyticsdb_list: "{{ analyticsdb_list }}"
   compute_list: "{{ compute_list }}"
+  nested_mode: "{{ nested_mode }}"
   config_ip: "{{ config_ip }}"
   controller_ip: "{{ controller_ip }}"
   analytics_ip: "{{ analytics_ip }}"

@@ -212,7 +212,7 @@
 
 - include: "agent.yml"
   tags: [container.agent, agent]
-  when: "'contrail-compute' in group_names and contrail_compute_mode == 'container'"
+  when: "'contrail-compute' in group_names and contrail_compute_mode == 'container' and not nested_mode"
 
 - include: kube_cni.yml
   tags: [container.kube_cni, kube_cni]
