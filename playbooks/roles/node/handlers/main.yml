@@ -1,0 +1,33 @@
+---
+- name: check controller container
+  shell: "docker ps -q --filter 'label=contrail.role=controller'"
+  register: controller_container_ps
+
+- name: contrailctl for controller
+  shell: "docker exec -i controller contrailctl config sync -c controller -F -v -t configure,service"
+  when: controller_container_ps.stdout != ''
+
+- name: check analytics container
+  shell: "docker ps -q --filter 'label=contrail.role=analytics'"
+  register: analytics_container_ps
+
+- name: contrailctl for analytics
+  shell: "docker exec -i analytics contrailctl config sync -c analytics -F -v -t configure,service"
+  when: analytics_container_ps.stdout != ''
+
+- name: check analyticsdb container
+  shell: "docker ps -q --filter 'label=contrail.role=analyticsdb'"
+  register: analyticsdb_container_ps
+
+- name: contrailctl for analyticsdb
+  shell: "docker exec -i analyticsdb contrailctl config sync -c analyticsdb -F -v -t configure,service"
+  when: analyticsdb_container_ps.stdout != ''
+
+- name: check agent container
+  shell: "docker ps -q --filter 'label=contrail.role=agent'"
+  register: agent_container_ps
+
+- name: contrailctl for agent
+  shell: "docker exec -i agent contrailctl config sync -c agent -F -v -t configure,service"
+  when: agent_container_ps.stdout != ''
+
