@@ -16,6 +16,11 @@
 
 - name: Create cni config
   copy: src=kube_cni.conf dest=/etc/cni/net.d/10-contrail.conf
+  when: not nested_mode
+
+- name: Create contrail-cni-nested.conf
+  template: src=contrail-cni-nested.conf.j2 dest=/etc/cni/net.d/10-contrail-cni-nested.conf
+  when: nested_mode
 
 - name: Create softlink contrail cni binary to /opt/cni/bin
   file: src=/usr/bin/contrail-kube-cni  dest=/opt/cni/bin/contrail-kube-cni state=link
