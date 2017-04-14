@@ -109,3 +109,7 @@ ssl_ca_cert_key_path: "{{ ssl_certs_dir }}/ca-cert-privkey.pem"
 # Volume persistance
 analyticsdb_data_dir: /var/lib/analyticsdb
 configdb_data_dir: /var/lib/configdb
+
+vrouter_agent_port: 9091
+# nested_mode is to define whether it is nested mode kubernetes setup or not
+nested_mode: false

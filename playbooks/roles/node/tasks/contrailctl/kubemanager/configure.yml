@@ -11,3 +11,4 @@
     KUBERNETES: "{{ kubernetes_config | default({}) }}"
     VNC: "{{ vnc_config | default({}) }}"
     OPENSHIFT: "{{ openshift_config | default({}) }}"
+  when: item.value
