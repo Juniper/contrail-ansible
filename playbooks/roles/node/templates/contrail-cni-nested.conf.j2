@@ -1,0 +1,18 @@
+{
+   "cniVersion": "0.2.0",
+   "contrail" : {
+       "mode"              : "k8s",
+       "vif-type"          : "macvlan",
+       "parent-interface"  : "eth0",
+       "vrouter-ip"        : "{{ vrouter_agent_ip }}",
+       "vrouter-port"      : "{{ vrouter_agent_port }}",
+       "config-dir"        : "/var/lib/contrail/ports/vm",
+       "poll-timeout"      : 5,
+       "poll-retries"      : 15,
+       "log-dir"          : "/var/log/contrail/cni",
+       "log-file"          : "/var/log/contrail/cni/opencontrail.log",
+       "log-level"         : "4"
+   },
+   "name": "contrail-kube-cni",
+   "type": "contrail-kube-cni"
+}
