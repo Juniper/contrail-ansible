@@ -105,3 +105,7 @@ ssl_cert_key_path: "{{ ssl_certs_dir }}/server-privkey.pem"
 ssl_cert_path: "{{ ssl_certs_dir }}/server.pem"
 ssl_ca_cert_path: "{{ ssl_certs_dir }}/ca-cert.pem"
 ssl_ca_cert_key_path: "{{ ssl_certs_dir }}/ca-cert-privkey.pem"
+
+vrouter_agent_port: 9091
+# nested_mode is to define whether it is nested mode kubernetes setup or not
+nested_mode: false

@@ -18,6 +18,7 @@
     DEVICE_MANAGER: "{{ device_manager_config | default({}) }}"
     SVC_MONITOR: "{{ svc_monitor_config | default({}) }}"
     WEBUI: "{{ webui_config | default({}) }}"
+  when: item.value
 
 - name: Configure contrailctl/controller.conf KEYSTONE section
   ini_file: dest="{{ contrailctl_config_directory }}/controller.conf" section=KEYSTONE option={{ item.key }} value={{ item.value }}  create=yes

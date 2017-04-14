@@ -15,6 +15,7 @@
     QUERY_ENGINE: "{{ query_engine_config | default({}) }}"
     SNMP_COLLECTOR: "{{ snmp_collector_config | default({}) }}"
     TOPOLOGY: "{{ topology_config | default({}) }}"
+  when: item.value
 
 - name: Configure contrailctl/analytics.conf KEYSTONE section
   ini_file: dest="{{ contrailctl_config_directory }}/analytics.conf" section=KEYSTONE option={{ item.key }} value={{ item.value }}  create=yes
