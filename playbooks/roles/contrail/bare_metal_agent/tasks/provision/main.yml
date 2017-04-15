@@ -28,3 +28,15 @@
   ini_file: dest={{ vrouter_agent_conf }} section=DEFAULT option={{ item.key }} value={{ item.value }}  create=yes
   with_dict:
       xmpp_auth_enable: "{{ xmpp_auth_enable }}"
+
+# Configure SSL for Sandesh
+- name: Configure vrouter agent conf file if sandesh ssl is enabled
+  ini_file: dest={{ vrouter_agent_conf }} section=SANDESH option={{ item.key }} value={{ item.value }}  create=yes
+  with_dict:
+      sandesh_ssl_enable: "{{ sandesh_ssl_enable }}"
+
+# Configure SSL for Introspect
+- name: Configure vrouter agent conf file if introspect ssl is enabled
+  ini_file: dest={{ vrouter_agent_conf }} section=SANDESH option={{ item.key }} value={{ item.value }}  create=yes
+  with_dict:
+      introspect_ssl_enable: "{{ introspect_ssl_enable }}"
