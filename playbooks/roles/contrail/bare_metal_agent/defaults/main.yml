@@ -28,8 +28,13 @@ contrail_compute_mode: "bare_metal"
 hypervisor: "libvirt"
 
 ssl_certs_dir: "/etc/contrail/ssl"
-xmpp_auth_enable: false
+xmpp_auth_enable: False
 vrouter_agent_conf: "/etc/contrail/contrail-vrouter-agent.conf"
+
+# contrail-coompute-setup args and flags
+xmpp_auth_flag: "{{ '--xmpp_auth_enable' if xmpp_auth_enable else '' }}"
+collectors_arg: "{{ '--collectors ' + collectors_with_space_delim }}"
+control_nodes_arg: "{{ '--control-nodes ' + controllers_with_space_delim }}"
 
 # Dpdk defaults
 dpdk_huge_pages: "{{ hostvars[inventory_hostname].get('huge_pages') | default('')}}"
