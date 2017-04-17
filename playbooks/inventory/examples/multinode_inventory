@@ -78,6 +78,12 @@ contrail_version=4.0.0.0-3012
 # TODO: Dynamically identify the interface name
 vrouter_physical_interface=p1p1
 
+# Sandesh SSL Enable/Disable
+;sandesh_ssl_enable=false
+
+# Introspect SSL Enable/Disable
+;introspect_ssl_enable=false
+
 # Docker images
 # docker images to launch the containers can be made available by one of the 
 # following ways or by combination of the both.
