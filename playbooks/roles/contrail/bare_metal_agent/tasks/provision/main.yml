@@ -22,4 +22,6 @@
           {{ control_nodes_arg }} \
           {{ collectors_arg }} \
           {{ xmpp_auth_flag }} \
+          {{ sandesh_ssl_flag }} \
+          {{ introspect_ssl_flag }} \
           {{ dpdk_config }}"

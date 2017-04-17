@@ -110,6 +110,10 @@ ssl_cert_path: "{{ ssl_certs_dir }}/server.pem"
 ssl_ca_cert_path: "{{ ssl_certs_dir }}/ca-cert.pem"
 ssl_ca_cert_key_path: "{{ ssl_certs_dir }}/ca-cert-privkey.pem"
 
+# Sandesh SSL flags
+sandesh_ssl_enable: false
+introspect_ssl_enable: false
+
 # Volume persistance
 analyticsdb_data_dir: /var/lib/analyticsdb
 configdb_data_dir: /var/lib/configdb
