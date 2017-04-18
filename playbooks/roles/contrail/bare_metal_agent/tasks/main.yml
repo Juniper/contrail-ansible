@@ -6,6 +6,9 @@
   tags: [install, contrail.bare_metal_agent.install]
   vars:
     ssl_certs_dir: '/etc/contrail/ssl'
+    ssl_cert_key_path: "{{ ssl_certs_dir }}/private/server-privkey.pem"
+    ssl_cert_path: "{{ ssl_certs_dir }}/certs/server.pem"
+    ssl_ca_cert_path: "{{ ssl_certs_dir }}/certs/ca-cert.pem"
 
 - include: provision/main.yml
   tags: [contrail.bare_metal_agent.provision, provision]
