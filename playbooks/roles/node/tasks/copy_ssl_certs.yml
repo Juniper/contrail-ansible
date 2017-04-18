@@ -9,7 +9,6 @@
   copy: src={{ item.src}} dest={{ item.dest }}
   with_items:
     - { src: "{{ ssl_certs_src_dir }}/ca-cert.pem", dest: "{{ ssl_ca_cert_path }}" }
-    - { src: "{{ ssl_certs_src_dir }}/ca-cert-privkey.pem", dest: "{{ ssl_ca_cert_key_path }}" }
   when: ssl_certs_supplied
 
 - name: Copy cert files onto container
