@@ -130,7 +130,7 @@
   delegate_to: 127.0.0.1
   delegate_facts: True
 
-- name: Configure contrailctl/cephcontainer.conf
+- name: Configure contrailctl/cephcontroller.conf
   ini_file:
     dest: "{{ ceph_key_config_store_file }}"
     section: "{{ item.section }}"

@@ -1,7 +1,7 @@
 ---
-- name: Configure contrailctl/cephcontainer.conf
+- name: Configure contrailctl/cephcontroller.conf
   ini_file:
-    dest: "{{ contrailctl_config_directory }}/cephcontainer.conf"
+    dest: "{{ contrailctl_config_directory }}/cephcontroller.conf"
     section: "{{ item.section }}"
     option: "{{ item.option }}"
     value: "{{ item.value }}"
