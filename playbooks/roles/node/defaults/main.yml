@@ -96,7 +96,7 @@ config_server_list_derived: []
 config_ip: "{{ controller_list[0] }}"
 
 # contrail-cni for mesos and contrail-kub-cni for others
-contrail_cni_package_name: "{{ 'contrail-cni' if cloud_orchestrator == 'mesos' else 'contrail-kube-cni' }}"
+contrail_cni_package_name: "{{ 'contrail-cni' if cloud_orchestrator == 'mesos' else 'contrail-k8s-cni' }}"
 
 container_image_load_timeout: 300
 docker_py_pkg_install_method: package

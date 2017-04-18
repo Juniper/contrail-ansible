@@ -3,6 +3,7 @@
 # repo container on specified node.
 # This repo will be used by other nodes on installing any packages in the node
 # setting up contrail-cni need this repo enabled.
+# NOTE: Repo is required only for mesos
 ;[contrail-repo]
 ;1.1.1.1
 

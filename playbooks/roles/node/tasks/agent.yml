@@ -70,7 +70,7 @@
 - name: Configure contrailctl/agent.conf
   include: "../contrailctl/agent/{{ contrailctl_config_mode }}.yml"
 
-- name: "Start contrail agent container"
+- name: "Start contrail agent container (non-kubernetes)"
   docker_container:
     name: agent
     image: "{{ agent_image }}"
@@ -87,6 +87,35 @@
       - "/usr/src:/usr/src"
       - "{{ contrailctl_config_directory }}:/etc/contrailctl/"
       - "/var/lib/contrail:/var/lib/contrail"
+  when: cloud_orchestrator not in ['kubernetes', 'openshift']
+
+# In case of Kubernetes, agent will install cni on the node, for which need
+# More directories to be mounted
+# /opt/cni/bin:/host/opt_cni_bin - to copy cni binary
+# /etc/cni:/host/etc_cni - to copy/create cni config file
+# /var/log/contrail/cni:/host/log_cni - just to make sure cni log directory
+# created on host
+- name: "Start contrail agent container (kubernetes)"
+  docker_container:
+    name: agent
+    image: "{{ agent_image }}"
+    privileged: true
+    network_mode: host
+    state: started
+    tty: true
+    restart_policy: unless-stopped
+    pull: "{{ always_pull_image }}"
+    capabilities:
+      - AUDIT_WRITE
+    volumes:
+      - "/lib/modules:/lib/modules"
+      - "/usr/src:/usr/src"
+      - "{{ contrailctl_config_directory }}:/etc/contrailctl/"
+      - "/var/lib/contrail:/var/lib/contrail"
+      - "/opt/cni/bin:/host/opt_cni_bin"
+      - "/etc/cni:/host/etc_cni"
+      - "/var/log/contrail/cni:/host/log_cni"
+  when: cloud_orchestrator in ['kubernetes', 'openshift']
 
 # Copy SSL certs to container
 - include: copy_ssl_certs.yml

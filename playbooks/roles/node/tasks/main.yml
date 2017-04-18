@@ -257,9 +257,10 @@
   tags: [container.agent, agent]
   when: "'contrail-compute' in group_names and contrail_compute_mode == 'container' and not nested_mode"
 
+# For kubernetes and openshift, agent will install cni file to the node
 - include: kube_cni.yml
   tags: [container.kube_cni, kube_cni]
-  when: "'contrail-compute' in group_names and cloud_orchestrator in ['kubernetes', 'mesos', 'openshift']"
+  when: "'contrail-compute' in group_names and (cloud_orchestrator in ['mesos'] or nested_mode)"
 
 - include: mesos_manager.yml
   tags: [container.mesos_manager, mesos_manager]
