@@ -110,6 +110,16 @@ ssl_cert_path: "{{ ssl_certs_dir }}/server.pem"
 ssl_ca_cert_path: "{{ ssl_certs_dir }}/ca-cert.pem"
 ssl_ca_cert_key_path: "{{ ssl_certs_dir }}/ca-cert-privkey.pem"
 
+# Keystone defaults
+keystone_version: v2.0
+keystone_ip: "{{ controller_ip }}"
+keystone_admin_port: "{{ keystone_config.get('admin_port','35357') }}"
+keystone_public_port: "{{ keystone_config.get('public_port','5000') }}"
+keystone_auth_protocol: "{{ keystone_config.get('auth_protocol','http') }}"
+keystone_admin_user: "{{ keystone_config.get('admin_user','admin') }}"
+keystone_admin_password: "{{ keystone_config.get('admin_password','admin') }}"
+keystone_admin_tenant: "{{ keystone_config.get('admin_tenant','admin') }}"
+
 # Sandesh SSL flags
 sandesh_ssl_enable: false
 introspect_ssl_enable: false

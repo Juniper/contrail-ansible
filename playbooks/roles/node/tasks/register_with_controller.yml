@@ -1,0 +1,33 @@
+---
+- name: "Register analytics node with controller"
+  shell: "docker exec controller /usr/share/contrail-utils/provision_analytics_node.py \
+         --use_admin_api \
+         --host_name {{ item.value }} \
+         --host_ip {{ item.key }} \
+         --oper add \
+         --admin_user {{ keystone_admin_user }} \
+         --admin_password {{ keystone_admin_password }} \
+         --admin_tenant_name {{ keystone_admin_tenant }}"
+  with_dict: "{{ analytics_ip_hostname_dict }}"
+
+- name: "Register analyticsdb node with controller"
+  shell: "docker exec controller /usr/share/contrail-utils/provision_database_node.py \
+         --use_admin_api \
+         --host_name {{ item.value }} \
+         --host_ip {{ item.key }} \
+         --oper add \
+         --admin_user {{ keystone_admin_user }} \
+         --admin_password {{ keystone_admin_password }} \
+         --admin_tenant_name {{ keystone_admin_tenant }}"
+  with_dict: "{{ analyticsdb_ip_hostname_dict }}"
+
+- name: "Register compute node with controller"
+  shell: "docker exec controller /usr/share/contrail-utils/provision_vrouter.py \
+         --use_admin_api \
+         --host_name {{ item.value }} \
+         --host_ip {{ item.key }} \
+         --oper add \
+         --admin_user {{ keystone_admin_user }} \
+         --admin_password {{ keystone_admin_password }} \
+         --admin_tenant_name {{ keystone_admin_tenant }}"
+  with_dict: "{{ compute_ip_hostname_dict }}"

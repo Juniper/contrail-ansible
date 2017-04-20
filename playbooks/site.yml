@@ -27,6 +27,13 @@
       tags: [openstack.compute]
       when: cloud_orchestrator == "openstack" and enable_openstack_compute
 
+- name: Register roles with controller API
+  hosts: contrail-controllers
+  roles:
+    - name: Register analytics, analyticsdb and agent with controller API
+      role: contrail/register
+      tags: [contrail.register]
+
   post_tasks:
     - name: Reboot node
       shell: sleep 5 && /etc/contrail/contrail_reboot

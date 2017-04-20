@@ -60,6 +60,8 @@
     analytics_list_tmp: "{{ analytics_list_tmp | default([]) + \
                          [hostvars[item].get('ctrl_data_ip', \
                          analytics_dict.get(item, item))] }}"
+    analytics_hostname_list_tmp: "{{ analytics_hostname_list_tmp | default([]) }} + \
+                          [ '{{ hostvars[item]['ansible_hostname'] }}' ]"
   with_items: "{{ analytics_group }}"
   when: ctrl_data_network is defined and analytics_list is not defined
 
@@ -67,12 +69,15 @@
   set_fact:
     analytics_list_tmp: "{{ analytics_list_tmp | default([]) + \
                          [hostvars[item].get('ctrl_data_ip', item)] }}"
+    analytics_hostname_list_tmp: "{{ analytics_hostname_list_tmp | default([]) }} + \
+                          [ '{{ hostvars[item]['ansible_hostname'] }}' ]"
   with_items: "{{ analytics_group }}"
   when: ctrl_data_network is not defined and analytics_list is not defined
 
 - name: Create analytics_list - step 4 (Assign from tmp if not defined)
   set_fact:
       analytics_list: "{{ analytics_list_tmp | default([]) }}"
+      analytics_hostname_list: "{{ analytics_hostname_list_tmp | default([]) }}"
   when: analytics_list is not defined
 
 
@@ -92,6 +97,8 @@
   set_fact:
     analyticsdb_list_tmp: "{{ analyticsdb_list_tmp | default([]) + \
                            [hostvars[item].get('ctrl_data_ip', item)] }}"
+    analyticsdb_hostname_list_tmp: "{{ analyticsdb_hostname_list_tmp | default([]) }} + \
+                          [ '{{ hostvars[item]['ansible_hostname'] }}' ]"
   with_items: "{{ analyticsdb_group }}"
   when: ctrl_data_network is not defined and analyticsdb_list is not defined
 
@@ -100,12 +107,15 @@
     analyticsdb_list_tmp: "{{ analyticsdb_list_tmp | default([]) + \
                            [hostvars[item].get('ctrl_data_ip', \
                            analyticsdb_dict.get(item, item))] }}"
+    analyticsdb_hostname_list_tmp: "{{ analyticsdb_hostname_list_tmp | default([]) }} + \
+                          [ '{{ hostvars[item]['ansible_hostname'] }}' ]"
   with_items: "{{ analyticsdb_group }}"
   when: ctrl_data_network is defined and analyticsdb_list is not defined
 
 - name: Create analyticsdb_list - step 4 (Assign from tmp if not defined)
   set_fact:
       analyticsdb_list: "{{ analyticsdb_list_tmp | default([]) }}"
+      analyticsdb_hostname_list: "{{ analyticsdb_hostname_list_tmp | default([]) }}"
   when: analyticsdb_list is not defined
 
 
@@ -157,6 +167,8 @@
   set_fact:
     compute_list_tmp: "{{ compute_list_tmp | default([]) + \
                        [hostvars[item].get('ctrl_data_ip', item)] }}"
+    compute_hostname_list_tmp: "{{ compute_hostname_list_tmp | default([]) }} + \
+                          [ '{{ hostvars[item]['ansible_hostname'] }}' ]"
   with_items: "{{ compute_group }}"
   when: ctrl_data_network is not defined and compute_list is not defined
 
@@ -165,12 +177,36 @@
     compute_list_tmp: "{{ compute_list_tmp | default([]) + \
                        [hostvars[item].get('ctrl_data_ip', \
                        compute_dict.get(item, item))] }}"
+    compute_hostname_list_tmp: "{{ compute_hostname_list_tmp | default([]) }} + \
+                       [ '{{ hostvars[item]['ansible_hostname'] }}' ]"
   with_items: "{{ compute_group }}"
   when: ctrl_data_network is defined and compute_list is not defined
 
 - name: Create compute_list - step 4 (Assign from tmp if not defined)
   set_fact:
       compute_list: "{{ compute_list_tmp | default([]) }}"
+      compute_hostname_list: "{{ compute_hostname_list_tmp | default([]) }}"
+
+- name: Create a dict mapping analytics hostnames to analytics IP addresses
+  set_fact:
+      analytics_ip_hostname_dict: "{{ analytics_ip_hostname_dict | default({}) | combine( {item.0: item.1} ) }}"
+  with_together:
+    - "{{ analytics_list }}"
+    - "{{ analytics_hostname_list }}"
+
+- name: Create a dict mapping compute analyticsdb to analyticsdb IP addresses
+  set_fact:
+      analyticsdb_ip_hostname_dict: "{{ analyticsdb_ip_hostname_dict | default({}) | combine( {item.0: item.1} ) }}"
+  with_together:
+    - "{{ analyticsdb_list }}"
+    - "{{ analyticsdb_hostname_list }}"
+
+- name: Create a dict mapping compute hostnames to compute IP addresses
+  set_fact:
+      compute_ip_hostname_dict: "{{ compute_ip_hostname_dict | default({}) | combine( {item.0: item.1} ) }}"
+  with_together:
+    - "{{ compute_list }}"
+    - "{{ compute_hostname_list }}"
 
 - name: Create config_server_list_derived
   set_fact:
