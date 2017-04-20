@@ -1,0 +1,3 @@
+---
+- include_role: name=node tasks_from=register_with_controller
+  tags: [register, contrail.register]
