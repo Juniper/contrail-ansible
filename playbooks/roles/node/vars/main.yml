@@ -13,8 +13,6 @@ global_config_detected:
   enable_control_service: "{{ enable_control_service }}"
   enable_webui_service: "{{ enable_webui_service }}"
   config_server_list: "{{ config_server_list if config_server_list else config_server_list_derived }}"
-  ceph_controller_list: "{{ ceph_controller_list }}"
-  ceph_hostname_list: "{{ ceph_hostname_list }}"
   sandesh_ssl_enable: "{{ sandesh_ssl_enable }}"
   introspect_ssl_enable: "{{ introspect_ssl_enable }}"
 agent_compile_vrouter_module_orig: "{{(agent_compile_vrouter_module is defined) | ternary(agent_compile_vrouter_module, 'undef')}}"
