@@ -18,4 +18,9 @@
 - name: Configure contrailctl/analyticsdb.conf KEYSTONE section
   ini_file: dest="{{ contrailctl_config_directory }}/analyticsdb.conf" section=KEYSTONE option={{ item.key }} value={{ item.value }}  create=yes
   with_dict: "{{ keystone_config | default({}) }}"
+  notify:
+    - check analyticsdb container
+    - contrailctl for analyticsdb
   when: cloud_orchestrator == "openstack"
+
+- meta: flush_handlers

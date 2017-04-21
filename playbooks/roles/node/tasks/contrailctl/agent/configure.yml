@@ -17,4 +17,9 @@
 - name: Configure contrailctl/controller.conf KEYSTONE section
   ini_file: dest="{{ contrailctl_config_directory }}/agent.conf" section=KEYSTONE option={{ item.key }} value={{ item.value }}  create=yes
   with_dict: "{{ keystone_config | default({}) }}"
+  notify:
+    - check agent container
+    - contrailctl for agent
   when: cloud_orchestrator == "openstack"
+
+- meta: flush_handlers
