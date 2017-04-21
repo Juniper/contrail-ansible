@@ -13,7 +13,6 @@
   notify:
     - check analyticsdb container
     - contrailctl for analyticsdb
-  when: item.value
 
 - name: Configure contrailctl/analyticsdb.conf KEYSTONE section
   ini_file: dest="{{ contrailctl_config_directory }}/analyticsdb.conf" section=KEYSTONE option={{ item.key }} value={{ item.value }}  create=yes
