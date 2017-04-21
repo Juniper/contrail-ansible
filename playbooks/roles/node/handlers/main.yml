@@ -1,6 +1,6 @@
 ---
 - name: check controller container
-  shell: "docker ps -q --filter 'label=contrail.role=controller'"
+  shell: "docker ps -q --filter 'label=contrail.role=controller' --filter 'status=running'"
   register: controller_container_ps
 
 - name: contrailctl for controller
@@ -8,7 +8,7 @@
   when: controller_container_ps.stdout != ''
 
 - name: check analytics container
-  shell: "docker ps -q --filter 'label=contrail.role=analytics'"
+  shell: "docker ps -q --filter 'label=contrail.role=analytics' --filter 'status=running'"
   register: analytics_container_ps
 
 - name: contrailctl for analytics
@@ -16,7 +16,7 @@
   when: analytics_container_ps.stdout != ''
 
 - name: check analyticsdb container
-  shell: "docker ps -q --filter 'label=contrail.role=analyticsdb'"
+  shell: "docker ps -q --filter 'label=contrail.role=analyticsdb' --filter 'status=running'"
   register: analyticsdb_container_ps
 
 - name: contrailctl for analyticsdb
@@ -24,7 +24,7 @@
   when: analyticsdb_container_ps.stdout != ''
 
 - name: check agent container
-  shell: "docker ps -q --filter 'label=contrail.role=agent'"
+  shell: "docker ps -q --filter 'label=contrail.role=agent' --filter 'status=running'"
   register: agent_container_ps
 
 - name: contrailctl for agent
