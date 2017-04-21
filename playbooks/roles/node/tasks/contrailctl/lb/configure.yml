@@ -10,4 +10,3 @@
     GLOBAL: "{{ global_config_orig }}"
     LB: "{{ lb_config | default({}) }}"
     HAPROXY: "{{ haproxy_config | default({}) }}"
-  when: item.value

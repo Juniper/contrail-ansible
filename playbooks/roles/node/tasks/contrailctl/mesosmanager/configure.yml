@@ -10,4 +10,3 @@
     GLOBAL: "{{ global_config_orig }}"
     MESOS: "{{ mesos_config | default({}) }}"
     VNC: "{{ vnc_config | default({}) }}"
-  when: item.value
