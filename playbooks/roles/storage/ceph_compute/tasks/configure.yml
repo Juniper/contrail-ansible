@@ -1,0 +1,44 @@
+---
+- debug:
+    msg:
+      - " storage = {{ storage }}"
+
+- debug:
+    msg:
+      - "fsid        = {{ storage_ceph_config['fsid'] }}"
+      - "mon_key     = {{ storage_ceph_config['mon_key'] }}"
+      - "osd_key     = {{ storage_ceph_config['osd_key'] }}"
+      - "adm_key     = {{ storage_ceph_config['adm_key'] }}"
+      - "osd_info    = {{ storage_ceph_config['osd_info'] }}"
+      - "pool_secret = {{ storage_ceph_config['pool_secret'] }}"
+      - "ceph_hostip_list {{ ceph_controller_list }}"
+      - "ceph_hostname_list {{ ceph_hostname_list }}"
+  when: storage_ceph_config is defined
+
+- include: ceph_prep_conf.yml
+  when: storage_ceph_config is defined
+
+- include: ceph_prep_vars.yml
+  when: storage_ceph_config is defined
+
+- include: ceph_prep_disk.yml
+  when: storage_ceph_config is defined
+
+- include: ceph_osd_config.yml
+  when: storage_ceph_config is defined
+
+- name: find first ceph-compute
+  set_fact:
+    first_compute: "{{ hostvars[ansible_host]['groups']['ceph-compute'][0] }}"
+
+- include: ceph_prep_pool_vars.yml
+  when: storage_ceph_config is defined
+
+- include: ceph_pool_config.yml
+  when: storage_ceph_config is defined and ansible_host == first_compute
+
+- include: ceph_tune.yml
+  when: storage_ceph_config is defined
+
+- include: ceph_auth_conf.yml
+  when: storage_ceph_config is defined

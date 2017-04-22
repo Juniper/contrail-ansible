@@ -1,0 +1,6 @@
+[client.admin]
+        key = {{ storage_ceph_config['adm_key'] }}
+        auid = 0
+        caps mds = "allow"
+        caps mon = "allow *"
+        caps osd = "allow *"

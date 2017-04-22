@@ -30,6 +30,15 @@ agent_config_orig: "{{ agent_config | default({}) | combine(\
   'vrouter_physical_interface': vrouter_physical_interface\
   })}}"
 
+ceph_controller_config: "{{ ceph_config | default({}) |                        \
+                     combine({'ceph_monname_list': ceph_hostname_list,         \
+                              'ceph_monip_list'  : ceph_controller_list,       \
+                              'cluster_fsid'     : storage_ceph_config.fsid,   \
+                              'mon_key'          : storage_ceph_config.mon_key,\
+                              'adm_key'          : storage_ceph_config.adm_key,\
+                              'osd_key'          : storage_ceph_config.osd_key \
+                            }) }}"
+
 controller_group: "{{ groups['contrail-controllers'] | default([]) }}"
 analytics_group: "{{ groups['contrail-analytics'] | default([]) }}"
 analyticsdb_group: "{{ groups['contrail-analyticsdb'] | default([]) }}"

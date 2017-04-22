@@ -1,0 +1,72 @@
+---
+- debug:
+    msg:
+      - "item {{ item }}"
+  with_items: "{{ disk_info }}"
+
+- debug:
+    msg:
+      - "disk {{ item.name }}"
+  with_items: "{{ disk_info }}"
+
+- debug:
+    msg:
+      - "journal {{ item.journal }}"
+  when: item.journal[0] == '/'
+  with_items: "{{ disk_info }}"
+
+# ansible 2.3 or >
+#- name: reset osd disks
+#  parted:
+#    device: "{{ item.name }}"
+#    label: gpt
+#  when: item.mounted == "0"
+#  with_items: "{{ disk_info }}"
+#
+#- name: reset journal disks
+#  parted:
+#    device: "{{ item.name }}"
+#    label: gpt
+#  when: item.mounted == "0"
+#  with_items: "{{ disk_info }}"
+
+- name: reset osd disks
+  shell: parted -s "{{ item.name }}" mklabel gpt
+  when: item.mounted == '0'
+  with_items: "{{ disk_info }}"
+
+- name: reset journal disks
+  shell: parted -s "{{ item.journal }}" mklabel gpt
+  when: item.mounted == '0' and item.journal_used == '0' and item.journal[0] == '/'
+  with_items: "{{ disk_info }}"
+
+#- name: make journal partition
+#  shell: parted -s "{{ item.name }}" mkpart primary 64s 12227
+#  when: item.mounted == "0"
+#  with_items: "{{ disk_info }}"
+#
+#- name: make data partition
+#  shell: parted -s "{{ item.name }}" mkpart primary 12228 100%
+#  when: item.mounted == "0"
+#  with_items: "{{ disk_info }}"
+
+- name: suppress activation for disk
+  shell: ceph-disk suppress-activate "{{ item.name }}"
+  when: item.mounted == "0"
+  with_items: "{{ disk_info }}"
+
+- name: make data partition with journal
+  shell: ceph-disk prepare --osd-uuid "{{item.uuid}}" --cluster ceph --cluster-uuid "{{ storage_ceph_config.fsid }}" --fs-type xfs "{{ item.name }}" "{{ item.journal}}"
+  when: item.mounted == "0" and item.journal[0] == '/'
+  with_items: "{{ disk_info }}"
+
+- name: make data partition
+  shell: ceph-disk prepare --osd-uuid "{{item.uuid}}" --cluster ceph --cluster-uuid "{{ storage_ceph_config.fsid }}" --fs-type xfs "{{ item.name }}"
+  when: item.mounted == "0" and item.journal[0] != '/'
+  with_items: "{{ disk_info }}"
+
+#- name: deactivate partition for manual config
+#  shell: ceph-disk deactivate "{{ item.name }}"
+#  when: item.mounted == "0" and item.journal[0] != '/'
+#  with_items: "{{ disk_info }}"
+

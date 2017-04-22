@@ -1,0 +1,60 @@
+---
+- debug:
+    msg: "{{osd_disks}}"
+    msg: "{{osd_ssd_disks}}"
+
+- name: tune disks
+  shell: "echo 4096 > /sys/block/{{item.split(':')[0].split('/')[2]}}/queue/max_sectors_kb"
+  ignore_errors: yes
+  with_items:
+      - "{{osd_disks}}"
+      - "{{osd_ssd_disks}}"
+
+- shell: "echo 512 > /sys/block/{{item.split(':')[0].split('/')[2]}}/queue/nr_requests"
+  ignore_errors: yes
+  with_items:
+      - "{{osd_disks}}"
+      - "{{osd_ssd_disks}}"
+
+- shell: "echo 4096 > /sys/block/{{item.split(':')[0].split('/')[2]}}/queue/read_ahead_kb"
+  ignore_errors: yes
+  with_items:
+      - "{{osd_disks}}"
+      - "{{osd_ssd_disks}}"
+
+- shell: "echo noop > /sys/block/{{item.split(':')[0].split('/')[2]}}/queue/scheduler"
+  ignore_errors: yes
+  with_items:
+      - "{{osd_ssd_disks}}"
+
+- lineinfile:
+    dest: /etc/sysfs.conf
+    line: "block/{{item.split(':')[0].split('/')[2]}}/queue/max_sectors_kb = 4096"
+    state: present
+  with_items:
+    - "{{osd_disks}}"
+    - "{{osd_ssd_disks}}"
+
+- lineinfile:
+    dest: /etc/sysfs.conf
+    line: "block/{{item.split(':')[0].split('/')[2]}}/queue/nr_requessts = 512"
+    state: present
+  with_items:
+    - "{{osd_disks}}"
+    - "{{osd_ssd_disks}}"
+
+- lineinfile:
+    dest: /etc/sysfs.conf
+    line: "block/{{item.split(':')[0].split('/')[2]}}/queue/read_ahead_kb = 4096"
+    state: present
+  with_items:
+    - "{{osd_disks}}"
+    - "{{osd_ssd_disks}}"
+
+- lineinfile:
+    dest: /etc/sysfs.conf
+    line: "block/{{item.split(':')[0].split('/')[2]}}/queue/scheduler = noop"
+    state: present
+  with_items:
+    - "{{osd_ssd_disks}}"
+
