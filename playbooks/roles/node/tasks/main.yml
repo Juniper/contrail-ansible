@@ -258,7 +258,7 @@
     ceph_controller_list_tmp: "{{ ceph_controller_list_tmp | default([]) + \
                       [hostvars[item].get('ctrl_data_ip', item)] }}"
     ceph_hostname_list_tmp: "{{ ceph_hostname_list_tmp | default([]) }} + \
-                          [ '{{ hostvars[item]['ansible_hostname'] }}' ]"
+                          [ '{{ hostvars[item]['ansible_hostname'] }}-storage' ]"
   with_items: "{{ ceph_controller_group }}"
   when: ctrl_data_network is not defined and ceph_controller_list is not defined
 
@@ -268,7 +268,7 @@
                           [hostvars[item].get('ctrl_data_ip', \
                           ceph_controller_dict.get(item, item))] }}"
     ceph_hostname_list_tmp: "{{ ceph_hostname_list_tmp | default([]) }} + \
-                          [ '{{ hostvars[item]['ansible_hostname'] }}' ]"
+                          [ '{{ hostvars[item]['ansible_hostname'] }}-storage' ]"
   with_items: "{{ ceph_controller_group }}"
   when: ctrl_data_network is defined and ceph_controller_list is not defined
 
