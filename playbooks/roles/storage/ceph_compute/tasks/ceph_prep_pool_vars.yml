@@ -1,0 +1,74 @@
+---
+- name: ceph pool vars
+  debug:
+    msg:
+      - "fsid        = {{ storage_ceph_config['fsid'] }}"
+      - "mon_key     = {{ storage_ceph_config['mon_key'] }}"
+      - "osd_key     = {{ storage_ceph_config['osd_key'] }}"
+      - "adm_key     = {{ storage_ceph_config['adm_key'] }}"
+      - "osd_info    = {{ storage_ceph_config['osd_info'] }}"
+      - "pool_secret = {{ storage_ceph_config['pool_secret'] }}"
+      - "ceph_hostip_list {{ ceph_controller_list }}"
+      - "ceph_hostname_list {{ ceph_hostname_list }}"
+  when: storage_ceph_config is defined
+
+- debug:
+    msg:
+      - "item {{ item }} "
+  with_items: "{{ disk_info }}"
+
+- name: create host-name list
+  set_fact:
+    host_list: "{{ansible_hostname}}"
+
+- name: create host-osd-num list
+  set_fact:
+    host_osd_num_list: "{{host_osd_num_list|default('')}}{{ansible_hostname}}:{{item.name}}:{{item.num}} "
+  with_items: "{{ disk_info }}"
+
+- name: create host-osd list
+  set_fact:
+    host_osd_list: "{{host_osd_list|default('')}}{{ansible_hostname}}:{{item}} "
+  with_items: "{{ osd_disks }}"
+
+- name: create host-ssd-osd list
+  set_fact:
+    host_ssd_osd_list: "{{host_ssd_osd_list|default('')}}{{ansible_hostname}}:{{item}} "
+  with_items: "{{ osd_ssd_disks }}"
+
+- name: create chassis list
+  set_fact:
+    host_chassis_list: "{{host_chassis_list|default('')}}{{ansible_hostname}}:{{storage_ceph_config['osd_info'][ansible_hostname]['chassis_id']}}"
+  when: storage_ceph_config['osd_info'][ansible_hostname]['chassis_id'] is defined
+
+- name: create ceph_util host-osd list
+  set_fact:
+    ceph_util_host_osd_list: "{{ceph_util_host_osd_list|default('')}}{{hostvars[item]['host_osd_list']}}"
+    ceph_util_host_osd_num_list: "{{ceph_util_host_osd_num_list|default('')}}{{hostvars[item]['host_osd_num_list']}}"
+    ceph_util_host_list: "{{ceph_util_host_list|default('')}} {{hostvars[item]['host_list']}}"
+  when: hostvars[item]['host_osd_list'] is defined and ansible_host == first_compute
+  with_items: "{{ groups['ceph-compute'] }}"
+
+- name: create ceph_util host-osd-osd list
+  set_fact:
+    ceph_util_host_ssd_osd_list: "{{ceph_util_host_ssd_osd_list|default('')}}{{hostvars[item]['host_ssd_osd_list']}}"
+  when: hostvars[item]['host_ssd_osd_list'] is defined and ansible_host == first_compute
+  with_items: "{{ groups['ceph-compute'] }}"
+
+- name: create ceph_util chassis list
+  set_fact:
+    ceph_util_host_chassis_list: "{{ceph_util_host_chassis_list|default('')}} {{hostvars[item]['host_chassis_list']}}"
+  when: hostvars[item]['host_chassis_list'] is defined and ansible_host == first_compute
+  with_items: "{{ groups['ceph-compute'] }}"
+
+- debug:
+    msg:
+      - "item {{ceph_util_host_osd_list}}"
+      - "item {{ceph_util_host_osd_num_list}}"
+      - "item {{ceph_util_host_list}}"
+  when: ansible_host == first_compute and ceph_util_host_osd_list is defined
+
+- debug:
+    msg:
+      - "item {{ceph_util_host_ssd_osd_list}}"
+  when: ansible_host == first_compute and ceph_util_host_ssd_osd_list is defined

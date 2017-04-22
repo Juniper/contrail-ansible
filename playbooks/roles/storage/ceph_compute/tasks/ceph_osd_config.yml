@@ -1,0 +1,96 @@
+---
+- debug:
+    msg:
+      - "item {{ item }}"
+  with_items: "{{ disk_info }}"
+
+- name: create osd partition
+  shell: "mkdir -p /var/lib/ceph/osd/ceph-{{item.num}}"
+  when: item.mounted == "0"
+  with_items: "{{ disk_info }}"
+  become: true
+  become_user: ceph
+
+#- name: format partition
+#  shell: mkfs.xfs -f "{{ item.name }}1"
+#  when: item.mounted == "0"
+#  with_items: "{{ disk_info }}"
+
+- name: mount partition
+  shell: "mount -o rw,noatime,inode64,logbufs=8,logbsize=256k {{ item.name }}1 /var/lib/ceph/osd/ceph-{{item.num}}"
+  when: item.mounted == "0"
+  with_items: "{{ disk_info }}"
+
+- name: overwrite osd uuid
+  shell: "echo {{ item.uuid }} > /var/lib/ceph/osd/ceph-{{item.num}}/fsid"
+  when: item.mounted == "0"
+  with_items: "{{ disk_info }}"
+  become: true
+  become_user: ceph
+
+- name: create osd
+  shell: "ceph osd create {{ item.uuid }} {{ item.num }}"
+  when: item.mounted == "0"
+  with_items: "{{ disk_info }}"
+
+- name: osd mkkey
+  shell: "ceph-osd -i {{ item.num }} --mkfs --mkjournal --mkkey --osd-uuid {{ item.uuid }}"
+  when: item.mounted == "0"
+  with_items: "{{ disk_info }}"
+
+- name: change ownership
+  shell: "chown -R ceph:ceph /var/lib/ceph/osd/ceph-{{item.num}}"
+  when: item.mounted == "0"
+  with_items: "{{ disk_info }}"
+
+- name: add node to crushmap
+  shell: "ceph osd crush add-bucket {{ansible_hostname}} host"
+
+- name: move node to default
+  shell: "ceph osd crush move {{ansible_hostname}} root=default"
+
+- name: add osd to host
+  shell: "ceph osd crush add osd.{{item.num}} 1.0 host={{ansible_hostname}}"
+  when: item.mounted == "0"
+  with_items: "{{ disk_info }}"
+
+- name: osd authentication
+  shell: "ceph auth add osd.{{item.num}} osd 'allow *' mon 'allow profile osd' -i /var/lib/ceph/osd/ceph-{{item.num}}/keyring"
+  when: item.mounted == "0"
+  with_items: "{{ disk_info }}"
+
+- name: start ceph osd
+  shell: "start ceph-osd id={{item.num}}"
+  ignore_errors: yes
+  when: item.mounted == "0"
+  with_items: "{{ disk_info }}"
+
+- name: Check if bootstrap-osd keyring file  exists
+  stat: path="/var/lib/ceph/bootstrap-osd/ceph.keyring"
+  register: stat_result
+
+- name: create bootstrap-osd keyring if not present
+  shell: "ceph-authtool /var/lib/ceph/bootstrap-osd/ceph.keyring -C -n client.bootstrap-osd -a {{ storage_ceph_config.osd_key }}"
+  when: stat_result.stat.exists == False
+  become: true
+  become_user: ceph
+
+- name: bootstrap-osd authentication
+  shell: "ceph auth add client.bootstrap-osd mon 'allow profile bootstrap-osd' -i /var/lib/ceph/bootstrap-osd/ceph.keyring"
+  when: stat_result.stat.exists == False
+
+- name: change ownership
+  shell: "chown ceph:ceph /var/lib/ceph/osd/ceph-{{item.num}}/*"
+  with_items: "{{ disk_info }}"
+
+- name: create sysvinit and upstart
+  shell: "touch /var/lib/ceph/osd/ceph-{{item.num}}/upstart /var/lib/ceph/osd/ceph-{{item.num}}/sysvinit"
+  with_items: "{{ disk_info }}"
+  become: true
+  become_user: ceph
+
+- name: unsuppress activation for disk
+  shell: ceph-disk unsuppress-activate "{{ item.name }}"
+  when: item.mounted == "0"
+  with_items: "{{ disk_info }}"
+
