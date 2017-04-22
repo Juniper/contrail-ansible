@@ -1,0 +1,111 @@
+---
+- debug:
+    msg:
+      - "fsid        = {{ storage_ceph_config['fsid'] }}"
+      - "mon_key     = {{ storage_ceph_config['mon_key'] }}"
+      - "osd_key     = {{ storage_ceph_config['osd_key'] }}"
+      - "adm_key     = {{ storage_ceph_config['adm_key'] }}"
+      - "osd_info    = {{ storage_ceph_config['osd_info'] }}"
+      - "pool_secret = {{ storage_ceph_config['pool_secret'] }}"
+      - "ceph_hostip_list {{ ceph_controller_list }}"
+      - "ceph_hostname_list {{ ceph_hostname_list }}"
+  when: storage_ceph_config is defined
+
+- name: Wait for ceph mons to stabilize
+  pause:
+    seconds: 10
+
+# check if ceph mons are up
+# if not fail to avoid changes to osd
+- name: check if mons are up
+  shell: ceph -s
+
+- debug:
+    msg:
+      - "item {{ item }} {{ storage_ceph_config['osd_info'][ansible_hostname]['osd_info'][item] }} "
+  with_items: "{{ (storage_ceph_config['osd_info'][ansible_hostname]['osd_info']).keys() }}"
+
+- set_fact:
+    osd_disks: "{{osd_disks + \
+        storage_ceph_config['osd_info'][ansible_hostname]['osd_info'].keys()}}"
+  when: storage_ceph_config['osd_info'][ansible_hostname] is defined and
+        storage_ceph_config['osd_info'][ansible_hostname]['osd_info'] is defined
+
+- set_fact:
+    osd_ssd_disks: "{{osd_ssd_disks + \
+        storage_ceph_config['osd_info'][ansible_hostname]['osd_ssd_info'].keys()}}"
+  when: storage_ceph_config['osd_info'][ansible_hostname] is defined and
+        storage_ceph_config['osd_info'][ansible_hostname]['osd_ssd_info'] is defined
+
+- debug:
+    msg: "{{osd_disks}}"
+    msg: "{{osd_ssd_disks}}"
+
+- set_fact:
+    val1: 9999990999999
+    val2: 0
+
+- name: find disk if already mounted
+  shell: ceph osd tree | grep -w "osd.{{ storage_ceph_config['osd_info'][ansible_hostname]['osd_info'][item] }}" | wc -l
+  register: mounted
+  with_items:
+    - "{{ osd_disks }}"
+
+- name: find ssd disk if already mounted
+  shell: ceph osd tree | grep -w "osd.{{ storage_ceph_config['osd_info'][ansible_hostname]['osd_ssd_info'][item] }}" | wc -l
+  register: mounted_ssd
+  with_items:
+    - "{{ osd_ssd_disks }}"
+
+- name: find if journal is already used
+  shell: parted -s "{{  item.split(':')[1]|default('None') }}" print | grep ceph | grep journal | wc -l
+  register: journal_present
+  with_items:
+    - "{{ osd_disks }}"
+
+- name: find if journal is already used for osd
+  shell: parted -s "{{  item.split(':')[1]|default('None') }}" print | grep ceph | grep journal | wc -l
+  register: journal_ssd_present
+  with_items:
+    - "{{ osd_ssd_disks }}"
+
+- debug:
+    msg:
+      - "mounted {{ mounted }}"
+      - "journal_present {{ journal_present }}"
+
+- name: create disk list
+  set_fact:
+    disk_info: "{{ disk_info|default([]) + \
+                [ {'name': item.split(':')[0], \
+                   'journal': item.split(':')[1]|default('None'), \
+                   'num': storage_ceph_config['osd_info'][ansible_hostname]['osd_info'][item], \
+                   'mounted': mounted.results[val2|int].stdout, \
+                   'journal_used': journal_present.results[val2|int].stdout, \
+                   'uuid': (val1 | int | random | to_uuid) } ] }}"
+    val1: "{{ val1 | int + 1 }}"
+    val2: "{{ val2 | int + 1 }}"
+  with_items: "{{ osd_disks }}"
+
+- set_fact:
+    val2: 0
+
+- name: create osd disk list
+  set_fact:
+    disk_info: "{{ disk_info|default([]) + \
+                [ {'name': item.split(':')[0], \
+                   'journal': item.split(':')[1]|default('None'), \
+                   'num': storage_ceph_config['osd_info'][ansible_hostname]['osd_ssd_info'][item], \
+                   'mounted': mounted_ssd.results[val2|int].stdout, \
+                   'journal_used': journal_ssd_present.results[val2|int].stdout, \
+                   'uuid': (val1 | int | random | to_uuid) } ] }}"
+    val1: "{{ val1 | int + 1 }}"
+    val2: "{{ val2 | int + 1 }}"
+  with_items: "{{ osd_ssd_disks }}"
+
+- debug:
+    msg:
+      - "item {{ item }} "
+  with_items: "{{ disk_info }}"
+
+

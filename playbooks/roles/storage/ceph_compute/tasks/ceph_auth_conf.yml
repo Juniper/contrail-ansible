@@ -1,0 +1,77 @@
+---
+- name: find list of pools
+  set_fact:
+    pool_list: "{{pool_list + storage_ceph_config['pool_secret'].keys()}}"
+
+- debug:
+    msg: "{{item}}"
+  when: item != 'images'
+  with_items: "{{pool_list}}"
+
+- debug:
+    msg: "{{item}}"
+  when: item == 'images'
+  with_items: "{{pool_list}}"
+
+- name: create images keyring
+  shell: "ceph auth get-or-create client.{{item}} mon 'allow r' osd 'allow class-read object_prefix rbd_children, allow rwx pool=images' \
+                    -o /etc/ceph/client.{{item}}.keyring"
+  when: item == 'images'
+  with_items: "{{pool_list}}"
+
+- name: create volumes keyring
+  shell: "ceph auth get-or-create client.{{item}} mon 'allow r' osd 'allow class-read object_prefix rbd_children, allow rwx pool={{item}} allow rx pool=images' \
+                    -o /etc/ceph/client.{{item}}.keyring"
+  when: item != 'images'
+  with_items: "{{pool_list}}"
+
+- name: setup ceph.conf
+  ini_file:
+    dest: /etc/ceph/ceph.conf
+    section: "client.{{item}}"
+    option: keyring
+    value: "/etc/ceph/client.{{item}}.keyring"
+  with_items: "{{pool_list}}"
+
+#virsh secret-define --file secret_%s.xml'
+#                                                    %(pool_name))
+#                            run('virsh secret-set-value %s --base64 %s'
+#                                                %(virsh_secret,volume_keyring))
+#
+
+- name: Read keys from file
+  shell: "cat /etc/ceph/client.{{item}}.keyring | grep key | awk '{print $3}'"
+  register: keys_output
+  with_items: "{{pool_list}}"
+
+- debug:
+    msg: "{{ keys_output }}"
+- set_fact:
+    val1: 0
+
+- name: create dict of keys
+  set_fact:
+    ceph_pool_keys: "{{ ceph_pool_keys|default({})|combine({ \
+                            item: keys_output.results[val1|int].stdout }) }}"
+    val1: "{{ val1 | int + 1 }}"
+  with_items: "{{pool_list}}"
+
+- debug:
+    msg: "{{ceph_pool_keys}}"
+
+- name: create virsh secret xml
+  template:
+    src: secret.xml.j2
+    dest: "/tmp/secret.{{item}}.xml"
+  with_items: "{{pool_list}}"
+
+- name: define virsh secret
+  shell: "virsh secret-define --file /tmp/secret.{{item}}.xml"
+  ignore_errors: yes
+  with_items: "{{pool_list}}"
+
+- name: virsh set secret
+  shell: "virsh secret-set-value {{storage_ceph_config['pool_secret'][item]}} \
+                --base64 {{ceph_pool_keys[item]}}"
+  ignore_errors: yes
+  with_items: "{{pool_list}}"

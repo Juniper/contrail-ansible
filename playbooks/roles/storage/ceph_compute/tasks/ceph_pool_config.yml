@@ -1,0 +1,33 @@
+---
+- debug:
+    msg:
+      - "item {{ceph_util_host_osd_list}}"
+      - "item {{ceph_util_host_osd_num_list}}"
+      - "item {{ceph_util_host_list}}"
+
+- debug:
+    msg: "Configuring pools in {{first_compute}}. will take a while..."
+
+- name: configure pool
+  shell: "contrail-storage-provisioning                                    \
+          --storage-hostnames \
+              {{ceph_util_host_list|default('none')}}                      \
+          --storage-disk-config \
+              {{ceph_util_host_osd_list|default('none')}}                  \
+          --storage-ssd-disk-config \
+              {{ceph_util_host_ssd_osd_list|default('none')}}              \
+          --storage-chassis-config \
+              {{ceph_util_host_chassis_list|default('none')}}              \
+          --storage-osd-map \
+              {{ceph_util_host_osd_num_list}}                              \
+          --replica-size \
+              {{storage_ceph_config.replica_size|default('2')}}            \
+          --ssd-cache-tier \
+              {{storage_ceph_config.ssd_cache_tier|default('False')}}      \
+          --object-storage \
+              {{storage_ceph_config.ceph_object_storage|default('False')}} \
+          --object-storage-pool \
+              {{storage_ceph_config.object_store_pool|default('volumes')}}"
+
+- name: set tunables to optimal
+  shell: ceph osd crush tunables optimal
