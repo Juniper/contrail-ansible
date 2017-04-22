@@ -1,0 +1,21 @@
+---
+- name: create ceph.conf
+  template:
+    src: ceph.conf.j2
+    dest: "{{ ceph_conf_file }}"
+    #    owner: root
+    #    #    group: root
+    #    #    mode: 0644
+
+#- name: create mon keyring
+#  template:
+#    src: ceph.mon.keyring.j2
+#    dest: "{{ ceph_mon_keyring_file }}"
+#    owner: ceph
+#    group: ceph
+#    mode: 0644
+
+- name: create admin keyring
+  template:
+    src: ceph.client.admin.keyring.j2
+    dest: "{{ ceph_client_admin_keyring_file }}"
