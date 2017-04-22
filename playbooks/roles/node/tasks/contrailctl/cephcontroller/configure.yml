@@ -8,6 +8,5 @@
     create: yes
   with_inidata:
     GLOBAL: "{{ global_config_orig }}"
+    CEPH_CONTROLLER: "{{ ceph_controller_config | default({}) }}"
 
-- name: Prepare ceph for config
-  include: ceph_prep_vars.yml

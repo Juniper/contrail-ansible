@@ -1,0 +1,55 @@
+[global]
+fsid = {{ storage_ceph_config['fsid'] }}
+mon_initial_members = {{ ceph_monip_list }}
+mon_host = {{ ceph_monname_list }}
+auth_supported = cephx
+osd_journal_size = 1024
+filestore_xattr_use_omap = true
+rbd_cache = true
+rbd_default_format = 2
+osd_heartbeat_grace = 180
+debug_lockdep = 0/0
+debug_context = 0/0
+debug_crush = 0/0
+debug_buffer = 0/0
+debug_timer = 0/0
+debug_filer = 0/0
+debug_objecter = 0/0
+debug_rados = 0/0
+debug_rbd = 0/0
+debug_journaler = 0/0
+debug_objectcatcher = 0/0
+debug_client = 0/0
+debug_osd = 0/0
+debug_optracker = 0/0
+debug_objclass = 0/0
+debug_filestore = 0/0
+debug_journal = 0/0
+debug_ms = 0/0
+debug_monc = 0/0
+debug_tp = 0/0
+debug_auth = 0/0
+debug_finisher = 0/0
+debug_heartbeatmap = 0/0
+debug_perfcounter = 0/0
+debug_asok = 0/0
+debug_throttle = 0/0
+debug_mon = 0/0
+debug_paxos = 0/0
+debug_rgw = 0/0
+throttler_perf_counter = false
+
+[osd]
+osd_op_threads = 4
+osd_disk_threads = 2
+osd_heartbeat_grace = 180
+osd_mount_options_xfs = rw,noatime,inode64,logbufs=8,logbsize=256k
+osd_enable_op_tracker = false
+filestore_merge_threshold = 40
+filestore_split_multiple = 8
+
+[mon]
+mon_cluster_log_to_syslog = true
+mon_cluster_log_file = /var/log/ceph/ceph.log
+mon_compact_on_start = true
+

@@ -1,0 +1,47 @@
+---
+- name: create monip list
+  set_fact:
+    ceph_monip_list: "{{ ceph_monip_list }} {{ item }},"
+  with_items: "{{ ceph_controller_list }}"
+
+- name: create monhost list
+  set_fact:
+    ceph_monname_list: "{{ ceph_monname_list }} {{item}},"
+  with_items: "{{ ceph_hostname_list }}"
+
+- set_fact:
+    val3: 0
+
+- name: create host/ip dictionary
+  set_fact:
+    host_ip_dict: "{{ host_ip_dict|default({})|combine({item: ceph_hostname_list[(val3 | int)]}) }}"
+    val3: "{{ val3 | int + 1 }}"
+  with_items:
+    - "{{ ceph_controller_list }}"
+
+- lineinfile:
+    dest: /etc/hosts
+    line: "{{item}} {{host_ip_dict[item]}}"
+    state: present
+  with_items: "{{ceph_controller_list}}"
+
+- name: create ceph.conf
+  template:
+    src: ceph.conf.j2
+    dest: "{{ ceph_conf_file }}"
+    #    owner: root
+    #    #    group: root
+    #    #    mode: 0644
+
+#- name: create mon keyring
+#  template:
+#    src: ceph.mon.keyring.j2
+#    dest: "{{ ceph_mon_keyring_file }}"
+#    owner: ceph
+#    group: ceph
+#    mode: 0644
+
+- name: create admin keyring
+  template:
+    src: ceph.client.admin.keyring.j2
+    dest: "{{ ceph_client_admin_keyring_file }}"
