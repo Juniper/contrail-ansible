@@ -1,6 +1,7 @@
 ---
 cloud_orchestrator: openstack
 
+keystone_config: {}
 # Keystone defaults
 keystone_version: v2.0
 keystone_ip: "{{ controller_ip }}"
