@@ -19,9 +19,15 @@
           --keystone_admin_user {{ keystone_admin_user }} \
           --keystone_admin_password {{ keystone_admin_password }} \
           --keystone_admin_tenant_name {{ keystone_admin_tenant }} \
+          --qos_logical_queue {{ qos_queue_id_list }} \
+          --qos_queue_id {{ qos_logical_queue_list }} \
+          --priority_id {{ priority_id_list }} \
+          --priority_scheduling {{ priority_scheduling_list }} \
+          --priority_bandwidth {{ priority_bandwidth_list }} \
           {{ control_nodes_arg }} \
           {{ collectors_arg }} \
           {{ xmpp_auth_flag }} \
           {{ sandesh_ssl_flag }} \
           {{ introspect_ssl_flag }} \
-          {{ dpdk_config }}"
+          {{ dpdk_config }} \
+          {{ default_hardware_queue_qos }}"

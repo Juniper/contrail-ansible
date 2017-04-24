@@ -50,5 +50,15 @@ optional_dpdk_params: "{{ ',uio_driver=' + dpdk_uio_driver if dpdk_uio_driver el
 dpdk_params: "{{ mandatory_dpdk_params + optional_dpdk_params }}"
 dpdk_config: "{{ '--dpdk ' + dpdk_params if dpdk_params else '' }}"
 
+# Qos-queueing defaults
+qos_queue_id_list: "{{hostvars[inventory_hostname].get('qos_queue_id_list') | default([])}}"
+qos_logical_queue_list: "{{hostvars[inventory_hostname].get('qos_logical_queue_list') | default([])}}"
+default_hardware_queue_qos: "{{ '--default_hardware_queue_qos' if default_hardware_queue else '' }}"
+
+# Qos-scheduling defaults
+priority_id_list: "{{hostvars[inventory_hostname].get('priority_id_list') | default([])}}"
+priority_scheduling_list: "{{hostvars[inventory_hostname].get('priority_scheduling_list') | default([])}}"
+priority_bandwidth_list: "{{hostvars[inventory_hostname].get('priority_bandwidth_list') | default([])}}"
+
 # compute packages
 compute_packages: "{{ dpdk_compute_packages if dpdk_config else kernel_compute_packages }}"
