@@ -3,13 +3,22 @@
   fail: msg="os_release should be one of {{ valid_os_release }}"
   when: "os_release not in valid_os_release"
 
+# Prepares the host for provisioning by pointing the host repositories list to the SM
+# node. For nodes relying on a repo container, this is done after installing
+# docker-py to avoid trying to install docker-py via a container that is not up
+# yet
 - include: host.yml
   tags: [always]
+  when: "'contrail-repo' not in group_names"
 
 - include: "{{ docker_py_pkg_install_method }}.yml"
 
 - include: "repo/{{ ansible_os_family }}.yml"
   tags: [repo]
+  when: "'contrail-repo' in group_names"
+
+- include: host.yml
+  tags: [always]
   when: "'contrail-repo' in group_names"
 
 # Intermediate dictionary necessary to derive the final analytics_list. This
