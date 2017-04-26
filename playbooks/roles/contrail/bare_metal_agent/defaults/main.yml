@@ -52,3 +52,17 @@ dpdk_config: "{{ '--dpdk ' + dpdk_params if dpdk_params else '' }}"
 
 # compute packages
 compute_packages: "{{ dpdk_compute_packages if dpdk_config else kernel_compute_packages }}"
+
+# contrail-tor-agent defaults
+tor_agent_tor_ip:  " "
+tor_agent_tor_agent_id: 1
+tor_agent_tor_tunnel_ip: " "
+tor_agent_tor_type: " "
+tor_agent_tor_ovs_port: 9090
+tor_agent.tor_ovs_protocol: "tcp"
+tor_agent_tor_name: " "
+tor_agent_tor_vendor_name: " "
+tor_agent.tor_product_name: " "
+tor_agent_tor_http_server_port: 9999
+tor_agent_tor_discovery_server_ip: " "
+tor_agent_tor_agent_ovs_ka: " "
