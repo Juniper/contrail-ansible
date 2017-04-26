@@ -35,10 +35,12 @@ vhost_interface: vhost0
 vhost_ansible_interface: "{{ 'ansible_' + vhost_interface if vhost_interface in ansible_interfaces else vrouter_physical_ansible_interface }}"
 
 vhost_address: "{{ hostvars[inventory_hostname][vhost_ansible_interface]['ipv4']['address'] }}"
+vhost_gateway: "{{ hostvars[inventory_hostname].get('ctrl_data_gw') | default("") }}"
 
 non_mgmt_ip_config: "--non_mgmt_ip {{ vhost_address }}"
 single_intf_config: ""
-multi_intf_config: "{{ non_mgmt_ip_config if vhost_address != ansible_default_ipv4.address else single_intf_config }}"
+multi_intf_ip_config: "{{ non_mgmt_ip_config if vhost_address != ansible_default_ipv4.address else single_intf_config }}"
+multi_intf_gw_config: "{{ '--non_mgmt_gw' vhost_gateway if vhost_gateway else default("") }}"
 no_of_controllers: "{{ controller_list | length }}"
 vrouter_max_control_nodes: 3
 contrail_compute_mode: "bare_metal"

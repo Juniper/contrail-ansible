@@ -12,7 +12,8 @@
 
   shell: "contrail-compute-setup --cfgm_ip {{ config_ip }} \
           --keystone_ip {{ keystone_ip }} \
-          --self_ip {{ my_compute_ip }} {{ multi_intf_config }} \
+          --self_ip {{ my_compute_ip }} {{ multi_intf_ip_config }} \
+          {{ multi_intf_gw_config }} \
           --hypervisor {{ hypervisor }} \
           --keystone_auth_protocol {{ keystone_auth_protocol }} \
           --keystone_auth_port {{ keystone_admin_port }} \
