@@ -25,3 +25,16 @@
           {{ sandesh_ssl_flag }} \
           {{ introspect_ssl_flag }} \
           {{ dpdk_config }}"
+
+- name: Run contrail-tor-agent script, logs at /var/log/contrail/contrail_vrouter_provisioning.log
+
+    shell: "contrail-tor-agent {{item.key}} is --agent_name {{ item.value.tor_name }} \
+            --http_server_port {{ item.value.tor_http_server_port }} \
+            --tor_agent_discovery_server_ip {{item.value.tor_discovery_server_ip }} \
+            --tor_id {{ item.value.tor_agent_id }} \
+            --tor_ip {{ item.value.tor_ip }} \
+            --tor_ovs_port {{ item.value.tor_ovs_port }} \
+            --tsn_ip {{ item.value.tor_tunnel_ip }} \
+            --tor_ovs_protocol {{ item.value.tor_ovs_protocol}} \
+            --tor_agent_ovs_ka {{item.value.tor_agent_ovs_kaa}} "
+    with_dict: {{tor_agent}} 

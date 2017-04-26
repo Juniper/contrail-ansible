@@ -49,6 +49,7 @@
 1.1.1.9 ctrl_data_ip=10.1.1.9 huge_pages=75 coremask='0,3-7' uio_driver='uio_pci_generic'
 1.1.1.10 huge_pages=75 coremask='0,3-7' uio_driver='vfio-pci'
 
+
 # List of all the defined groups in this inventory
 [all:children]
 contrail-lb
