@@ -28,8 +28,7 @@
     restart_policy: unless-stopped
     capabilities:
       - AUDIT_WRITE
-    volumes:
-      - "{{ contrailctl_config_directory }}:/etc/contrailctl/"
+    volumes: "{{ contrail_analytics_volumes }}"
 
 # Copy SSL certs to container
 - include: copy_ssl_certs.yml
