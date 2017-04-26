@@ -76,4 +76,25 @@ vrouter_physical_interface: eth0
 ##
 # contrail_install_packages_url: "http://10.84.5.120/github-build/mainline/3023/ubuntu-14-04/mitaka/contrail-install-packages_4.0.0.0-3023~mitaka_all.deb"
 # keystone_config: {ip: 192.168.0.23, admin_password: contrail123}
+tor_agent: 
+    TOR1:
+        tor_ip: 10.204.221.35
+        tor_agent_id: 1
+        tor_tunnel_ip: 10.204.221.33
+        tor_ovs_port: 9999
+        tor_ovs_protocol: tcp
+        tor_name: contrail-tor-1
+        tor_http_server_port: 9090
+        tor_discovery_server_ip: 10.204.217.39
+        tor_agent_ovs_ka: 1000
+    TOR2:
+        tor_ip: 10.204.221.36
+        tor_agent_id: 2
+        tor_tunnel_ip: 10.204.221.34
+        tor_ovs_port: 9999
+        tor_ovs_protocol: tcp
+        tor_name: contrail-tor-2
+        tor_http_server_port: 9090
+        tor_discovery_server_ip: 10.204.217.40
+        tor_agent_ovs_ka: 1000 
 
