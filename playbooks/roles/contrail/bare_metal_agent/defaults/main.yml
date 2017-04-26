@@ -27,6 +27,7 @@ vrouter_physical_interface: >-
   {#- set interface with default gateway -#}
   {%- else -%}{{ ansible_default_ipv4.interface }}{%- endif -%}
 
+default_gateway: "{{ ansible_default_ipv4.gateway }}"
 vrouter_physical_ansible_interface: "ansible_{{ vrouter_physical_interface | regex_replace('-', '_') }}"
 vhost_interface: vhost0
 
@@ -36,9 +37,14 @@ vhost_ansible_interface: "{{ 'ansible_' + vhost_interface if vhost_interface in 
 
 vhost_address: "{{ hostvars[inventory_hostname][vhost_ansible_interface]['ipv4']['address'] }}"
 
+control_data_gw: "{{ hostvars[inventory_hostname]['ctrl_data_gw'] }}"
+vhost_gateway: "{{ control_data_gw if control_data_gw else default_gateway }}"
+
 non_mgmt_ip_config: "--non_mgmt_ip {{ vhost_address }}"
+non_mgmt_gw_config: "--non_mgmt_gw {{ vhost_gateway }}"
 single_intf_config: ""
-multi_intf_config: "{{ non_mgmt_ip_config if vhost_address != ansible_default_ipv4.address else single_intf_config }}"
+multi_intf_ip_config: "{{ non_mgmt_ip_config if vhost_address != ansible_default_ipv4.address else single_intf_config }}"
+multi_intf_gw_config: "{{ non_mgmt_gw_config if vhost_address != ansible_default_ipv4.address else single_intf_config }}"
 no_of_controllers: "{{ controller_list | length }}"
 vrouter_max_control_nodes: 3
 contrail_compute_mode: "bare_metal"
