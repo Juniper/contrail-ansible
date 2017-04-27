@@ -35,6 +35,8 @@
       tags: [contrail.register]
       when: cloud_orchestrator == 'openstack'
 
+- name: Reboot compute nodes
+  hosts: contrail-compute
   post_tasks:
     - name: Reboot node
       shell: sleep 5 && /etc/contrail/contrail_reboot
