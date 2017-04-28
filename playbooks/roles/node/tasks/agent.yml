@@ -82,11 +82,7 @@
     pull: "{{ always_pull_image }}"
     capabilities:
       - AUDIT_WRITE
-    volumes:
-      - "/lib/modules:/lib/modules"
-      - "/usr/src:/usr/src"
-      - "{{ contrailctl_config_directory }}:/etc/contrailctl/"
-      - "/var/lib/contrail:/var/lib/contrail"
+    volumes: "{{ contrail_agent_volumes }}"
   when: cloud_orchestrator not in ['kubernetes', 'openshift']
 
 # In case of Kubernetes, agent will install cni on the node, for which need

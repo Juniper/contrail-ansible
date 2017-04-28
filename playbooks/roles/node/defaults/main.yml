@@ -82,6 +82,32 @@ analytics_ip: "{{ analytics_list[0] | default('') }}"
 contrail_container_volumes:
   - "{{ contrailctl_config_directory }}:/etc/contrailctl/"
 
+contrail_controller_log_volumes:
+  - "/var/log/contrail:/var/log/contrail"
+  - "/var/log/zookeeper:/var/log/zookeeper"
+
+contrail_controller_data_volumes:
+  - "{{ configdb_data_dir }}:/var/lib/cassandra"
+  - "/var/lib/zookeeper:/var/lib/zookeeper"
+contrail_analytics_log_volumes:
+  - "/var/log/contrail:/var/log/contrail"
+contrail_analyticsdb_log_volumes:
+  - "/var/log/contrail:/var/log/contrail"
+contrail_analyticsdb_db_volumes:
+    - "{{ analyticsdb_data_dir }}:/var/lib/cassandra"
+
+contrail_agent_log_volumes:
+  - "/var/log/contrail:/var/log/contrail"
+contrail_agent_kernel_volumes:
+  - "/lib/modules:/lib/modules"
+  - "/usr/src:/usr/src"
+  - "/var/lib/contrail:/var/lib/contrail"
+
+contrail_controller_volumes: "{{ contrail_container_volumes + contrail_controller_log_volumes + contrail_controller_data_volumes }}"
+contrail_analytics_volumes: "{{ contrail_container_volumes + contrail_analytics_log_volumes }}"
+contrail_analyticsdb_volumes: "{{ contrail_container_volumes + contrail_analyticsdb_log_volumes + contrail_analyticsdb_db_volumes }}"
+contrail_agent_volumes: "{{ contrail_container_volumes + contrail_agent_log_volumes + contrail_agent_kernel_volumes }}"
+
 # In case of openshift, /etc/origin need to be mounted to the kube_manager container
 #  which contain certs to connect with openshift master
 openshift_cert_volumes:

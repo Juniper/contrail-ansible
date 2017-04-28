@@ -28,9 +28,7 @@
     restart_policy: unless-stopped
     capabilities:
       - AUDIT_WRITE
-    volumes:
-      - "{{ contrailctl_config_directory }}:/etc/contrailctl/"
-      - "{{ analyticsdb_data_dir }}:/var/lib/cassandra"
+    volumes: "{{ contrail_analyticsdb_volumes }}"
 
 # Copy SSL certs to container
 - include: copy_ssl_certs.yml
