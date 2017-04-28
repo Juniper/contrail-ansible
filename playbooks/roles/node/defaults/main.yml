@@ -133,7 +133,7 @@ vrouter_physical_interface: >-
   {#- set interface with default gateway -#}
   {%- else -%}{{ ansible_default_ipv4.interface }}{%- endif -%}
 
-config_server_list: []
+config_nodes: []
 config_server_list_derived: []
 config_ip: "{{ controller_list[0] }}"
 
