@@ -12,6 +12,7 @@
   when: "'contrail-repo' not in group_names"
 
 - include: "{{ docker_py_pkg_install_method }}.yml"
+  when: docker_required == true
 
 - include: "repo/{{ ansible_os_family }}.yml"
   tags: [repo]

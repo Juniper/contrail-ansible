@@ -2,13 +2,29 @@
 - name: Common system settings on base hosts
   hosts: all
 
+  # docker_required is set to true if the node is running atleast one of
+  # contrail-controller, contrail-analytics, contrail-analyticsdb, contrail-lb,
+  # contrail-compute in 'bare_metal' mode.
+  # In other words: set to false on standalone bare_metal computes
+  # NOTE: Change here if you are adding a new group in the inventory that needs
+  # to avoid installing docker-engine
+  pre_tasks:
+    - name: Set flag to decide if docker is required
+      set_fact:
+        docker_required: "{{ false if 'contrail-compute' in group_names and \
+                          contrail_compute_mode == 'bare_metal' and \
+                          'contrail-controllers' not in group_names and \
+                          'contrail-analytics' not in group_names and \
+                          'contrail-analyticsdb' not in group_names and \
+                          'contrail-lb' not in group_names else true }}"
+
   roles:
     - name: Run common code
       role: common
     - name: Setup docker engine on nodes
       role: docker
       tags: [contrail.containers, contrail.containers.docker]
-      when: deployment_platform == "docker"
+      when: deployment_platform == "docker" and docker_required == true
     - name: Setup the containers
       role: node
       tags: [node]
