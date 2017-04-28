@@ -1,16 +1,30 @@
 ---
-- name: Common system settings on base hosts
-  hosts: all
-
+- name: Setup docker engine on non-compute nodes
+  hosts: all:!contrail-compute
   roles:
     - name: Run common code
       role: common
-    - name: Setup docker engine on nodes
+    - name: Run docker role
       role: docker
       tags: [contrail.containers, contrail.containers.docker]
-      when: deployment_platform == "docker"
-    - name: Setup the containers
-      role: node
+      when: deployment_platform == 'docker'
+
+- name: Setup docker engine on compute nodes
+  hosts: contrail-compute
+  roles:
+    - name: Run common code
+      role: common
+    - name: Run docker role only if required
+      role: docker
+      tags: [contrail.containers, contrail.containers.docker]
+      when: deployment_platform == 'docker' and contrail_compute_mode == 'container'
+
+- name: Now prepare the nodes
+  hosts: all
+  roles:
+    - name: Run common code
+      role: common
+    - role: node
       tags: [node]
 
 - name: Setup compute node
