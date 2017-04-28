@@ -4,6 +4,11 @@ controller_list: ["{{ ansible_default_ipv4.address }}"]
 controller_ip: "{{ controller_list[0] }}"
 config_server_list: "{{ controller_list }}"
 contrail_api_server_list: "{{ config_server_list }}"
+controllers: "{{ controller_list | join(',') }}"
+config_servers: "{{ config_server_list | join(',') }}"
+analytics_servers: "{{ anlaytics_list | join(',') }}"
+analyticsdb_servers: "{{ analyticsdb_list | join(',') }}"
+compute_servers: "{{ compute_list | join(',') }}"
 
 # Analytics dB defaults
 analyticsdb_list: "{{ controller_list }}"
