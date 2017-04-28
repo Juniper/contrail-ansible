@@ -89,7 +89,6 @@
       analytics_hostname_list: "{{ analytics_hostname_list_tmp | default([]) }}"
   when: analytics_list is not defined
 
-
 # Create analyticsdb_list - start
 - name: Create analyticsdb_list - step 1 (analyticsdb_dict)
   set_fact:
