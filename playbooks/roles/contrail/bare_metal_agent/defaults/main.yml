@@ -48,12 +48,14 @@ hypervisor: "libvirt"
 
 ssl_certs_dir: "/etc/contrail/ssl"
 xmpp_auth_enable: False
+xmpp_dns_auth_enable: False
 sandesh_ssl_enable: False
 introspect_ssl_enable: False
 vrouter_agent_conf: "/etc/contrail/contrail-vrouter-agent.conf"
 
 # contrail-coompute-setup args and flags
 xmpp_auth_flag: "{{ '--xmpp_auth_enable' if xmpp_auth_enable else '' }}"
+xmpp_dns_auth_flag: "{{ '--xmpp_dns_auth_enable' if xmpp_dns_auth_enable else '' }}"
 collectors_arg: "{{ '--collectors ' + collectors_with_space_delim }}"
 control_nodes_arg: "{{ '--control-nodes ' + controllers_with_space_delim }}"
 sandesh_ssl_flag: "{{ '--sandesh_ssl_enable' if sandesh_ssl_enable else '' }}"
