@@ -282,6 +282,16 @@
     ceph_rest_api_port: 5006
   when: "'contrail-lb' in group_names"
 
+- name: Enable web-ui storage feature if ceph is configured - step 5.1
+  set_fact:
+      webui_storage_enable: true
+  when: storage_ceph_config is defined
+
+- name: Disable web-ui storage feature if ceph is not configured - step 5.2
+  set_fact:
+      webui_storage_enable: false
+  when: storage_ceph_config is not defined
+
 - include: lb.yml
   tags: [container.lb, lb]
   when: "'contrail-lb' in group_names"
