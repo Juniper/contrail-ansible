@@ -277,6 +277,11 @@
       ceph_hostname_list: "{{ ceph_hostname_list_tmp | default([]) }}"
   when: ceph_controller_list is not defined
 
+- name: set ceph-rest-api port
+  set_fact:
+    ceph_rest_api_port: 5006
+  when: "'contrail-lb' in group_names"
+
 - include: lb.yml
   tags: [container.lb, lb]
   when: "'contrail-lb' in group_names"

@@ -36,7 +36,8 @@ ceph_controller_config: "{{ ceph_config | default({}) |                        \
                               'cluster_fsid'     : storage_ceph_config.fsid,   \
                               'mon_key'          : storage_ceph_config.mon_key,\
                               'adm_key'          : storage_ceph_config.adm_key,\
-                              'osd_key'          : storage_ceph_config.osd_key \
+                              'osd_key'          : storage_ceph_config.osd_key,\
+                              'ceph_rest_api_port': ceph_rest_api_port         \
                             }) }}"
 
 controller_group: "{{ groups['contrail-controllers'] | default([]) }}"

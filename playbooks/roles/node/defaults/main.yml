@@ -163,3 +163,6 @@ configdb_data_dir: /var/lib/configdb
 vrouter_agent_port: 9091
 # nested_mode is to define whether it is nested mode kubernetes setup or not
 nested_mode: false
+
+# ceph related default
+ceph_rest_api_port: 5005
