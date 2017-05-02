@@ -19,6 +19,8 @@ global_config_detected:
   config_nodes: "{{ config_nodes if config_nodes else config_server_list_derived | join(',') }}"
   sandesh_ssl_enable: "{{ sandesh_ssl_enable }}"
   introspect_ssl_enable: "{{ introspect_ssl_enable }}"
+
+webui_config_orig: "{{ webui_config | default({}) | combine({'webui_storage_enable': webui_storage_enable}) }}"
 agent_compile_vrouter_module_orig: "{{(agent_compile_vrouter_module is defined) | ternary(agent_compile_vrouter_module, 'undef')}}"
 global_config_orig: "{{ global_config_detected | combine(global_config|default({})) | combine(global_config_extra|default({})) }} "
 non_bare_metal_vrouter_compile: "{{ (agent_compile_vrouter_module_orig != 'undef') | ternary(agent_compile_vrouter_module_orig|ternary(true, false), external_vrouter_compile|ternary(false,true)) }}"
