@@ -5,7 +5,7 @@
 
 - name: install contrail-vrouter-agent related packages
   package: name={{ item }} state=latest
-  with_items: "{{ agent_packages }}"
+  with_items: "{{ compute_packages }}"
 
 # This is a workaround on issue https://github.com/Juniper/contrail-docker/issues/82
 - name: Remove supervisor-vrouter from /etc/sensitive_servies (WA for issue contrail-docker/82)
