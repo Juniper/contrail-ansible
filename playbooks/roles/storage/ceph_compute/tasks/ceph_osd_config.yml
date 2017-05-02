@@ -49,10 +49,31 @@
 - name: move node to default
   shell: "ceph osd crush move {{ansible_hostname}} root=default"
 
-- name: add osd to host
-  shell: "ceph osd crush add osd.{{item.num}} 1.0 host={{ansible_hostname}}"
-  when: item.mounted == "0"
+- name: find disk size
+  shell: "parted -s {{item.name}} unit TB print | grep ^Disk | \
+                      awk '{print $3}'| cut -d 'T' -f 1"
+  register: disk_size_tmp
   with_items: "{{ disk_info }}"
+
+- set_fact:
+    val_size: 0
+
+- set_fact:
+    disk_size: "{{ disk_size|default([]) + \
+                    [ {'weight': disk_size_tmp.results[val_size|int].stdout} ] }}"
+    val_size: "{{ val_size | int + 1 }}"
+  with_items: "{{ disk_info }}"
+
+- debug:
+    msg: "{{item}}"
+  with_items: "{{ disk_size }}"
+
+- name: add osd to host
+  shell: "ceph osd crush add osd.{{item.0.num}} {{item.1.weight}} host={{ansible_hostname}}"
+  #when: item.mounted == "0"
+  with_together:
+      - "{{ disk_info }}"
+      - "{{ disk_size }}"
 
 - name: osd authentication
   shell: "ceph auth add osd.{{item.num}} osd 'allow *' mon 'allow profile osd' -i /var/lib/ceph/osd/ceph-{{item.num}}/keyring"
