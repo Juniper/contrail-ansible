@@ -10,4 +10,12 @@
     GLOBAL: "{{ global_config_orig }}"
     KUBERNETES: "{{ kubernetes_config | default({}) }}"
     VNC: "{{ vnc_config | default({}) }}"
-    OPENSHIFT: "{{ openshift_config | default({}) }}"
+    AUTH: "{{ keystone_config | default({}) }}"
+
+- name: Override keystone IP in contrailctl/kubemanager.conf with generated linklocal ip, in nested mode.
+  ini_file: dest="{{ contrailctl_config_directory }}/kubemanager.conf" section=AUTH option=ip value={{ keystone_link_local_ip }}  create=yes
+  when: nested_mode is defined
+
+- name: Set nested mode flag in config file, when nested mode is defined. 
+  ini_file: dest="{{ contrailctl_config_directory }}/kubemanager.conf" section=GLOBAL option=nested_mode value=True  create=yes
+  when: nested_mode is defined

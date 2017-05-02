@@ -77,3 +77,23 @@ vrouter_physical_interface: eth0
 # contrail_install_packages_url: "http://10.84.5.120/github-build/mainline/3023/ubuntu-14-04/mitaka/contrail-install-packages_4.0.0.0-3023~mitaka_all.deb"
 # keystone_config: {ip: 192.168.0.23, admin_password: contrail123}
 
+###################################################
+# Kubernetes cluster configuration
+##
+
+# The IP subnet reserved for use by kubernetes for internal cluster management
+# and housekeeping.
+#nested_cluster_private_network: "<cluster-private-CIDR>"
+
+# Name of the kubernetes cluster being provisioned.
+#kubernetes_cluster_name:<cluster-name>
+
+# Virtual Network in which the Kubernetes cluster should be provisioned.
+#nested_cluster_network: {domain: <name>, project: <name>, name: <name>}
+
+# Access token to connect to Kuberenetes API server.
+#kubernetes_access_token: <token>
+
+# Kubernetes cluster is nested within an Openstack cluster.
+#nested_mode: true
+

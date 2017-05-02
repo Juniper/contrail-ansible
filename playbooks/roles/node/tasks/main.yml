@@ -9,17 +9,25 @@
 # yet
 - include: host.yml
   tags: [always]
-  when: "'contrail-repo' not in group_names"
+  when:
+    - "'contrail-repo' not in groups"
+    - "'kubernetes-contrail-controllers' not in group_names"
 
 - include: "{{ docker_py_pkg_install_method }}.yml"
+  when:
+    - "'kubernetes-contrail-controllers' not in group_names"
 
 - include: "repo/{{ ansible_os_family }}.yml"
   tags: [repo]
-  when: "'contrail-repo' in group_names"
+  when:
+    - "'contrail-repo' in groups"
+    - "'kubernetes-contrail-controllers' not in group_names"
 
 - include: host.yml
   tags: [always]
-  when: "'contrail-repo' in group_names"
+  when:
+    - "'contrail-repo' in groups"
+    - "'kubernetes-contrail-controllers' not in group_names"
 
 # Intermediate dictionary necessary to derive the final analytics_list. This
 # dictionary will contain the ip address of each host in  the contrail-analytics
@@ -283,15 +291,21 @@
 
 - include: controller.yml
   tags: [container.controller, controller]
-  when: "'contrail-controllers' in group_names"
+  when: "'contrail-controllers' in group_names and nested_mode is not defined"
 
 - include: analyticsdb.yml
   tags: [container.analyicsdb, analyticsdb]
-  when: "'contrail-analyticsdb' in group_names"
+  when: "'contrail-analyticsdb' in group_names and nested_mode is not defined"
 
 - include: analytics.yml
   tags: [container.analytics, analytics]
-  when: "'contrail-analytics' in group_names"
+  when: "'contrail-analytics' in group_names and nested_mode is not defined"
+
+- include: kube_manager_nested.yml
+  when: nested_mode is defined
+
+- include: kube_manager_link_local.yml
+  when: "nested_mode is defined and 'kubernetes-contrail-controllers' in group_names"
 
 - include: kube_manager.yml
   tags: [container.kube_manager, kube_manager]
@@ -299,12 +313,12 @@
 
 - include: "agent.yml"
   tags: [container.agent, agent]
-  when: "'contrail-compute' in group_names and contrail_compute_mode == 'container' and not nested_mode"
+  when: "'contrail-compute' in group_names and contrail_compute_mode == 'container' and nested_mode is not defined"
 
 # For kubernetes and openshift, agent will install cni file to the node
 - include: kube_cni.yml
   tags: [container.kube_cni, kube_cni]
-  when: "'contrail-compute' in group_names and (cloud_orchestrator in ['mesos'] or nested_mode)"
+  when: "'contrail-compute' in group_names and (cloud_orchestrator in ['mesos','kubernetes'])"
 
 - include: mesos_manager.yml
   tags: [container.mesos_manager, mesos_manager]
