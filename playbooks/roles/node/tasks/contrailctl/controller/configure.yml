@@ -17,7 +17,7 @@
     SCHEMA: "{{ schema_config | default({}) }}"
     DEVICE_MANAGER: "{{ device_manager_config | default({}) }}"
     SVC_MONITOR: "{{ svc_monitor_config | default({}) }}"
-    WEBUI: "{{ webui_config | default({}) }}"
+    WEBUI: "{{ webui_config_org | default({}) }}"
     CASSANDRA: "{{ cassandra_config | default({}) }}"
   notify:
     - check controller container
