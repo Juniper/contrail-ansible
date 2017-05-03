@@ -83,21 +83,21 @@ contrail_container_volumes:
   - "{{ contrailctl_config_directory }}:/etc/contrailctl/"
 
 contrail_controller_log_volumes:
-  - "/var/log/contrail:/var/log/contrail"
+  - "/var/log/contrail/controller:/var/log/contrail"
   - "/var/log/zookeeper:/var/log/zookeeper"
 
 contrail_controller_data_volumes:
   - "{{ configdb_data_dir }}:/var/lib/cassandra"
   - "/var/lib/zookeeper:/var/lib/zookeeper"
 contrail_analytics_log_volumes:
-  - "/var/log/contrail:/var/log/contrail"
+  - "/var/log/contrail/analytics:/var/log/contrail"
 contrail_analyticsdb_log_volumes:
-  - "/var/log/contrail:/var/log/contrail"
+  - "/var/log/contrail/analyticsdb:/var/log/contrail"
 contrail_analyticsdb_db_volumes:
     - "{{ analyticsdb_data_dir }}:/var/lib/cassandra"
 
 contrail_agent_log_volumes:
-  - "/var/log/contrail:/var/log/contrail"
+  - "/var/log/contrail/agent:/var/log/contrail"
 contrail_agent_kernel_volumes:
   - "/lib/modules:/lib/modules"
   - "/usr/src:/usr/src"
