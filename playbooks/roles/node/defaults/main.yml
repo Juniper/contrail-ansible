@@ -135,6 +135,8 @@ vrouter_physical_interface: >-
 
 config_nodes: []
 config_server_list_derived: []
+webui_nodes: []
+webui_server_list_derived: []
 config_ip: "{{ controller_list[0] }}"
 
 # contrail-cni for mesos and contrail-kub-cni for others
