@@ -254,6 +254,24 @@
   with_items: "{{ controller_group }}"
   when: ctrl_data_network is not defined
 
+- name: Create webui_server_list_derived
+  set_fact:
+      webui_server_list_derived: "{{webui_server_list_derived + \
+          [hostvars[item].get('ctrl_data_ip', controller_dict.get(item, item))]\
+          if 'webui' in hostvars[item].get('controller_components', []) \
+          else webui_server_list_derived"
+  with_items: "{{ controller_group }}"
+  when: ctrl_data_network is defined
+
+- name: Create webui_server_list_derived when ctrl_data_network is not defined
+  set_fact:
+      webui_server_list_derived: "{{webui_server_list_derived + \
+          [hostvars[item].get('ctrl_data_ip', item)] \
+          if 'webui' in hostvars[item].get('controller_components', []) \
+          else webui_server_list_derived}}"
+  with_items: "{{ controller_group }}"
+  when: ctrl_data_network is not defined
+
 # Create ceph-controller list
 - name: Create ceph_controller_list - step 1 (ceph_controller_dict)
   set_fact:

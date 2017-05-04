@@ -12,6 +12,7 @@ config_nodes: "{{ config_server_list | join(',') }}"
 analytics_nodes: "{{ anlaytics_list | join(',') }}"
 analyticsdb_nodes: "{{ analyticsdb_list | join(',') }}"
 compute_nodes: "{{ compute_list | join(',') }}"
+webui_nodes: "{{ controller_list }}"
 
 ctrl_physical_interface: >-
   {#- set interface of ctrl_data_network if passed -#}
