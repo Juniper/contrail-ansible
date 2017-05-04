@@ -9,6 +9,7 @@ config_nodes: "{{ config_server_list | join(',') }}"
 analytics_nodes: "{{ anlaytics_list | join(',') }}"
 analyticsdb_nodes: "{{ analyticsdb_list | join(',') }}"
 compute_nodes: "{{ compute_list | join(',') }}"
+webui_nodes: "{{ controller_list }}"
 
 # Analytics dB defaults
 analyticsdb_list: "{{ controller_list }}"
@@ -87,6 +88,11 @@ keystone_admin_tenant: admin
 
 neutron_metadata_ip: "{{ keystone_ip }}"
 neutron_metadata_port: 8775
+
+glance_ip: "{{ keystone_ip }}"
+
+nova_ip: "{{ keystone_ip }}"
+
 provision_cmd_keystone_args: " --admin_user {{ keystone_admin_user }} --admin_password {{ keystone_admin_password }} --admin_tenant_name {{ keystone_admin_tenant }} "
 service_tenant_name: services
 # Vnc api client input file
