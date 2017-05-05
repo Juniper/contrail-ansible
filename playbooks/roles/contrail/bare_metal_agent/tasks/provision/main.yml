@@ -20,6 +20,7 @@
           --keystone_admin_user {{ keystone_admin_user }} \
           --keystone_admin_password {{ keystone_admin_password }} \
           --keystone_admin_tenant_name {{ keystone_admin_tenant }} \
+          --register\
           {{ control_nodes_arg }} \
           {{ collectors_arg }} \
           {{ xmpp_auth_flag }} \
