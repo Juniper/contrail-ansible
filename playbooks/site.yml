@@ -34,14 +34,14 @@
   roles:
     - name: Run common code
       role: common
-    - name: Setup baremetal agent
-      role: contrail/bare_metal_agent
-      tags: [contrail.bare_metal_agent]
-      when: contrail_compute_mode == 'bare_metal'
     - name: Setup openstack compute in case of openstack
       role: openstack/compute
       tags: [openstack.compute]
       when: cloud_orchestrator == "openstack" and enable_openstack_compute
+    - name: Setup baremetal agent
+      role: contrail/bare_metal_agent
+      tags: [contrail.bare_metal_agent]
+      when: contrail_compute_mode == 'bare_metal'
 
 - name: Register roles with controller API
   hosts: contrail-controllers
