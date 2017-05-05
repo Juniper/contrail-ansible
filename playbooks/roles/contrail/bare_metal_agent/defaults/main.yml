@@ -71,3 +71,9 @@ dpdk_config: "{{ '--dpdk ' + dpdk_params if dpdk_params else '' }}"
 
 # compute packages
 compute_packages: "{{ dpdk_compute_packages if dpdk_config else kernel_compute_packages }}"
+
+# Qos queueing default
+qos: {}
+
+# Qos scheduling default
+qos_niantic: {}

@@ -10,6 +10,15 @@
 
 - name: Run contrail-compute-setup script, logs at /var/log/contrail/contrail_vrouter_provisioning.log
 
+  vars:
+    qos_config_compute: "{{ qos.get(ansible_default_ipv4.address) | default([]) }}"
+    qos_config_str: "{{ qos_config_compute | join(' ') | string }}"
+    qos_config: "{{ '--qos_config ' + qos_config_str if qos_config_str else '' }}"
+
+    priority_config_compute: "{{ qos_niantic.get(ansible_default_ipv4.address) | default([]) }}"
+    priority_config_str: "{{ priority_config_compute | join(' ') | string }}"
+    priority_config: "{{ '--qos_niantic_config ' + priority_config_str if priority_config_str else '' }}"
+
   shell: "contrail-compute-setup --cfgm_ip {{ config_ip }} \
           --keystone_ip {{ keystone_ip }} \
           --self_ip {{ my_compute_ip }} {{ multi_intf_ip_config }} \
@@ -20,6 +29,8 @@
           --keystone_admin_user {{ keystone_admin_user }} \
           --keystone_admin_password {{ keystone_admin_password }} \
           --keystone_admin_tenant_name {{ keystone_admin_tenant }} \
+          {{ qos_config }} \
+          {{ priority_config }} \
           {{ control_nodes_arg }} \
           {{ collectors_arg }} \
           {{ xmpp_auth_flag }} \
