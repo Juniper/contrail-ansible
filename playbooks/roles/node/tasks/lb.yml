@@ -16,7 +16,7 @@
 - name: Configure contrailctl/lb.conf
   include: "contrailctl/lb/{{ contrailctl_config_mode }}.yml"
 
-- name: "Start Loadbalancer container"
+- name: "Start Loadbalancer container for ubuntu 14.0x"
   docker_container:
     name: lb
     image: "{{ lb_image }}"
@@ -31,6 +31,23 @@
       - AUDIT_WRITE
     volumes:
       - "{{ contrailctl_config_directory }}:/etc/contrailctl/"
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '14.04' and os_release != 'ubuntu16.04'
+
+- name: "Start Loadbalancer container for ubuntu 14.0x"
+  docker_container:
+    name: lb
+    image: "{{ lb_image }}"
+    privileged: true
+    network_mode: host
+    state: started
+    tty: true
+    pull: "{{ always_pull_image }}"
+    restart_policy: unless-stopped
+    capabilities:
+      - AUDIT_WRITE
+    volumes:
+      - "{{ contrailctl_config_directory }}:/etc/contrailctl/"
+  when: ansible_distribution_version != '14.04' or os_release == 'ubuntu16.04'
 
 # Copy SSL certs to container
 - include: copy_ssl_certs.yml
