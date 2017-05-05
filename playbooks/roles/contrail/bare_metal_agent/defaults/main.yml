@@ -9,6 +9,9 @@ dpdk_compute_packages:
   - contrail-vrouter-dpdk-init
   - contrail-vrouter-common
 
+lbaas_packages:
+  - haproxy
+
 vrouter_physical_interface: >-
   {#- set interface of ctrl_data_network if passed -#}
   {%- if ctrl_data_ip is defined -%}
@@ -71,7 +74,8 @@ dpdk_params: "{{ mandatory_dpdk_params + optional_dpdk_params }}"
 dpdk_config: "{{ '--dpdk ' + dpdk_params if dpdk_params else '' }}"
 
 # compute packages
-compute_packages: "{{ dpdk_compute_packages if dpdk_config else kernel_compute_packages }}"
+compute_packages_to_install: "{{ dpdk_compute_packages if dpdk_config else kernel_compute_packages }}"
+compute_packages: "{{ compute_packages_to_install + lbaas_packages if enable_lbaas else compute_packages_to_install }}"
 
 # Qos-scheduling defaults
 qos_niantic: {}
