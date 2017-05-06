@@ -62,9 +62,10 @@ introspect_ssl_flag: "{{ '--introspect_ssl_enable' if introspect_ssl_enable else
 # Dpdk defaults
 dpdk_huge_pages: "{{ hostvars[inventory_hostname].get('huge_pages') | default('')}}"
 dpdk_coremask: "{{ hostvars[inventory_hostname].get('coremask') | default('')}}"
+dpdk_coremask_hex: "{{ '0x%x'|format(dpdk_coremask|int(0, 10)) }}"
 dpdk_uio_driver: "{{ hostvars[inventory_hostname].get('uio_driver') | default('')}}"
 
-mandatory_dpdk_params: "{{ 'coremask=' + dpdk_coremask + ',huge_pages=' + dpdk_huge_pages if dpdk_huge_pages else '' }}"
+mandatory_dpdk_params: "{{ 'coremask=' + dpdk_coremask_hex + ',huge_pages=' + dpdk_huge_pages if dpdk_huge_pages else '' }}"
 optional_dpdk_params: "{{ ',uio_driver=' + dpdk_uio_driver if dpdk_uio_driver else '' }}"
 dpdk_params: "{{ mandatory_dpdk_params + optional_dpdk_params }}"
 dpdk_config: "{{ '--dpdk ' + dpdk_params if dpdk_params else '' }}"
