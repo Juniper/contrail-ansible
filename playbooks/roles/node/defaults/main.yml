@@ -166,3 +166,6 @@ nested_mode: false
 
 # ceph related default
 ceph_rest_api_port: 5005
+
+# redis password
+redis_password: ""
