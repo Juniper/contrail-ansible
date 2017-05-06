@@ -74,6 +74,7 @@ log_local: 1
 #  it should default to localhost
 redis_server_ip: 127.0.0.1
 redis_server_port: 6379
+redis_password: ''
 
 # Keystone defaults
 keystone_version: v2.0
