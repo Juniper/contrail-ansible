@@ -19,6 +19,7 @@ global_config_detected:
   config_nodes: "{{ config_nodes if config_nodes else config_server_list_derived | join(',') }}"
   sandesh_ssl_enable: "{{ sandesh_ssl_enable }}"
   introspect_ssl_enable: "{{ introspect_ssl_enable }}"
+  redis_password: "{{ redis_password }}"
 
 webui_config_orig: "{{ webui_config | default({}) | combine({'webui_storage_enable': webui_storage_enable}) }}"
 agent_compile_vrouter_module_orig: "{{(agent_compile_vrouter_module is defined) | ternary(agent_compile_vrouter_module, 'undef')}}"

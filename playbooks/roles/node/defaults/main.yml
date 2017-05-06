@@ -174,3 +174,6 @@ rabbitmq_port: 5672
 
 # Private/Linklocad IP's allocated for controllers.
 controller_ll_ip_list: []
+
+# redis password
+redis_password: ""
