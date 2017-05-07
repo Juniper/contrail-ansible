@@ -72,3 +72,22 @@ dpdk_config: "{{ '--dpdk ' + dpdk_params if dpdk_params else '' }}"
 
 # compute packages
 compute_packages: "{{ dpdk_compute_packages if dpdk_config else kernel_compute_packages }}"
+
+# Qos-scheduling defaults
+qos_niantic: {}
+priority_config_compute: "{{ qos_niantic.get(ansible_default_ipv4.address) }}"
+priority_id_list: []
+priority_scheduling_list: []
+priority_bandwidth_list: []
+priority_id_config: ""
+priority_scheduling_config: ""
+priority_bandwidth_config: ""
+
+# Qos-queueing defaults
+qos: {}
+qos_config_compute: "{{ qos.get(ansible_default_ipv4.address) }}"
+qos_queue_id_list: []
+qos_logical_queue_list: []
+qos_queue_id_config: ""
+qos_logical_queue_config: ""
+default_nic_queue: {}
