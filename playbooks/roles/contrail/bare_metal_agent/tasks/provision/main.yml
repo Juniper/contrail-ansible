@@ -27,3 +27,39 @@
           {{ sandesh_ssl_flag }} \
           {{ introspect_ssl_flag }} \
           {{ dpdk_config }}"
+
+- name: Display all variables/facts known for a host
+
+  vars:
+      tor_agent_list_debug: "{{ tor_agent.get(ansible_default_ipv4.address) }}"
+
+  debug: msg = "tor entry is {{ item }}"
+  with_items: "{{ tor_agent_list_debug }}"
+  when: tor_agent_list_debug is defined
+
+- name: Run contrail-toragent-setup script, logs at /var/log/contrail/contrail_vrouter_provisioning.log
+
+  vars:
+      tor_agent_list: "{{ tor_agent.get(ansible_default_ipv4.address) }}"
+
+  shell: "contrail-toragent-setup  --cfgm_ip {{ config_ip }} \
+            --self_ip {{ my_compute_ip }} {{ multi_intf_config }} \
+            --authserver_ip {{ keystone_ip }} \
+            --admin_user {{ keystone_admin_user }} \
+            --admin_password {{ keystone_admin_password }} \
+            --admin_tenant_name {{ keystone_admin_tenant }} \
+            --agent_name {{ item.tor_name }} \
+            --http_server_port {{ item.tor_http_server_port }} \
+            --tor_ip {{ item.tor_ip }} \
+            --tor_id {{ item.tor_agent_id }} \
+            --tor_ovs_port {{ item.tor_ovs_port }} \
+            --tsn_ip {{ item.tor_tsn_ip }} \
+            --tor_ovs_protocol {{ item.tor_ovs_protocol }} \
+            --tor_vendor_name {{ item.tor_vendor_name }} \
+            --tor_tsn_name {{ item.tor_tsn_name }} \
+            --tor_agent_ovs_ka {{ item.tor_agent_ovs_ka }} \
+            {{ control_nodes_arg }} \
+            {{ collectors_arg }}"
+  with_items: "{{ tor_agent_list }}"
+  when: tor_agent_list is defined
+
