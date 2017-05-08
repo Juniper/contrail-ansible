@@ -1,0 +1,9 @@
+---
+- name: Check if contrail-storge-stats process exists
+  shell: ps -ef | grep contrail-storage-stats | grep -v grep | wc -l
+  register: contrail_storage_stats_status
+
+- name: start contrail-storge-stats process
+  shell: /usr/bin/python /usr/bin/contrail-storage-stats --conf_file /etc/contrail/contrail-storage-nodemgr.conf &
+  when: "contrail_storage_stats_status.stdout.find('1') == -1"
+
