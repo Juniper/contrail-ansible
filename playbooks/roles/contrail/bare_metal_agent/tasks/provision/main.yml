@@ -86,8 +86,8 @@
       tor_agent_list_debug: "{{ tor_agent.get(ansible_default_ipv4.address) }}"
 
   debug: msg = "tor entry is {{ item }}"
+  when: item
   with_items: "{{ tor_agent_list_debug }}"
-  when: tor_agent_list_debug is defined
 
 - name: Run contrail-toragent-setup script, logs at /var/log/contrail/contrail_vrouter_provisioning.log
 
@@ -95,7 +95,7 @@
       tor_agent_list: "{{ tor_agent.get(ansible_default_ipv4.address) }}"
 
   shell: "contrail-toragent-setup  --cfgm_ip {{ config_ip }} \
-            --self_ip {{ my_compute_ip }} {{ multi_intf_config }} \
+            --self_ip {{ my_compute_ip }} {{ multi_intf_ip_config }} \
             --authserver_ip {{ keystone_ip }} \
             --admin_user {{ keystone_admin_user }} \
             --admin_password {{ keystone_admin_password }} \
@@ -112,6 +112,6 @@
             --tor_agent_ovs_ka {{ item.tor_agent_ovs_ka }} \
             {{ control_nodes_arg }} \
             {{ collectors_arg }}"
+  when: item
   with_items: "{{ tor_agent_list }}"
-  when: tor_agent_list is defined
 
