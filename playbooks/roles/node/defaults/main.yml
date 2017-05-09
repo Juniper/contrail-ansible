@@ -135,7 +135,7 @@ vrouter_physical_interface: >-
 
 config_nodes: []
 config_server_list_derived: []
-config_ip: "{{ controller_list[0] }}"
+config_ip: "{{ controller_list[0] | default('') }}"
 
 # contrail-cni for mesos and contrail-kub-cni for others
 contrail_cni_package_name: "{{ 'contrail-cni' if cloud_orchestrator == 'mesos' else 'contrail-k8s-cni' }}"
@@ -160,9 +160,18 @@ introspect_ssl_enable: false
 analyticsdb_data_dir: /var/lib/analyticsdb
 configdb_data_dir: /var/lib/configdb
 
+# Well known port defaults.
 vrouter_agent_port: 9091
 # nested_mode is to define whether it is nested mode kubernetes setup or not
 nested_mode: false
 
 # ceph related default
 ceph_rest_api_port: 5005
+api_server_port: 8082
+configdb_port: 9161
+keystone_admin_port: 35357
+rabbitmq_port: 5672
+
+# Private/Linklocad IP's allocated for controllers.
+controller_ll_ip_list: []
+controller_pvt_ip_dict: {}
