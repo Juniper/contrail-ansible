@@ -11,11 +11,14 @@
   shell: "docker ps -q --filter 'label=contrail.role=controller' --filter 'status=running'"
   ignore_errors: yes
   register: controller_container_ps
+  when: nested_mode
 
 - name: Set docker exec prefix if container is running in a container.
   set_fact:
     docker_prefix: "docker exec -i controller "
-  when: controller_container_ps.stdout != ''
+  when:
+    - controller_container_ps.stdout != ''
+    - nested_mode
 
 - set_fact: service_name="_api_server_"
 - set_fact: link_local_name="{{ kubernetes_cluster_name + service_name }}"
@@ -26,7 +29,7 @@
           --linklocal_service_ip {{ item.value }} --linklocal_service_port {{ api_server_port }} \
           --ipfabric_service_ip  {{ item.key }} \
           --ipfabric_service_port  {{ api_server_port }} --oper add"
-  with_dict: "{{ controller_pvt_ip_dict }}"
+  with_dict: "{{ controller_pvt_ip_dict|default({}) }}"
   when: controller_pvt_ip_dict is defined
 
 #
@@ -43,7 +46,7 @@
           --linklocal_service_ip {{ item.value }} --linklocal_service_port {{ configdb_port }} \
           --ipfabric_service_ip  {{ item.key }} \
           --ipfabric_service_port  {{ configdb_port }} --oper add"
-  with_dict: "{{ controller_pvt_ip_dict }}"
+  with_dict: "{{ controller_pvt_ip_dict|default({}) }}"
   when: controller_pvt_ip_dict is defined
 
 #
@@ -60,7 +63,7 @@
           --linklocal_service_ip {{ item.value }} --linklocal_service_port {{ rabbitmq_port }} \
           --ipfabric_service_ip  {{ item.key }} \
           --ipfabric_service_port  {{ rabbitmq_port }} --oper add"
-  with_dict: "{{ controller_pvt_ip_dict }}"
+  with_dict: "{{ controller_pvt_ip_dict|default({}) }}"
   when: controller_pvt_ip_dict is defined
 
 #
@@ -77,6 +80,7 @@
           --linklocal_service_ip {{ keystone_link_local_ip }} --linklocal_service_port {{ keystone_admin_port }} \
           --ipfabric_service_ip  {{ keystone_config['ip'] }} \
           --ipfabric_service_port  {{ keystone_admin_port }} --oper add"
+  when: keystone_link_local_ip is defined
 
 #
 # Create linklocal service to Vrouter.
@@ -97,3 +101,4 @@
           --linklocal_service_ip {{ vrouter_agent_link_local_ip }} --linklocal_service_port {{ vrouter_agent_port }} \
           --ipfabric_service_ip  {{ vrouter_agent_fabric_ip }} \
           --ipfabric_service_port  {{ vrouter_agent_port }} --oper add"
+  when: vrouter_agent_link_local_ip is defined

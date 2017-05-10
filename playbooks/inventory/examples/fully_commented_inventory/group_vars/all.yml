@@ -35,7 +35,7 @@ controller_list: [192.168.0.24]
 
 # Kubernetes Nested Mode.
 # This config knob is to create Kubernetes cluster within Openstack cluster.
-nested_mode=True
+nested_mode: true
 
 # Kubernetes Nested Mode.
 # The IP subnet reserved for use by kubernetes for internal cluster management

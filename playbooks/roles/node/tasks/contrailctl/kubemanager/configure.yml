@@ -14,8 +14,10 @@
 
 - name: Override keystone IP in contrailctl/kubemanager.conf with generated linklocal ip, in nested mode.
   ini_file: dest="{{ contrailctl_config_directory }}/kubemanager.conf" section=AUTH option=ip value={{ keystone_link_local_ip }}  create=yes
-  when: nested_mode is defined
+  when:
+    - nested_mode
+    - keystone_link_local_ip is defined
 
 - name: Set nested mode flag in config file, when nested mode is defined. 
   ini_file: dest="{{ contrailctl_config_directory }}/kubemanager.conf" section=GLOBAL option=nested_mode value=True  create=yes
-  when: nested_mode is defined
+  when: nested_mode

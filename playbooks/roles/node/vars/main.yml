@@ -2,7 +2,7 @@
 compute_nodes: "{{ compute_list | join(',') }}"
 analytics_nodes: "{{ analytics_list | join(',') }}"
 analyticsdb_nodes: "{{ analyticsdb_list | join(',') }}"
-controller_nodes_tmp:  "{{ controller_ll_ip_list if nested_mode is defined else controller_list }}"
+controller_nodes_tmp:  "{{ controller_ll_ip_list if nested_mode else controller_list }}"
 controller_nodes: "{{ controller_nodes_tmp | join(',') }}"
 global_config_detected:
   cloud_orchestrator: "{{ cloud_orchestrator }}"

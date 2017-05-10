@@ -307,21 +307,21 @@
 
 - include: controller.yml
   tags: [container.controller, controller]
-  when: "'contrail-controllers' in group_names and nested_mode is not defined"
+  when: "'contrail-controllers' in group_names and not nested_mode"
 
 - include: analyticsdb.yml
   tags: [container.analyicsdb, analyticsdb]
-  when: "'contrail-analyticsdb' in group_names and nested_mode is not defined"
+  when: "'contrail-analyticsdb' in group_names and not nested_mode"
 
 - include: analytics.yml
   tags: [container.analytics, analytics]
-  when: "'contrail-analytics' in group_names and nested_mode is not defined"
+  when: "'contrail-analytics' in group_names and not nested_mode"
 
 - include: kube_manager_nested.yml
-  when: nested_mode is defined
+  when: nested_mode
 
 - include: kube_manager_link_local.yml
-  when: "nested_mode is defined and 'kubernetes-contrail-controllers' in group_names"
+  when: "nested_mode and 'kubernetes-contrail-controllers' in group_names"
 
 - include: kube_manager.yml
   tags: [container.kube_manager, kube_manager]
@@ -329,7 +329,7 @@
 
 - include: "agent.yml"
   tags: [container.agent, agent]
-  when: "'contrail-compute' in group_names and contrail_compute_mode == 'container' and nested_mode is not defined"
+  when: "'contrail-compute' in group_names and contrail_compute_mode == 'container' and not nested_mode"
 
 # For kubernetes and openshift, agent will install cni file to the node
 - include: kube_cni.yml
