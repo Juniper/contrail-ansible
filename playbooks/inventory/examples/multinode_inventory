@@ -121,3 +121,9 @@ ansible_user=root
 ansible_connection=ssh
 ansible_become=true
 ;ansible_ssh_private_key_file=~/.ssh/id_rsa
+
+# Cassandra User and Password configuration
+;global_config = {
+;        'analyticsdb_cassandra_user': '<analyticsdb_cassandra_user>',
+;        'analyticsdb_cassandra_password': '<analyticsdb_cassandra_password>'
+;}
