@@ -73,6 +73,9 @@ optional_dpdk_params: "{{ ',uio_driver=' + dpdk_uio_driver if dpdk_uio_driver el
 dpdk_params: "{{ mandatory_dpdk_params + optional_dpdk_params }}"
 dpdk_config: "{{ '--dpdk ' + dpdk_params if dpdk_params else '' }}"
 
+# Tsn mode
+tsn_mode_flag: "{{ hostvars[inventory_hostname].get('tsn_mode') | default('')}}"
+
 # compute packages
 compute_packages_to_install: "{{ dpdk_compute_packages if dpdk_config else kernel_compute_packages }}"
 compute_packages: "{{ compute_packages_to_install + lbaas_packages if enable_lbaas else compute_packages_to_install }}"

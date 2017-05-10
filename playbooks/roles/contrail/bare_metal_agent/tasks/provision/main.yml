@@ -67,6 +67,7 @@
           --keystone_admin_password {{ keystone_admin_password }} \
           --keystone_admin_tenant_name {{ keystone_admin_tenant }} \
           --register \
+          --tsn_mode {{ tsn_mode_flag }}
           {{ qos_queue_id_config }} \
           {{ qos_logical_queue_config }} \
           {{ default_hw_queue }} \
