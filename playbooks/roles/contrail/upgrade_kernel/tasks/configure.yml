@@ -1,0 +1,8 @@
+---
+- name: Set Grub Default Settings
+  replace: dest=/etc/default/grub regexp={{ item.regexp }} replace={{ item.replace }}
+  with_items:
+    - { regexp: '^GRUB_DEFAULT=(.*)', replace: "{{ grub_line }}" }
+
+- name: Update Grub after setting correct kernel version
+  command: "update-grub"

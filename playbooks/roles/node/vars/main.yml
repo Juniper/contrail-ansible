@@ -42,6 +42,9 @@ ceph_controller_config: "{{ ceph_config | default({}) |                        \
                               'ceph_rest_api_port': ceph_rest_api_port         \
                             }) }}"
 
+kernel_upgrade: "{{ kernel_upgrade | default('False') }}"
+default_kernel_version: "{{ '4.4.0-38' if ansible_distribution + ansible_distribution_version == 'Ubuntu16.04' else '3.13.0-106' }}"
+kernel_version: "{{ kernel_version | default(default_kernel_version) }}"
 controller_group: "{{ groups['contrail-controllers'] | default([]) }}"
 analytics_group: "{{ groups['contrail-analytics'] | default([]) }}"
 analyticsdb_group: "{{ groups['contrail-analyticsdb'] | default([]) }}"
