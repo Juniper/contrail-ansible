@@ -67,6 +67,7 @@
           --keystone_admin_password {{ keystone_admin_password }} \
           --keystone_admin_tenant_name {{ keystone_admin_tenant }} \
           --register \
+          {{ tsn_mode_enabled }}
           {{ qos_queue_id_config }} \
           {{ qos_logical_queue_config }} \
           {{ default_hw_queue }} \
@@ -101,7 +102,8 @@
             --admin_user {{ keystone_admin_user }} \
             --admin_password {{ keystone_admin_password }} \
             --admin_tenant_name {{ keystone_admin_tenant }} \
-            --agent_name {{ item.tor_name }} \
+            --auth_protocol {{ keystone_auth_protocol }} \
+            --tor_name {{ item.tor_name }} \
             --http_server_port {{ item.tor_http_server_port }} \
             --tor_ip {{ item.tor_ip }} \
             --tor_id {{ item.tor_agent_id }} \
@@ -111,6 +113,9 @@
             --tor_vendor_name {{ item.tor_vendor_name }} \
             --tor_tsn_name {{ item.tor_tsn_name }} \
             --tor_agent_ovs_ka {{ item.tor_agent_ovs_ka }} \
+            --tor_agent_name {{ item.tor_agent_name }} \
+            --tor_tunnel_ip  {{ item.tor_tunnel_ip }} \
+            --tor_product_name {{ item.tor_product_name }} \
             {{ control_nodes_arg }} \
             {{ collectors_arg }}"
   when: item
