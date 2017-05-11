@@ -1,0 +1,6 @@
+---
+- name: Set Grub Default Settings
+  lineinfile: dest=/etc/default/grub line=grub_line state=present create=yes
+
+- name: Update Grub after setting correct kernel version
+  command: "update-grub"

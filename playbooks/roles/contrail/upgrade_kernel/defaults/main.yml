@@ -1,0 +1,10 @@
+---
+kernel_upgrade: false
+cloud_orchestrator: openstack
+kernel_version: "3.13.0-106"
+kernel_upgrade_packages:
+  - "linux-headers-{{ kernel_version }}"
+  - "linux-headers-{{ kernel_version }}-generic"
+  - "linux-image-{{ kernel_version }}-generic"
+  - "linux-image-extra-{{ kernel_version }}-generic"
+grub_line: "GRUB_DEFAULT='Advanced options for Ubuntu>Ubuntu, with Linux {{ kernel_version }}-generic'"

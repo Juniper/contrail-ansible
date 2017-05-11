@@ -1,0 +1,13 @@
+---
+- name: Check if correct kernel package is already installed
+  command: "dpkg-query -l linux-headers-{{ kernel_version }}"
+  register: kernel_upgraded
+
+- include: install.yml
+  when: kernel_upgraded.stdout.find('no packages found') != -1
+
+- include: configure.yml
+  when: kernel_upgraded.stdout.find('no packages found') != -1
+
+- include: reboot.yml
+  when: kernel_upgraded.stdout.find('no packages found') != -1

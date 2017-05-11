@@ -1,4 +1,12 @@
 ---
+- name: Upgrade kernel if kernel_upgrade flag is set
+  hosts: all
+  roles:
+    - name: Upgrade kernel to the version supplied with this image
+      role: contrail/upgrade_kernel
+      tags: [contrail.upgrade_kernel]
+      when: kernel_upgrade
+
 - name: Common system settings on base hosts
   hosts: all
 
