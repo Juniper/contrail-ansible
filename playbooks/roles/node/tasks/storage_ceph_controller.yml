@@ -21,7 +21,6 @@
     name: ceph-master
     image: "{{ storage_ceph_controller_image }}"
     privileged: true
-    pid_mode: host
     network_mode: host
     state: started
     tty: true
