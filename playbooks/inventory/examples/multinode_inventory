@@ -120,3 +120,8 @@ ansible_user=root
 ansible_connection=ssh
 ansible_become=true
 ;ansible_ssh_private_key_file=~/.ssh/id_rsa
+
+# redis password
+;global_config = {
+;        'redis_password': '<redis_password>'
+;}
