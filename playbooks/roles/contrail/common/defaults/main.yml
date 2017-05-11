@@ -1,4 +1,7 @@
 ---
+kernel_upgrade: false
+kernel_version: "3.13.0-106"
+
 cloud_orchestrator: openstack
 controller_list: ["{{ ansible_default_ipv4.address }}"]
 controller_ip: "{{ controller_list[0] }}"

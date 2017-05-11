@@ -1,0 +1,11 @@
+---
+- name: Reboot node after kernel upgrade
+  shell: sleep 5 && /sbin/shutdown -r now
+  async: 1
+  poll: 0
+  sudo: true
+  ignore_errors: true
+
+- name: Waiting for server to come back
+  local_action: wait_for port=22 host={{ inventory_hostname }} state=started delay=30 timeout=600
+  sudo: false
