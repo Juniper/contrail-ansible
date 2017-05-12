@@ -1,0 +1,73 @@
+###################################################
+# Docker configurations
+##
+# docker registry
+docker_registry: 10.84.34.155:5000
+docker_registry_insecure: True
+
+# install docker from package rather than installer from get.docker.com which is default method
+docker_install_method: package
+
+docker_py_pkg_install_method: pip
+
+###################################################
+# Ansible specific vars
+##
+
+# ansible connection details
+ansible_user: root
+ansible_become: true
+ansible_ssh_private_key_file: ~/.ssh/id_rsa
+
+###################################################
+# Common settings for contrail
+##
+
+# contrail_compute_mode - the values are bare_metal to have bare_metal agent setup and "container" for agent container
+# default is bare_metal
+contrail_compute_mode: container
+
+# os_release - operating system release - ubuntu 14.04 - ubuntu14.04, ubuntu 16.04 - ubuntu16.04, centos 7.1 - centos7.1, centos 7.2 - centos7.2
+os_release: ubuntu14.04
+
+# contrail version
+contrail_version: 4.0.0.0-3058
+
+# cloud_orchestrator - cloud orchestrators to be setup
+# Valid cloud orchestrators:
+# kubernetes, mesos, openstack, openshift
+cloud_orchestrator: kubernetes
+
+# vrouter physical interface
+vrouter_physical_interface: enp6s0f0
+
+# global_config:
+
+# To configure custom webui http port
+webui_config: {http_listen_port: 8085}
+
+###################################################
+# Openstack specific configuration
+##
+keystone_config: {ip: 10.84.29.27, admin_password: c0ntrail123, admin_user: admin, admin_tenant: admin}
+
+###################################################
+# Kubernetes cluster configuration
+##
+
+# The IP subnet reserved for use by kubernetes for internal cluster management
+# and housekeeping.
+nested_cluster_private_network: "10.10.10.0/24"
+
+# Name of the kubernetes cluster being provisioned.
+kubernetes_cluster_name: k8s5
+
+# Virtual Network in which the Kubernetes cluster should be provisioned.
+nested_cluster_network: {domain: default-domain, project: admin, name: 5-k8s-VM-network}
+
+# Access token to connect to Kuberenetes API server.
+kubernetes_access_token: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2VhY2NvdW50Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9uYW1lc3BhY2UiOiJkZWZhdWx0Iiwia3ViZXJuZXRlcy5pby9zZXJ2aWNlYWNjb3VudC9zZWNyZXQubmFtZSI6ImRlZmF1bHQtdG9rZW4tcTUzYmYiLCJrdWJlcm5ldGVzLmlvL3NlcnZpY2VhY2NvdW50L3NlcnZpY2UtYWNjb3VudC5uYW1lIjoiZGVmYXVsdCIsImt1YmVybmV0ZXMuaW8vc2VydmljZWFjY291bnQvc2VydmljZS1hY2NvdW50LnVpZCI6ImVhNzE1YjJkLTJhYWUtMTFlNy1iZmJmLTAyMWQwOTNhMzRkMSIsInN1YiI6InN5c3RlbTpzZXJ2aWNlYWNjb3VudDpkZWZhdWx0OmRlZmF1bHQifQ.Kj0-NYBopRc8rMsX4NnKpJa570k2iamPOgCTdj3d93MW20girt4IgdAmR4v4kifQO-h5eYGVlfA3ftkPuWb5GbHDz9x7BoYc7b759i2cuX3AmtbCl5kNcbGY7_7JPIDkMHwwRj7FK7Y57eEFTstCxcpR4itqxzsRi7jc0nrrcbDkvlOkDhA93ID4ChPwE2PcsAf_LV9ds-gSzuyPIQt0qdxnQvI262AjgeNowbQhkYguoqZWJIE--AwpgSE0NiNpjcxiUx1HC2uaRSP3g9mMr2g4YQHRjxJwuz3fUkaSRNZyQEpyE5G5WKXTefc7h52R5Kphn2nT9gg6x175mrrnNQ
+
+# Kubernetes cluster is nested within an Openstack cluster.
+nested_mode: true
+

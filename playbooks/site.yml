@@ -24,7 +24,9 @@
     - name: Setup docker engine on nodes
       role: docker
       tags: [contrail.containers, contrail.containers.docker]
-      when: deployment_platform == "docker" and docker_required == true
+      when:
+        - deployment_platform == "docker" and docker_required == true
+        - "'kubernetes-contrail-controllers' not in group_names"
     - name: Setup the containers
       role: node
       tags: [node]

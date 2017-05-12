@@ -1,0 +1,99 @@
+---
+
+# Get the base ip of the configured cluster private network.
+- name: Get the base ip of the configured cluster private network
+  set_fact:
+    cluster_private_base_ip="{{ nested_cluster_private_network.split('/')[-2] }}"
+  when: nested_cluster_private_network is defined
+
+- name: Get the base ip int of the configured cluster private network
+  set_fact:
+    cluster_private_base_ip_int="{{ cluster_private_base_ip|ipaddr('address')|ipaddr('int') }}"
+  when: cluster_private_base_ip is defined
+
+# Start ip addr assignment from base + 1
+- name: Get the first IP address from configured cluster private network.
+  set_fact:
+    cluster_private_base_ip_int="{{ cluster_private_base_ip_int|int+1 }}"
+  when: cluster_private_base_ip_int is defined
+
+#
+# Iterate through list of contollers and allocate private IP's for each
+# from the configured cluster private subnet.
+#
+# The controller IP to its allocated cluster-private IP is cached in a
+# dictionary for later use.
+#
+- name: Create dictionary of link local controller IPs to their fabric controller IPs.
+  set_fact:
+    cluster_private_base_ip_int: "{{ cluster_private_base_ip_int|int+1 }}"
+    controller_pvt_ip_dict: "{{ controller_pvt_ip_dict|default({}) | \
+        combine( {item: cluster_private_base_ip_int|ipaddr} ) }}"
+  with_items: "{{ groups['kubernetes-contrail-controllers'] | default([]) }}"
+  when: cluster_private_base_ip_int is defined
+
+# Construct the list of generate controller IPs.
+- name: Create list of link local controller IPs.
+  set_fact:
+    controller_ll_ip_list: "{{ controller_ll_ip_list | default([]) + \
+        [item.value] }}"
+  with_dict: "{{ controller_pvt_ip_dict|default({}) }}"
+  when: controller_pvt_ip_dict is defined
+
+#
+# Allocate private IPs for misc services.
+#
+
+# Start ip addr assignment from base + 100
+- name: Start ip addr assignment from base + 100 for misc services.
+  set_fact:
+    cluster_private_base_ip_int="{{ cluster_private_base_ip|ipaddr('address')|ipaddr('int') }}"
+  when: cluster_private_base_ip is defined
+
+- name: Get first IP for misc services.
+  set_fact:
+    cluster_private_base_ip_int="{{ cluster_private_base_ip_int|int+100 }}"
+  when: cluster_private_base_ip_int is defined
+
+# Allocate private IP for authentication(keystone) service.
+- name: Allocate keystone link local ip.
+  set_fact:
+    cluster_private_base_ip_int: "{{ cluster_private_base_ip_int|int+1 }}"
+    keystone_link_local_ip: "{{ cluster_private_base_ip_int|ipaddr('address') }}"
+  when: cluster_private_base_ip_int is defined
+
+# Allocate private IP for vrouter.
+- name: Allocate vrouter agent link local ip.
+  set_fact:
+    cluster_private_base_ip_int: "{{ cluster_private_base_ip_int|int+1 }}"
+    vrouter_agent_link_local_ip: "{{ cluster_private_base_ip_int|ipaddr('address') }}"
+  when: cluster_private_base_ip_int is defined
+
+#
+# From now on, the config servers should be referred to by their generated
+# linkloca/private IP's. NAT the config server IPs to their linklocal/private
+# IPs.
+#
+- name: NAT config_server_list_derived to its linklocal IP.
+  set_fact:
+      config_server_list_derived_tmp: "{{ config_server_list_derived_tmp | default([]) + [controller_pvt_ip_dict[item]] }}"
+  with_items: "{{ groups['kubernetes-contrail-controllers'] | default([]) }}"
+  when: controller_pvt_ip_dict is defined
+
+- name: Get the list of config servers.
+  set_fact:
+    config_server_list_derived="{{ config_server_list_derived_tmp }}"
+  when: config_server_list_derived_tmp is defined
+
+- set_fact: controller_ip_key="{{ groups['kubernetes-contrail-controllers'][0] if controller_ip|default("") == "" else controller_ip }}"
+
+- name: Get link local ip for controller ip.
+  set_fact:
+    controller_ip="{{ controller_pvt_ip_dict[controller_ip_key] }}"
+  when: controller_pvt_ip_dict is defined
+
+- set_fact: config_ip_key="{{ groups['kubernetes-contrail-controllers'][0] if config_ip|default("") == "" else config_ip }}"
+- name: Get link local ip for config ip.
+  set_fact:
+    config_ip="{{ controller_pvt_ip_dict[config_ip_key] }}"
+  when: controller_pvt_ip_dict is defined

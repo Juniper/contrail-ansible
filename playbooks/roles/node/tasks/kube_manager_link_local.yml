@@ -1,0 +1,104 @@
+---
+
+#
+# Create linklocal service to Contrail API server.
+# This linklocal service converts the generated IP for API server
+# to the actual fabirc IP configured in the inventory.
+#
+- set_fact: docker_prefix=""
+
+- name: Check if controller running as a container. If not, ignore and proceed.
+  shell: "docker ps -q --filter 'label=contrail.role=controller' --filter 'status=running'"
+  ignore_errors: yes
+  register: controller_container_ps
+  when: nested_mode
+
+- name: Set docker exec prefix if container is running in a container.
+  set_fact:
+    docker_prefix: "docker exec -i controller "
+  when:
+    - controller_container_ps.stdout != ''
+    - nested_mode
+
+- set_fact: service_name="_api_server_"
+- set_fact: link_local_name="{{ kubernetes_cluster_name + service_name }}"
+- name: Create linklocal entry for api server.
+  shell: "{{ docker_prefix }}/usr/share/contrail-utils/provision_linklocal.py --api_server_ip 127.0.0.1 \
+          --linklocal_service_name {{ link_local_name + item.key }} --admin_user {{ keystone_config['admin_user'] }} \
+          --admin_password {{ keystone_config['admin_password'] }} --admin_tenant_name {{ keystone_config['admin_tenant'] }} \
+          --linklocal_service_ip {{ item.value }} --linklocal_service_port {{ api_server_port }} \
+          --ipfabric_service_ip  {{ item.key }} \
+          --ipfabric_service_port  {{ api_server_port }} --oper add"
+  with_dict: "{{ controller_pvt_ip_dict|default({}) }}"
+  when: controller_pvt_ip_dict is defined
+
+#
+# Create linklocal service to ConfigDB.
+# This linklocal service converts the generated IP for ConfigDB
+# to the actual fabirc IP configured in the inventory.
+#
+- set_fact: service_name="_configdb_"
+- set_fact: link_local_name="{{ kubernetes_cluster_name + service_name }}"
+- name: Create linklocal entry for cassandra.
+  shell: "{{ docker_prefix }}/usr/share/contrail-utils/provision_linklocal.py --api_server_ip 127.0.0.1 \
+          --linklocal_service_name {{ link_local_name + item.key }} --admin_user {{ keystone_config['admin_user'] }} \
+          --admin_password {{ keystone_config['admin_password'] }} --admin_tenant_name {{ keystone_config['admin_tenant'] }} \
+          --linklocal_service_ip {{ item.value }} --linklocal_service_port {{ configdb_port }} \
+          --ipfabric_service_ip  {{ item.key }} \
+          --ipfabric_service_port  {{ configdb_port }} --oper add"
+  with_dict: "{{ controller_pvt_ip_dict|default({}) }}"
+  when: controller_pvt_ip_dict is defined
+
+#
+# Create linklocal service to Message Queue.
+# This linklocal service converts the generated IP for Message Queue
+# to the actual fabirc IP configured in the inventory.
+#
+- set_fact: service_name="_msg_queue_"
+- set_fact: link_local_name="{{ kubernetes_cluster_name + service_name }}"
+- name: Create linklocal entry for rabbitmq.
+  shell: "{{ docker_prefix }}/usr/share/contrail-utils/provision_linklocal.py --api_server_ip 127.0.0.1 \
+          --linklocal_service_name {{ link_local_name + item.key }} --admin_user {{ keystone_config['admin_user'] }} \
+          --admin_password {{ keystone_config['admin_password'] }} --admin_tenant_name {{ keystone_config['admin_tenant'] }} \
+          --linklocal_service_ip {{ item.value }} --linklocal_service_port {{ rabbitmq_port }} \
+          --ipfabric_service_ip  {{ item.key }} \
+          --ipfabric_service_port  {{ rabbitmq_port }} --oper add"
+  with_dict: "{{ controller_pvt_ip_dict|default({}) }}"
+  when: controller_pvt_ip_dict is defined
+
+#
+# Create linklocal service to Authentication server.
+# This linklocal service converts the generated IP for authentication server
+# to the actual fabirc IP configured in the inventory.
+#
+- set_fact: service_name="_keystone_"
+- set_fact: link_local_name="{{ kubernetes_cluster_name + service_name }}"
+- name: Create linklocal entry for keystone.
+  shell: "{{ docker_prefix }}/usr/share/contrail-utils/provision_linklocal.py --api_server_ip 127.0.0.1 \
+          --linklocal_service_name {{ link_local_name + keystone_config['ip'] }} --admin_user {{ keystone_config['admin_user'] }} \
+          --admin_password {{ keystone_config['admin_password'] }} --admin_tenant_name {{ keystone_config['admin_tenant'] }} \
+          --linklocal_service_ip {{ keystone_link_local_ip }} --linklocal_service_port {{ keystone_admin_port }} \
+          --ipfabric_service_ip  {{ keystone_config['ip'] }} \
+          --ipfabric_service_port  {{ keystone_admin_port }} --oper add"
+  when: keystone_link_local_ip is defined
+
+#
+# Create linklocal service to Vrouter.
+# This linklocal service converts the generated IP for Vrouter
+# to the actual fabirc IP configured in the inventory.
+#
+# The fabric ip of the vrouter is set to localhost so that packets
+# from a nested VMI can be intercepted by the local vrouter agent.
+#
+- set_fact: service_name="_vrouter_"
+- set_fact: link_local_name="{{ kubernetes_cluster_name + service_name }}"
+- set_fact: vrouter_agent_fabric_ip="127.0.0.1"
+- name: Create linklocal entry for vrouter agent.
+  shell: "{{ docker_prefix }}/usr/share/contrail-utils/provision_linklocal.py --api_server_ip 127.0.0.1 \
+          --linklocal_service_name {{ link_local_name + vrouter_agent_fabric_ip }} \
+          --admin_user {{ keystone_config['admin_user'] }} \
+          --admin_password {{ keystone_config['admin_password'] }} --admin_tenant_name {{ keystone_config['admin_tenant'] }} \
+          --linklocal_service_ip {{ vrouter_agent_link_local_ip }} --linklocal_service_port {{ vrouter_agent_port }} \
+          --ipfabric_service_ip  {{ vrouter_agent_fabric_ip }} \
+          --ipfabric_service_port  {{ vrouter_agent_port }} --oper add"
+  when: vrouter_agent_link_local_ip is defined

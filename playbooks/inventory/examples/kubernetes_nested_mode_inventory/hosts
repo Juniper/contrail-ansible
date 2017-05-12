@@ -1,0 +1,22 @@
+# Enable contrail-repo when required - this will start a contrail apt or yum repo container on specified node
+# This repo will be used by other nodes on installing any packages in the node
+# setting up contrail-cni need this repo enabled
+# NOTE: Repo is required only for mesos and nested mode kubernetes
+
+# Openstack control node: 10.84.29.27
+# Kubernetes master node: 10.84.31.67
+# Kubernetes compute node: 10.84.31.68
+
+# Repo from which contrail-k8s-cni will be installed.
+[contrail-repo]
+10.84.31.67
+
+# List of Openstack Contrail controllers.
+[kubernetes-contrail-controllers]
+10.84.29.27
+
+[contrail-kubernetes]
+10.84.31.67
+
+[contrail-compute]
+10.84.31.68
