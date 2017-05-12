@@ -16,7 +16,9 @@
                           'contrail-controllers' not in group_names and \
                           'contrail-analytics' not in group_names and \
                           'contrail-analyticsdb' not in group_names and \
-                          'contrail-lb' not in group_names else true }}"
+                          'contrail-lb' not in group_names and \
+                          'ceph-controller' not in group_names else \
+                          true }}"
 
   roles:
     - name: Run common code
