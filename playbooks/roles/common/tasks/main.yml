@@ -11,7 +11,7 @@
 
 - name: Disable selinux for redhat systems
   command: setenforce 0
-  when: ansible_os_family == 'RedHat'
+  when: cloud_orchestrator != 'openstack' and ansible_os_family == 'RedHat' and ansible_selinux.status == 'enabled'
 
 - include: facts.yml
   tags: always
