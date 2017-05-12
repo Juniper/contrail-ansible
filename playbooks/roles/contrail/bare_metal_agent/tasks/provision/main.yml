@@ -54,6 +54,9 @@
     qos_queue_id_config: "{{ '--qos_queue_id ' + qos_queue_id_list | join(' ') if qos_queue_id_list else ''}}"
     qos_logical_queue_config: "{{ '--qos_logical_queue ' + qos_logical_queue_list | join(' ') if qos_logical_queue_list else ''}}"
 
+- include: vgw_facts.yml
+  tags: always
+
 - name: Run contrail-compute-setup script, logs at /var/log/contrail/contrail_vrouter_provisioning.log
 
   shell: "contrail-compute-setup --cfgm_ip {{ config_ip }} \
@@ -79,7 +82,11 @@
           {{ xmpp_dns_auth_flag }} \
           {{ sandesh_ssl_flag }} \
           {{ introspect_ssl_flag }} \
-          {{ dpdk_config }}"
+          {{ dpdk_config }} \
+          {{ vgw_public_subnet_config }} \
+          {{ vgw_public_vn_name_config }} \
+          {{ vgw_intf_list_config }} \
+          {{ vgw_gateway_routes_config }}"
 
 - name: Display all variables/facts known for a host
 
