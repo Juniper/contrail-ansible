@@ -98,9 +98,6 @@ qos_queue_id_config: ""
 qos_logical_queue_config: ""
 default_nic_queue: {}
 
-#Tor Agent defaults
-tor_agent: {}
-
 # Tsn mode
 tsn_mode_flag: "{{ hostvars[inventory_hostname].get('tsn_mode') | default('')}}"
-tsn_mode_enabled: "{{'--tsn_mode ' + tsn_mode_flag if tsn_mode_flag else False}}
+tsn_mode_enabled: "{{'--tsn_mode ' + tsn_mode_flag if tsn_mode_flag else False}}"
