@@ -91,10 +91,11 @@
   when: item
   with_items: "{{ tor_agent_list_debug }}"
 
-- name: Run contrail-toragent-setup script, logs at /var/log/contrail/contrail_vrouter_provisioning.log
+- name: Get the tor_agent_list
+  set_fact:
+    tor_agent_list: "{{ tor_agent.get(ansible_default_ipv4.address) }}"
 
-  vars:
-      tor_agent_list: "{{ tor_agent.get(ansible_default_ipv4.address) }}"
+- name: Run contrail-toragent-setup script, logs at /var/log/contrail/contrail_vrouter_provisioning.log
 
   shell: "contrail-toragent-setup  --cfgm_ip {{ config_ip }} \
             --self_ip {{ my_compute_ip }} {{ multi_intf_ip_config }} \
@@ -121,3 +122,22 @@
   when: item
   with_items: "{{ tor_agent_list }}"
 
+- name: Get the list of tor id's
+  set_fact:
+    tor_id_list: "{{ tor_id_list + [ item.tor_agent_id ] }}"
+  when: item
+  with_items: "{{ tor_agent_list }}"
+
+- name: Get tarid config list
+  set_fact:
+    tor_id_config: "{{ '--tor_id_list ' +  tor_id_list | join(' ')  if tor_id_list else '' }}"
+
+- name: Run Cleaup Script to audit the tor_id to be deleted
+  shell: "contrail-toragent-cleanup  --cfgm_ip {{ config_ip }} \
+            --self_ip {{ my_compute_ip }} {{ multi_intf_ip_config }} \
+            --authserver_ip {{ openstack_ip }} \
+            --admin_user {{ keystone_admin_user }} \
+            --admin_password {{ keystone_admin_password }} \
+            --admin_tenant_name {{ keystone_admin_tenant }} \
+            --auth_protocol {{ keystone_auth_protocol }} \
+            {{ tor_id_config }}"
