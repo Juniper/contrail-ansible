@@ -54,6 +54,24 @@
     qos_queue_id_config: "{{ '--qos_queue_id ' + qos_queue_id_list | join(' ') if qos_queue_id_list else ''}}"
     qos_logical_queue_config: "{{ '--qos_logical_queue ' + qos_logical_queue_list | join(' ') if qos_logical_queue_list else ''}}"
 
+- name: Parse SRIOV configuration
+  set_fact:
+    sriov_interface_list: "{{ sriov_interface_list + [ item.get('interface') ] }}"
+    sriov_vf_list: "{{ sriov_vf_list + [ item.get('VF') ] }}"
+  when: item
+  with_items: "{{ sriov_config_compute }}"
+
+- name: Create SRIOV input string - Part one
+  set_fact:
+      sriov_config_list: "{{ sriov_config_list + [ item.0 + ':' + item.1 ] }}"
+  with_together:
+    - "{{ sriov_interface_list }}"
+    - "{{ sriov_vf_list }}"
+
+- name: Create SRIOV input string - Part two
+  set_fact:
+      sriov_config: "{{ '--sriov ' + sriov_config_list | join(',')  if sriov_config_list else '' }}"
+
 - include: vgw_facts.yml
   tags: always
 
@@ -82,6 +100,7 @@
           {{ xmpp_dns_auth_flag }} \
           {{ sandesh_ssl_flag }} \
           {{ introspect_ssl_flag }} \
+          {{ sriov_config }} \
           {{ dpdk_config }} \
           {{ vgw_public_subnet_config }} \
           {{ vgw_public_vn_name_config }} \

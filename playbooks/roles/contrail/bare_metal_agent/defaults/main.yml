@@ -91,6 +91,14 @@ dpdk_config: "{{ '--dpdk ' + dpdk_params if dpdk_params else '' }}"
 compute_packages_to_install: "{{ dpdk_compute_packages if dpdk_config else kernel_compute_packages }}"
 compute_packages: "{{ compute_packages_to_install + lbaas_packages if enable_lbaas else compute_packages_to_install }}"
 
+#SRIOV defaults
+sriov: {}
+sriov_config_compute: "{{ sriov.get(ansible_default_ipv4.address) }}"
+sriov_interface_list: []
+sriov_vf_list: []
+sriov_config_list: []
+sriov_config: ""
+
 # Qos-scheduling defaults
 qos_niantic: {}
 priority_config_compute: "{{ qos_niantic.get(ansible_default_ipv4.address) }}"
