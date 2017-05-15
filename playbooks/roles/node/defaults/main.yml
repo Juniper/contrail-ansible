@@ -151,6 +151,8 @@ ssl_cert_key_path: "{{ ssl_certs_dir }}/server-privkey.pem"
 ssl_cert_path: "{{ ssl_certs_dir }}/server.pem"
 ssl_ca_cert_path: "{{ ssl_certs_dir }}/ca-cert.pem"
 ssl_ca_cert_key_path: "{{ ssl_certs_dir }}/ca-cert-privkey.pem"
+ssl_tor_certs_dir: "/etc/contrail/ssl/certs"
+ssl_tor_private_dir: "/etc/contrail/ssl/private"
 
 # Sandesh SSL flags
 sandesh_ssl_enable: false
