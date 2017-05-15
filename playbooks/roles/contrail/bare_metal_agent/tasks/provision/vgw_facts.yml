@@ -1,0 +1,21 @@
+---
+- name: Parse vgw configuration
+  set_fact:
+    vgw_public_subnet_list: "{{ vgw_public_subnet_list + [ item.value.ipam_subnets | string ] }}"
+    vgw_public_vn_name_list: "{{ vgw_public_vn_name_list + [ item.value.vn | string ] }}"
+    vgw_intf_list: "{{ vgw_intf_list + [ item.key ] }}"
+  with_dict: "{{ vgw_config_compute }}"
+
+- name: Parse vgw gateway_routes
+  set_fact:
+    vgw_gateway_route_list: "{{ vgw_gateway_route_list + [ item.value.gateway_routes | string ] if 'gateway_routes' in item.value.keys() else vgw_gateway_route_list + [ '[]' ] }}"
+  with_dict: "{{ vgw_config_compute }}"
+  when: 
+    - item
+
+- name: Form vgw cmd line arguments
+  set_fact:
+    vgw_public_subnet_config: "{{ '--vgw_public_subnet ' + '[' + vgw_public_subnet_list | join(';') | regex_replace(' ', '') | quote  + ']' if vgw_public_subnet_list else '' }}"
+    vgw_public_vn_name_config: "{{ '--vgw_public_vn_name ' + '[' + vgw_public_vn_name_list | join(';') | regex_replace(' ', '') | quote + ']' if vgw_public_vn_name_list else '' }}"
+    vgw_intf_list_config: "{{ '--vgw_intf_list ' + '[' + vgw_intf_list | join(';') | regex_replace(' ', '') | quote + ']' if vgw_intf_list else '' }}"
+    vgw_gateway_routes_config: "{{ '--vgw_gateway_routes ' + '[' + vgw_gateway_route_list | join(';') | regex_replace(' ', '') | quote + ']' if vgw_gateway_route_list else '' }}"
