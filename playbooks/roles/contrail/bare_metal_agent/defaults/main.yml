@@ -109,3 +109,15 @@ default_nic_queue: {}
 # Tsn mode
 tsn_mode_flag: "{{ hostvars[inventory_hostname].get('tsn_mode') | default('')}}"
 tsn_mode_enabled: "{{'--tsn_mode ' + tsn_mode_flag if tsn_mode_flag else '' }}"
+
+# Vgw defaults
+vgw: {}
+vgw_config_compute: "{{ vgw.get(ansible_default_ipv4.address, {}) }}"
+vgw_intf_list: []
+vgw_public_subnet_list: []
+vgw_public_vn_name_list: []
+vgw_gateway_route_list: []
+vgw_public_subnet_config: ""
+vgw_public_vn_name_config: ""
+vgw_intf_list_config: ""
+vgw_gateway_routes_config: ""

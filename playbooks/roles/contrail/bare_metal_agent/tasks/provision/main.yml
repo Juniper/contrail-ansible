@@ -72,6 +72,9 @@
   set_fact:
       sriov_config: "{{ '--sriov ' + sriov_config_list | join(',')  if sriov_config_list else '' }}"
 
+- include: vgw_facts.yml
+  tags: always
+
 - name: Run contrail-compute-setup script, logs at /var/log/contrail/contrail_vrouter_provisioning.log
 
   shell: "contrail-compute-setup --cfgm_ip {{ config_ip }} \
@@ -85,7 +88,7 @@
           --keystone_admin_password {{ keystone_admin_password }} \
           --keystone_admin_tenant_name {{ keystone_admin_tenant }} \
           --register \
-          {{ tsn_mode_enabled }}
+          {{ tsn_mode_enabled }} \
           {{ qos_queue_id_config }} \
           {{ qos_logical_queue_config }} \
           {{ default_hw_queue }} \
@@ -99,6 +102,10 @@
           {{ sandesh_ssl_flag }} \
           {{ introspect_ssl_flag }} \
           {{ sriov_config }} \
+          {{ vgw_public_subnet_config }} \
+          {{ vgw_public_vn_name_config }} \
+          {{ vgw_intf_list_config }} \
+          {{ vgw_gateway_routes_config }} \
           {{ dpdk_config }}"
 
 - name: Display all variables/facts known for a host
