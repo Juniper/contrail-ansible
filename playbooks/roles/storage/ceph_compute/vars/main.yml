@@ -1,5 +1,6 @@
 ---
 ceph_conf_file: /etc/ceph/ceph.conf
+contrail_storage_nodemgr_file: /etc/contrail/contrail-storage-nodemgr.conf
 ceph_mon_keyring_file: /tmp/ceph.mon.keyring
 ceph_client_admin_keyring_file: /etc/ceph/ceph.client.admin.keyring
 ceph_monip_list: ''
