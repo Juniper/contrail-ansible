@@ -1,0 +1,14 @@
+---
+- name: Check if contrail-storge-stats process exists
+  shell: ps -ef | grep contrail-storage-stats | grep -v grep | wc -l
+  register: contrail_storage_stats_status
+
+- debug:
+    msg:
+      - "enable_stats_daemon: {{ enable_stats_daemon }}"
+      - "contrail_storage_stats_status: {{ contrail_storage_stats_status.stdout }}"
+      - "analytics_ip {{ analytics_ip }}"
+
+- name: start contrail-storge-stats process
+  shell: service contrail-storage-stats start
+  when: "contrail_storage_stats_status.stdout.find('1') == -1"

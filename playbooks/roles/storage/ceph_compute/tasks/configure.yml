@@ -42,3 +42,9 @@
 
 - include: ceph_auth_conf.yml
   when: storage_ceph_config is defined
+
+- include: contrail_storage_stats_prep_vars.yml
+  when: storage_ceph_config is defined
+
+- include: contrail_storage_stats_conf.yml
+  when: storage_ceph_config is defined
