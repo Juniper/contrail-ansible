@@ -2,3 +2,10 @@
 contrail_extensions: "ipam:neutron_plugin_contrail.plugins.opencontrail.contrail_plugin_ipam.NeutronPluginContrailIpam,policy:neutron_plugin_contrail.plugins.opencontrail.contrail_plugin_policy.NeutronPluginContrailPolicy,route-table:neutron_plugin_contrail.plugins.opencontrail.contrail_plugin_vpc.NeutronPluginContrailVpc,contrail:None"
 nova_conf: /etc/nova/nova.conf
 contrail_compute_mode: "container"
+#SRIOV defaults
+sriov: {}
+sriov_config_openstack_compute: "{{ sriov.get(ansible_default_ipv4.address) }}"
+sriov_intf_list: []
+sriov_physnets_list: []
+sriov_physnets: ""
+sriov_interfaces: ""

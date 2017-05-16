@@ -1,3 +1,15 @@
+- name: Parse SRIOV configuration
+  set_fact:
+    sriov_intf_list: "{{ sriov_intf_list + [ item.get('interface') ] }}"
+    sriov_physnets_list: "{{ sriov_physnets_list + [ item.get('physnets') | join('%') if item.get('physnets') else '' ] }}"
+  when: item
+  with_items: "{{ sriov_config_openstack_compute }}"
+
+- name: Create SRIOV config strings
+  set_fact:
+      sriov_physnets: "{{  sriov_physnets_list | join(',')  if sriov_physnets_list else '' }}"
+      sriov_interfaces: "{{  sriov_intf_list | join(',')  if sriov_intf_list else '' }}"
+
 - name: Create /etc/contrail/ctrl-details
   template: src=ctrl-details.j2 dest=/etc/contrail/ctrl-details
 
