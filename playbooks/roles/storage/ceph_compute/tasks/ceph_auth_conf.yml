@@ -16,7 +16,7 @@
 - name: create keyring file
   shell: "ceph-authtool /etc/ceph/client.{{item}}.keyring -n client.{{item}} -C -a {{storage_ceph_config['pool_keys'][item]}} \
           --cap mon 'allow r' \
-          --cap osd 'allow class-read object_prefix rbd_children, allow rx pool=images'"
+          --cap osd 'allow class-read object_prefix rbd_children, allow rwx pool=images'"
   when: item == 'images'
   with_items: "{{pool_list}}"
 
