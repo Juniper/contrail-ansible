@@ -4,4 +4,11 @@ neutron_password: "{{ keystone_admin_password }}"
 service_tenant_name: "services"
 region: RegionOne
 openstack_ip: "{{ groups['openstack-controllers'][0] if 'openstack-controllers' in groups else keystone_ip }}"
+
+# Openstack defaults - User can override these by setting the following in inventory
+# openstack_config={'management_ip':'192.168.1.25', 'ctrl_data_ip':'192.168.10.25'}
+openstack_mgmt_ip: "{{ openstack_config.get('management_ip', openstack_ip) if openstack_config is defined else openstack_ip }}"
+openstack_ctrl_data_ip: "{{ openstack_config.get('ctrl_data_ip', keystone_ip) if openstack_config is defined else keystone_ip }}"
+openstack_config: {}
+
 neutron_port: 9696
