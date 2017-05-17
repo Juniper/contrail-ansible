@@ -159,3 +159,10 @@ vrouter_physical_interface: eth0
 #                   'vgw2':{'vn':'default-domain:admin:public1:public1', 'ipam_subnets': ['10.204.220.144/29']}},
 #   '192.168.0.26': {'vgw2':{'vn':'default-domain:admin:public1:public1', 'ipam_subnets': ['10.204.220.144/29']}}
 #       }
+
+#Vrouter module params
+
+#vrouter_module_params = {
+#   '192.168.0.25': {'flow_entries':'4000000','mpls_labels':'131072', 'nexthops':'131072', 'vrfs':'65536', 'macs':'262144'},
+#   '192.168.0.26': {'flow_entries':'4000000','mpls_labels':'131072', 'nexthops':'131072', 'vrfs':'65536', 'macs':'262144'}
+#       }
