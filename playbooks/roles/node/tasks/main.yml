@@ -291,6 +291,11 @@
     ceph_rest_api_port: 5006
   when: "'contrail-lb' in group_names"
 
+- name: set enable_stats_daemon port
+  set_fact:
+    enable_stats_daemon : false
+  when: "'contrail-compute' in group_names"
+
 - name: Enable web-ui storage feature if ceph is configured - step 5.1
   set_fact:
       webui_storage_enable: true
