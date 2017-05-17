@@ -45,7 +45,7 @@
 # List of compute node ip's in which the contrial-agent container needs to be
 # launched.
 [computes]
-1.1.1.7 ctrl_data_ip=10.1.1.7 #kernel mode
+1.1.1.7 ctrl_data_ip=10.1.1.7 tsn_mode=True #kernel mode
 1.1.1.8 ctrl_data_ip=10.1.1.8 huge_pages=50 coremask='0xf' #dpdk mode
 1.1.1.9 ctrl_data_ip=10.1.1.9 huge_pages=75 coremask='0,3-7' uio_driver='uio_pci_generic'
 1.1.1.10 huge_pages=75 coremask='0,3-7' uio_driver='vfio-pci'
