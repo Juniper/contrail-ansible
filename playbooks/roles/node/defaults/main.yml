@@ -176,3 +176,6 @@ rabbitmq_port: 5672
 
 # Private/Linklocad IP's allocated for controllers.
 controller_ll_ip_list: []
+
+# storage stats related default
+enable_stats_daemon: true

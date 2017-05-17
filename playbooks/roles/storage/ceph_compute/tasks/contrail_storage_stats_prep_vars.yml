@@ -1,0 +1,5 @@
+---
+- name: create contrail-storage-stats config file
+  template:
+    src: contrail.storage.nodemgr.conf.j2
+    dest: "{{ contrail_storage_nodemgr_file }}"
