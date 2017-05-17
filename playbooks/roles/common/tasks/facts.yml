@@ -15,6 +15,10 @@
   set_fact: ansible_service_mgr=upstart
   when: deployment_platform == "docker" and ansible_service_mgr == 'systemd' and not (ansible_distribution == 'Ubuntu' and ansible_distribution_version == '16.04')
 
+- name: Set kernel_version_installed flag for compute provision to use
+  set_fact:
+      kernel_version_installed: "{{ansible_kernel.split('-generic')[0]}}"
+
 # This need to be a fact as otherwise hostvars would not have them, unless
 # passed from inventory - for some reason hostvars not picking defaults
 - name: Setting default for controller_components
