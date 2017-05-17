@@ -152,6 +152,9 @@
   set_fact:
     controller_list_tmp: "{{ controller_list_tmp | default([]) + \
                       [hostvars[item].get('ctrl_data_ip', item)] }}"
+    controller_hostname_list_tmp: "{{ controller_hostname_list_tmp | \
+                      default([]) }} + \
+                      [ '{{ hostvars[item]['ansible_hostname'] }}' ]"
   with_items: "{{ controller_group }}"
   when: ctrl_data_network is not defined and controller_list is not defined
 
@@ -160,12 +163,16 @@
     controller_list_tmp: "{{ controller_list_tmp | default([]) + \
                           [hostvars[item].get('ctrl_data_ip', \
                           controller_dict.get(item, item))] }}"
+    controller_hostname_list_tmp: "{{ controller_hostname_list_tmp | \
+                          default([]) }} + \
+                          [ '{{ hostvars[item]['ansible_hostname'] }}' ]"
   with_items: "{{ controller_group }}"
   when: ctrl_data_network is defined and controller_list is not defined
 
 - name: Create controller_list - step 4 (Assign from tmp if not defined)
   set_fact:
       controller_list: "{{ controller_list_tmp | default([]) }}"
+      controller_hostname_list: "{{ controller_hostname_list_tmp|default([]) }}"
   when: controller_list is not defined
 
 # Create compute_list
@@ -224,6 +231,14 @@
   with_together:
     - "{{ compute_list }}"
     - "{{ compute_hostname_list }}"
+
+- name: Create a dict mapping controller hostnames to controller IP addresses
+  set_fact:
+      controller_ip_hostname_dict: "{{ controller_ip_hostname_dict | \
+          default({}) | combine( {item.0: item.1} ) }}"
+  with_together:
+    - "{{ controller_list }}"
+    - "{{ controller_hostname_list }}"
 
 - name: Create config_server_list_derived
   set_fact:

@@ -1,4 +1,9 @@
 ---
+- name: set /etc/hosts entry with their conrol-data IP for rabbitmq to work
+  lineinfile: dest=/etc/hosts line="{{ item.key + ' ' + item.value }}"
+  with_dict: "{{ controller_ip_hostname_dict }}"
+  when: controller_ip_hostname_dict
+
 - name: Copy contrail controller image
   copy:
     src: "{{ docker_image_load_path }}/{{ contrail_controller_image_archive }}"
