@@ -13,6 +13,6 @@ export QUANTUM={{ openstack_ip }}
 export QUANTUM_PORT={{ neutron_port }}
 export COMPUTE={{ ansible_default_ipv4.address }}
 export SELF_MGMT_IP={{ ansible_default_ipv4.address }}
-export CONTROLLER_MGMT={{ openstack_ip }}
+export CONTROLLER_MGMT={{ openstack_mgmt_ip }}
 export SRIOV_INTERFACES={{ sriov_interfaces }}
 export SRIOV_PHYSNETS={{ sriov_physnets }}
