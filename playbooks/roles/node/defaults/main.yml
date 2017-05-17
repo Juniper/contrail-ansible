@@ -178,3 +178,6 @@ controller_ll_ip_list: []
 
 # storage stats related default
 enable_stats_daemon: true
+
+# Tor Agent inventory, required for HA Proxy configuration
+haproxy_toragent_config: {}
