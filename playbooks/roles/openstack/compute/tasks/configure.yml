@@ -50,3 +50,8 @@
         "/dev/rtc", "/dev/hpet","/dev/net/tun",
       ]
   notify: restart libvirt
+
+# Setup live-migration
+- include: live_migration_conf.yml
+  when: live_migration is defined and live_migration == True
+
