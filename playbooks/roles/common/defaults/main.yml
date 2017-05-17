@@ -4,3 +4,4 @@ enable_openstack_compute: true
 enable_lbaas: true
 deployment_platform: docker
 no_upstart: "{{ true if deployment_platform == 'docker' }}"
+kernel_version_installed: ""
