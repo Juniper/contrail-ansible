@@ -176,3 +176,13 @@ rabbitmq_port: 5672
 
 # Private/Linklocad IP's allocated for controllers.
 controller_ll_ip_list: []
+
+# By default no public fip pool is configured.
+kubernetes_public_fip_pool: {}
+
+# Default cluster project to be used for kubernetes.
+kubernetes_cluster_project: {domain: default-domain, project: default}
+
+# Kubernetes default subnets.
+kubernetes_service_subnet: '10.96.0.0/12'
+kubernetes_pod_subnet: '10.32.0.0/12'
