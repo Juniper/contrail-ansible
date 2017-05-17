@@ -1,0 +1,4 @@
+---
+- name: install kernel packages for upgrade
+  apt: name={{ item }} state=latest force=yes install_recommends=no
+  with_items: "{{ kernel_upgrade_packages }}"
