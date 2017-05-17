@@ -100,8 +100,7 @@ vrouter_physical_interface: eth0
 # apiserver_auth_protocol=http
 # apiserver_insecure=False
 # toragent configuration
-# Toragent config#
-#tor_agent = { '10.84.32.2': [ {'tor_ip': '10.204.221.35', 'tor_agent_id': '1', 'tor_tsn_ip': '10.204.221.33', 'tor_ovs_port': '9999', 'tor_ovs_protocol': 'tcp', 'tor_name': 'contrail-tor-1', 'tor_http_server_port': '9090', 'tor_vendor_name': 'Juniper', 'tor_tsn_name':’tsn1', tor_agent_ovs_ka': '1000'} , {'tor_ip': '10.204.221.35', 'tor_agent_id': '2', 'tor_tsn_ip': '10.204.221.33', 'tor_ovs_port': '9999', 'tor_ovs_protocol': 'tcp', 'tor_name': 'contrail-tor-2', 'tor_http_server_port': '9090', 'tor_vendor_name': 'Juniper', 'tor_tsn_name':’tsn2', tor_agent_ovs_ka': '1000'}], '10.84.32.3': [ {'tor_ip': '10.204.221.36', 'tor_agent_id': '1', 'tor_tsn_ip': '10.204.221.34', 'tor_ovs_port': '9999', 'tor_ovs_protocol': 'tcp', 'tor_name': 'contrail-tor-1', 'tor_http_server_port': '9090', 'tor_vendor_name': 'Juniper', 'tor_tsn_name':’tsn1', tor_agent_ovs_ka': '1000'} ] }
+#tor_agent = { '10.204.216.34': [ {'tor_ip': '10.204.221.35', 'tor_agent_id': '1', 'tor_tsn_ip': '10.204.221.33', 'tor_ovs_port': '9999', 'tor_ovs_protocol': 'tcp', 'tor_name': 'contrail-tor-1', 'tor_http_server_port': '9090', 'tor_vendor_name': 'Juniper', 'tor_tsn_name':'tsn1', 'tor_agent_ovs_ka': '1000', 'tor_agent_name':'agent1', 'tor_tunnel_ip':'10.204.216.54', 'tor_product_name':'qfx1'} , {'tor_ip': '10.204.221.35', 'tor_agent_id': '2', 'tor_tsn_ip': '10.204.221.33', 'tor_ovs_port': '9999', 'tor_ovs_protocol': 'tcp', 'tor_name': 'contrail-tor-2', 'tor_http_server_port': '9090', 'tor_vendor_name': 'Juniper', 'tor_tsn_name':'tsn2', 'tor_agent_ovs_ka': '1000','tor_agent_name':'agent2', 'tor_tunnel_ip':'10.204.216.55', 'tor_product_name':'qfx2'}] }
 
 # Qos queueing configuration
 #qos =  {
