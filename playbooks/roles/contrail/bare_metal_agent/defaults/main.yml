@@ -1,8 +1,15 @@
 ---
 # python-paramiko and ecdsa installed as workaround for bug https://bugs.launchpad.net/juniperopenstack/+bug/1669918
 # contrail-vrouter-dkms installed as workaround for bug https://bugs.launchpad.net/juniperopenstack/+bug/1664421
-kernel_compute_packages:
+kernel_upgrade: false
+kernel_version: "{{ '4.4.0-38' if ansible_distribution + ansible_distribution_version == 'Ubuntu16.04' else '3.13.0-106' }}"
+
+default_kernel_compute_packages:
   - contrail-vrouter-dkms
+  - contrail-vrouter-common
+
+upgrade_kernel_vrouter_packages:
+  - "contrail-vrouter-{{ kernel_version }}-generic"
   - contrail-vrouter-common
 
 dpdk_compute_packages:
@@ -88,6 +95,7 @@ dpdk_params: "{{ mandatory_dpdk_params + optional_dpdk_params }}"
 dpdk_config: "{{ '--dpdk ' + dpdk_params if dpdk_params else '' }}"
 
 # compute packages
+kernel_compute_packages: "{{ upgrade_kernel_vrouter_packages if kernel_upgrade else default_kernel_compute_packages }}"
 compute_packages_to_install: "{{ dpdk_compute_packages if dpdk_config else kernel_compute_packages }}"
 compute_packages: "{{ compute_packages_to_install + lbaas_packages if enable_lbaas else compute_packages_to_install }}"
 
