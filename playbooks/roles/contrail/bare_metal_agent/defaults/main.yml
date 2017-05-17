@@ -136,3 +136,7 @@ vgw_public_subnet_config: ""
 vgw_public_vn_name_config: ""
 vgw_intf_list_config: ""
 vgw_gateway_routes_config: ""
+
+# Vrouter module params defaults
+vrouter_module_params: {}
+vrouter_module_args: ""

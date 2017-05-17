@@ -75,6 +75,17 @@
 - include: vgw_facts.yml
   tags: always
 
+- name: Parse vrouter module params
+  set_fact:
+    vrouter_module_args: "{{ vrouter_module_args + item.key | string + '=' + item.value | string + ',' }}"
+  with_dict: "{{ vrouter_module_params.get(ansible_default_ipv4.address, {}) }}"
+  when:
+    - item
+
+- name: Form vrouter module params command line args
+  set_fact:
+    vrouter_module_param_args: "{{ '--vrouter_module_params ' + vrouter_module_args if vrouter_module_args else '' }}"
+
 - name: Run contrail-compute-setup script, logs at /var/log/contrail/contrail_vrouter_provisioning.log
 
   shell: "contrail-compute-setup --cfgm_ip {{ config_ip }} \
