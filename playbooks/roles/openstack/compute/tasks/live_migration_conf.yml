@@ -1,0 +1,91 @@
+---
+- name: enable live-migraiton in nova
+  ini_file: dest={{ nova_conf }} section=DEFAULT option={{ item.key }} value={{ item.value }} create=yes
+  notify: restart nova-compute
+  with_dict:
+    live_migration_flag: "VIR_MIGRATE_UNDEFINE_SOURCE,VIR_MIGRATE_PEER2PEER,VIR_MIGRATE_LIVE"
+    vncserver_listen: "0.0.0.0"
+
+- name: set listen_tls = 0
+  lineinfile:
+    dest: "{{ libvirtd_conf }}"
+    regexp: '^#listen_tls = 0'
+    line: 'listen_tls = 0'
+    state: present
+  notify: restart libvirt
+      
+- name: set listen_tcp = 1
+  lineinfile:
+    dest: "{{ libvirtd_conf }}"
+    regexp: '^#listen_tcp = 1'
+    line: 'listen_tcp = 1'
+    state: present
+  notify: restart libvirt
+
+- name: set auth_tcp = none
+  lineinfile:
+    dest: "{{ libvirtd_conf }}"
+    regexp: '^#auth_tcp = "sasl"'
+    line: 'auth_tcp = "none"'
+    state: present
+  notify: restart libvirt
+
+- name: set auth_tcp = none
+  lineinfile:
+    dest: "{{ libvirt_bin_conf }}"
+    regexp: '^env libvirtd_opts="-d"'
+    line: 'env libvirtd_opts="-d -l"'
+    state: present
+  notify: restart libvirt
+
+- name: modify libvirt apparmor
+  lineinfile:
+    dest: "{{ libvirt_aa_helper }}"
+    insertafter: '  \/var\/lib\/nova\/instances\/snapshots\/\*\* r,'
+    line: '  /var/lib/nova/instances/global/_base/** r,'
+    state: present
+
+- name: modify libvirt apparmor
+  lineinfile:
+    dest: "{{ libvirt_aa_helper }}"
+    insertafter: '  \/var\/lib\/nova\/instances\/snapshots\/\*\* r,'
+    line: '  /var/lib/nova/instances/global/snapshots/** r,'
+    state: present
+
+- name: reparse apparmor
+  shell: apparmor_parser -r /etc/apparmor.d/usr.lib.libvirt.virt-aa-helper
+ 
+- name: modify qemu apparmor
+  lineinfile:
+    dest: "{{ libvirt_qemu_abs }}"
+    insertafter: '  capability setuid,'
+    line: '  capability mknod,'
+    state: present
+
+- name: modify qemu apparmor
+  lineinfile:
+    dest: "{{ libvirt_qemu_abs }}"
+    insertafter: '  /etc/ceph/ceph.conf r,'
+    line: '  /etc/ceph/* r,'
+    state: present
+
+- name: modify qemu apparmor
+  lineinfile:
+    dest: "{{ libvirt_qemu_abs }}"
+    insertafter: '  /etc/ceph/ceph.conf r,'
+    line: '  /etc/qemu-ifdown ixr,'
+    state: present
+
+- name: modify qemu apparmor
+  lineinfile:
+    dest: "{{ libvirt_qemu_abs }}"
+    insertafter: '  /etc/ceph/ceph.conf r,'
+    line: '  /etc/qemu-ifup ixr,'
+    state: present
+
+- name: modify qemu apparmor
+  lineinfile:
+    dest: "{{ libvirt_qemu_abs }}"
+    insertafter: '  /etc/ceph/ceph.conf r,'
+    line: '  owner /tmp/* rw,'
+    state: present
