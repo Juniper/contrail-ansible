@@ -32,7 +32,7 @@
     - name: Upgrade kernel to the version supplied with this image
       role: contrail/upgrade_kernel
       tags: [contrail.upgrade_kernel]
-      when: kernel_upgrade
+      when: kernel_upgrade and ansible_os_family == 'Debian'
     - name: Setup the containers
       role: node
       tags: [node]
