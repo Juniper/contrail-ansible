@@ -140,6 +140,26 @@ vrouter_physical_interface: eth0
 # Kubernetes cluster is nested within an Openstack cluster.
 #nested_mode: true
 
+# Kubernetes FloatingIpPool to be used for service/ingress.
+# Example:kubernetes_public_fip_pool: {domain: domain-name, project: project-name, network: network-name, name: fip-pool-name}
+#
+#kubernetes_public_fip_pool: {domain: <>, project: <>, network: <>, name: <>}
+
+# Kubernetes cluster project fq-name.
+# Example: kubernetes_cluster_project: {domain: domain-name, project: project-name}
+#
+#kubernetes_cluster_project: {domain: <>, project: <>}
+
+# Kubernetes pod subnet.
+# If not configured, default value of 10.32.0.0/12 is used.
+#
+#kubernetes_pod_subnet: "10.32.0.0/12"
+
+# Kubernetes service subnet
+# If not configured, default value of 10.96.0.0/12 is used.
+#
+#kubernetes_service_subnet: "10.96.0.0/12"
+
 #OPTIONAL Virtual gateway CONFIGURATION
 #=======================================
 
