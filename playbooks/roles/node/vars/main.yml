@@ -39,7 +39,8 @@ ceph_controller_config: "{{ ceph_config | default({}) |                        \
                               'mon_key'          : storage_ceph_config.mon_key,\
                               'adm_key'          : storage_ceph_config.adm_key,\
                               'osd_key'          : storage_ceph_config.osd_key,\
-                              'ceph_rest_api_port': ceph_rest_api_port         \
+                              'ceph_rest_api_port': ceph_rest_api_port,        \
+                              'enable_stats_daemon': enable_stats_daemon       \
                             }) }}"
 
 kernel_upgrade: "{{ kernel_upgrade | default('False') }}"
