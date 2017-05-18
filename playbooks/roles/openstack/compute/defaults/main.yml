@@ -9,3 +9,7 @@ sriov_intf_list: []
 sriov_physnets_list: []
 sriov_physnets: ""
 sriov_interfaces: ""
+libvirtd_conf: /etc/libvirt/libvirtd.conf
+libvirt_bin_conf: /etc/init/libvirt-bin.conf
+libvirt_aa_helper: /etc/apparmor.d/usr.lib.libvirt.virt-aa-helper
+libvirt_qemu_abs: /etc/apparmor.d/abstractions/libvirt-qemu
