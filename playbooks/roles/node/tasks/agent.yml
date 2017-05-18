@@ -70,6 +70,9 @@
 - name: Configure contrailctl/agent.conf
   include: "../contrailctl/agent/{{ contrailctl_config_mode }}.yml"
 
+# Copy SSL certs to container
+- include: copy_ssl_certs.yml
+
 - name: "Start contrail agent container (non-kubernetes)"
   docker_container:
     name: agent
@@ -112,6 +115,3 @@
       - "/etc/cni:/host/etc_cni"
       - "/var/log/contrail/cni:/host/log_cni"
   when: cloud_orchestrator in ['kubernetes', 'openshift']
-
-# Copy SSL certs to container
-- include: copy_ssl_certs.yml
