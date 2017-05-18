@@ -13,6 +13,11 @@
     load_path: "/tmp/{{ contrail_lb_image_archive }}"
   when: docker_registry is not defined or load_contrail_lb_image is defined
 
+- name: Set haproxy toragent configuration dictionary
+  set_fact:
+    haproxy_toragent_config: "{{ haproxy_toragent_config|combine( {'haproxy_toragent_config': tor_agent|string} ) }}"
+  when: tor_agent is defined
+
 - name: Configure contrailctl/lb.conf
   include: "contrailctl/lb/{{ contrailctl_config_mode }}.yml"
 

@@ -189,3 +189,6 @@ kubernetes_cluster_project: {domain: default-domain, project: default}
 # Kubernetes default subnets.
 kubernetes_service_subnet: '10.96.0.0/12'
 kubernetes_pod_subnet: '10.32.0.0/12'
+
+# Tor Agent inventory, required for HA Proxy configuration
+haproxy_toragent_config: {}
