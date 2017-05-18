@@ -191,3 +191,6 @@ kubernetes_pod_subnet: '10.32.0.0/12'
 
 # storage stats related default
 enable_stats_daemon: true
+
+# Tor Agent inventory, required for HA Proxy configuration
+haproxy_toragent_config: {}
