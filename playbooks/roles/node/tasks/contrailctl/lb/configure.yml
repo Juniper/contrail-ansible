@@ -10,3 +10,4 @@
     GLOBAL: "{{ global_config_orig }}"
     LB: "{{ lb_config | default({}) }}"
     HAPROXY: "{{ haproxy_config | default({}) }}"
+    HAPROXY_TORAGENT: "{{ haproxy_toragent_config | default({}) }}"
