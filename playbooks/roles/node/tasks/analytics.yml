@@ -16,6 +16,9 @@
 - name: Configure contrailctl/analytics.conf
   include: "contrailctl/analytics/{{ contrailctl_config_mode }}.yml"
 
+# Copy SSL certs to container
+- include: copy_ssl_certs.yml
+
 - name: "Start contrail analytics container"
   docker_container:
     name: analytics
@@ -29,6 +32,3 @@
     capabilities:
       - AUDIT_WRITE
     volumes: "{{ contrail_analytics_volumes }}"
-
-# Copy SSL certs to container
-- include: copy_ssl_certs.yml
