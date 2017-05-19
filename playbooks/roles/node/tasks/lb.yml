@@ -21,6 +21,9 @@
 - name: Configure contrailctl/lb.conf
   include: "contrailctl/lb/{{ contrailctl_config_mode }}.yml"
 
+# Copy SSL certs to container
+- include: copy_ssl_certs.yml
+
 - name: "Start Loadbalancer container"
   docker_container:
     name: lb
@@ -35,6 +38,3 @@
       - AUDIT_WRITE
     volumes:
       - "{{ contrailctl_config_directory }}:/etc/contrailctl/"
-
-# Copy SSL certs to container
-- include: copy_ssl_certs.yml
