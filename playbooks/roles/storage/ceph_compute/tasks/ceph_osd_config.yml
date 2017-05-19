@@ -83,7 +83,13 @@
 - name: start ceph osd
   shell: "start ceph-osd id={{item.num}}"
   ignore_errors: yes
-  when: item.mounted == "0"
+  when: item.mounted == "0" and ansible_distribution_version == "14.04"
+  with_items: "{{ disk_info }}"
+
+- name: start ceph osd
+  shell: "systemctl start ceph-osd@{{item.num}}"
+  ignore_errors: yes
+  when: item.mounted == "0" and ansible_distribution_version == "16.04"
   with_items: "{{ disk_info }}"
 
 - name: Check if bootstrap-osd keyring file  exists

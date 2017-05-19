@@ -55,6 +55,11 @@
   when: item.mounted == "0"
   with_items: "{{ disk_info }}"
 
+- name: call sync
+  shell: sync
+  when: item.mounted == "0"
+  with_items: "{{ disk_info }}"
+
 - name: make data partition with journal
   shell: ceph-disk prepare --osd-uuid "{{item.uuid}}" --cluster ceph --cluster-uuid "{{ storage_ceph_config.fsid }}" --fs-type xfs "{{ item.name }}" "{{ item.journal}}"
   when: item.mounted == "0" and item.journal[0] == '/'
