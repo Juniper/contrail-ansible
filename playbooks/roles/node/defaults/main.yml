@@ -91,13 +91,14 @@ contrail_controller_log_volumes:
 
 contrail_controller_data_volumes:
   - "{{ configdb_data_dir }}:/var/lib/cassandra"
-  - "/var/lib/zookeeper:/var/lib/zookeeper"
+  - "{{ config_zookeeper_data_dir }}:/var/lib/zookeeper"
 contrail_analytics_log_volumes:
   - "/var/log/contrail/analytics:/var/log/contrail"
 contrail_analyticsdb_log_volumes:
   - "/var/log/contrail/analyticsdb:/var/log/contrail"
-contrail_analyticsdb_db_volumes:
-    - "{{ analyticsdb_data_dir }}:/var/lib/cassandra"
+contrail_analyticsdb_data_volumes:
+  - "{{ analyticsdb_data_dir }}:/var/lib/cassandra"
+  - "{{ analyticsdb_zookeeper_data_dir }}:/var/lib/zookeeper"
 
 contrail_agent_log_volumes:
   - "/var/log/contrail/agent:/var/log/contrail"
@@ -108,7 +109,7 @@ contrail_agent_kernel_volumes:
 
 contrail_controller_volumes: "{{ contrail_container_volumes + contrail_controller_log_volumes + contrail_controller_data_volumes }}"
 contrail_analytics_volumes: "{{ contrail_container_volumes + contrail_analytics_log_volumes }}"
-contrail_analyticsdb_volumes: "{{ contrail_container_volumes + contrail_analyticsdb_log_volumes + contrail_analyticsdb_db_volumes }}"
+contrail_analyticsdb_volumes: "{{ contrail_container_volumes + contrail_analyticsdb_log_volumes + contrail_analyticsdb_data_volumes }}"
 contrail_agent_volumes: "{{ contrail_container_volumes + contrail_agent_log_volumes + contrail_agent_kernel_volumes }}"
 
 # In case of openshift, /etc/origin need to be mounted to the kube_manager container
@@ -163,6 +164,8 @@ introspect_ssl_enable: false
 # Volume persistance
 analyticsdb_data_dir: /var/lib/analyticsdb
 configdb_data_dir: /var/lib/configdb
+analyticsdb_zookeeper_data_dir: /var/lib/analyticsdb_zookeeper_data
+config_zookeeper_data_dir: /var/lib/config_zookeeper_data
 
 # Well known port defaults.
 vrouter_agent_port: 9091
