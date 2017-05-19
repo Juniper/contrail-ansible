@@ -9,7 +9,7 @@
   with_inidata:
     GLOBAL: "{{ global_config_orig }}"
     KUBERNETES: "{{ kubernetes_config | default({}) }}"
-    VNC: "{{ vnc_config | default({}) }}"
+    KUBERNETES_VNC: "{{ kubernetes_vnc_config | default({}) }}"
     AUTH: "{{ keystone_config | default({}) }}"
 
 - name: Override keystone IP in contrailctl/kubemanager.conf with generated linklocal ip, in nested mode.
