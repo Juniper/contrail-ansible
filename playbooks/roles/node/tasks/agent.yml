@@ -16,7 +16,9 @@
   copy:
     src: "{{ docker_image_load_path }}/{{ vrouter_module_compiler_centos7_image_archive }}"
     dest: "/tmp/{{ vrouter_module_compiler_centos7_image_archive }}"
-  when: docker_registry is not defined or load_contrail_vrouter_module_compiler_centos7_image is defined
+  when:
+    - docker_registry is not defined or load_contrail_vrouter_module_compiler_centos7_image is defined
+    - ansible_os_family == 'RedHat'
 
 - name: "Load vrouter compiler image"
   docker_image:
@@ -24,7 +26,9 @@
     tag: "{{ contrail_version }}"
     timeout: "{{ container_image_load_timeout }}"
     load_path: "/tmp/{{ vrouter_module_compiler_centos7_image_archive }}"
-  when: docker_registry is not defined or load_vrouter_module_compiler_centos7_image is defined
+  when:
+    - docker_registry is not defined or load_vrouter_module_compiler_centos7_image is defined
+    - ansible_os_family == 'RedHat'
 
 - name: "Compile vrouter module"
   docker_container:
