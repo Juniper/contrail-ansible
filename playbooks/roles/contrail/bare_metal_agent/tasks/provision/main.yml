@@ -106,6 +106,7 @@
           {{ vgw_public_vn_name_config }} \
           {{ vgw_intf_list_config }} \
           {{ vgw_gateway_routes_config }} \
+          {{ vrouter_module_param_args }} \
           {{ dpdk_config }}"
 
 - name: Display all variables/facts known for a host
