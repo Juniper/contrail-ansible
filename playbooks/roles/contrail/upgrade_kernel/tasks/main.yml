@@ -1,4 +1,10 @@
 ---
+- include: host.yml
+  tags: [always]
+  when:
+    - "'contrail-repo' not in groups"
+    - "'kubernetes-contrail-controllers' not in group_names"
+
 - name: Check if correct kernel package is already installed
   command: "dpkg-query -l linux-headers-{{ kernel_version }}"
   register: kernel_upgrade_query

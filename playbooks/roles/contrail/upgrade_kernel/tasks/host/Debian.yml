@@ -1,0 +1,21 @@
+---
+# Install all required packages from the contrail-install-packages repo
+#
+- name: Add contrail apt repository
+  apt_repository:
+    repo: "deb {{ contrail_apt_repo }} ./"
+    state: present
+  register: apt_repo_added
+  when: contrail_apt_repo is defined and contrail_apt_repo != ""
+  ignore_errors: yes
+
+- name: Allow unauthenticated packages for contrail packages to work
+  copy: content='APT::Get::AllowUnauthenticated "true";' dest=/etc/apt/apt.conf.d/99allowunauth
+
+- name: Pin contrail apt repo "contrail" release to priority 999
+  copy: src=apt-preferences.conf dest=/etc/apt/preferences.d/contrail_repo.pref
+
+- name: Run apt-get update
+  apt: update_cache=yes
+  when: apt_repo_added.get('changed',false)
+  ignore_errors: yes
