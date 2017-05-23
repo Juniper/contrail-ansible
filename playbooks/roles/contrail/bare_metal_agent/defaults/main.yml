@@ -142,6 +142,8 @@ vgw_public_subnet_config: ""
 vgw_public_vn_name_config: ""
 vgw_intf_list_config: ""
 vgw_gateway_routes_config: ""
+qos_priority_tagging_config: "{{ '--qos_priority_tagging ' + hostvars[inventory_hostname].get('qos_priority_tagging') | string if hostvars[inventory_hostname].get('qos_priority_tagging') or
+                                 hostvars[inventory_hostname].get('qos_priority_tagging') == false else '' }}"
 
 # Vrouter module params defaults
 flow_entries_str: "{{ 'flow_entries=' + hostvars[inventory_hostname].get('flow_entries') | string + ',' if hostvars[inventory_hostname].get('flow_entries') else '' }}"
