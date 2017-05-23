@@ -108,6 +108,8 @@ priority_bandwidth_list: []
 priority_id_config: ""
 priority_scheduling_config: ""
 priority_bandwidth_config: ""
+qos_priority_tagging_config: "{{ '--qos_priority_tagging ' + hostvars[inventory_hostname].get('qos_priority_tagging') | string if hostvars[inventory_hostname].get('qos_priority_tagging') or
+                                 hostvars[inventory_hostname].get('qos_priority_tagging') == false else '' }}"
 
 # Qos-queueing defaults
 qos: {}
