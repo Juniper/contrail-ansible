@@ -15,3 +15,11 @@
 
 - include: facts.yml
   tags: always
+
+# Prepares the host for provisioning by pointing the host repositories list to the SM
+# node.
+- include: host.yml
+  tags: [always]
+  when:
+    - "'contrail-repo' not in groups"
+    - "'kubernetes-contrail-controllers' not in group_names"
