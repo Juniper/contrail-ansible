@@ -1,0 +1,10 @@
+---
+- name: Add contrail yum repository
+  yum_repository:
+    name: contrail
+    description: contrail repo
+    baseurl: "{{ contrail_yum_repo }}"
+    gpgcheck: no
+    enabled: yes
+    priority: 1
+  when: contrail_yum_repo

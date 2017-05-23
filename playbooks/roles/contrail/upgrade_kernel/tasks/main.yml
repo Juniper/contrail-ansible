@@ -1,4 +1,13 @@
 ---
+# Setup repo for upgrade_kernel to find the kernel packages
+# This repo needs to be setup only for Debian/RedHat cases where a separate repo container is not provided
+
+- include: host.yml
+  tags: [always]
+  when:
+    - "'contrail-repo' not in groups"
+    - "'kubernetes-contrail-controllers' not in group_names"
+
 - name: Check if correct kernel package is already installed
   command: "dpkg-query -l linux-headers-{{ kernel_version }}"
   register: kernel_upgrade_query
