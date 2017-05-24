@@ -126,6 +126,8 @@ qos_logical_queue_list: []
 qos_queue_id_config: ""
 qos_logical_queue_config: ""
 default_nic_queue: {}
+qos_priority_tagging_config: "{{ '--qos_priority_tagging ' + hostvars[inventory_hostname].get('qos_priority_tagging') | string if hostvars[inventory_hostname].get('qos_priority_tagging') or
+                                 hostvars[inventory_hostname].get('qos_priority_tagging') == false else '' }}"
 
 # Tor id list
 tor_id_list: []

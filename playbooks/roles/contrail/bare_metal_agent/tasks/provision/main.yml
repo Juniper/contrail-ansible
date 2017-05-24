@@ -92,6 +92,7 @@
           {{ qos_queue_id_config }} \
           {{ qos_logical_queue_config }} \
           {{ default_hw_queue }} \
+          {{ qos_priority_tagging_config }} \
           {{ priority_id_config }} \
           {{ priority_scheduling_config }} \
           {{ priority_bandwidth_config }} \
