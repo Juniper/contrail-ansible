@@ -122,7 +122,7 @@ tor_agent_list: []
 
 # Tsn mode
 tsn_mode_flag: "{{ hostvars[inventory_hostname].get('tsn_mode') | default('')}}"
-tsn_mode_enabled: "{{'--tsn_mode ' + tsn_mode_flag if tsn_mode_flag else '' }}"
+tsn_mode_enabled: "{{'--tsn_mode ' + 'True' if tsn_mode_flag else '' }}"
 
 # Vgw defaults
 vgw: {}
