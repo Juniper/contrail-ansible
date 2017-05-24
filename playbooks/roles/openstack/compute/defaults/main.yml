@@ -2,6 +2,13 @@
 contrail_extensions: "ipam:neutron_plugin_contrail.plugins.opencontrail.contrail_plugin_ipam.NeutronPluginContrailIpam,policy:neutron_plugin_contrail.plugins.opencontrail.contrail_plugin_policy.NeutronPluginContrailPolicy,route-table:neutron_plugin_contrail.plugins.opencontrail.contrail_plugin_vpc.NeutronPluginContrailVpc,contrail:None"
 nova_conf: /etc/nova/nova.conf
 contrail_compute_mode: "container"
+
+#DPDK defaults
+dpdk_huge_pages: "{{ hostvars[inventory_hostname].get('huge_pages') | default('')}}"
+dpdk_coremask: "{{ hostvars[inventory_hostname].get('coremask') | default('')}}"
+dpdk_mode: "{{ true if dpdk_huge_pages else false }}"
+dpdk_interface: "{{ ctrl_physical_interface if dpdk_huge_pages else '' }}"
+
 #SRIOV defaults
 sriov: {}
 sriov_config_openstack_compute: "{{ sriov.get(ansible_default_ipv4.address) }}"
