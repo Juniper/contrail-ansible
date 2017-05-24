@@ -22,7 +22,14 @@
   vars:
       tor_list: "{{ tor_agent.get(ansible_default_ipv4.address) }}"
   copy: src="{{ ssl_certs_src_dir }}/tor.{{ item.tor_agent_id }}.cert.pem" dest="{{ssl_tor_certs_dir}}/tor.{{ item.tor_agent_id }}.cert.pem"
-  copy: src="{{ ssl_certs_src_dir }}/tor.{{ item.tor_agent_id }}.private.pem" dest="{{ssl_tor_private_dir}}/tor.{{ item.tor_agent_id }}.private.pem"
+  when: ssl_certs_supplied
+  when: item
+  with_items: "{{ tor_list }}"
+
+- name: Copy toragent private onto container/BareMetal
+  vars:
+      tor_list: "{{ tor_agent.get(ansible_default_ipv4.address) }}"
+  copy: src="{{ ssl_certs_src_dir }}/tor.{{ item.tor_agent_id }}.privkey.pem" dest="{{ssl_tor_private_dir}}/tor.{{ item.tor_agent_id }}.private.pem"
   when: ssl_certs_supplied
   when: item
   with_items: "{{ tor_list }}"

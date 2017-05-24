@@ -131,7 +131,7 @@
             --admin_tenant_name {{ keystone_admin_tenant }} \
             --auth_protocol {{ keystone_auth_protocol }} \
             --tor_name {{ item.tor_name }} \
-            --http_server_port {{ item.tor_http_server_port }} \
+            --http_server_port {{ item.tor_agent_http_server_port }} \
             --tor_ip {{ item.tor_ip }} \
             --tor_id {{ item.tor_agent_id }} \
             --tor_ovs_port {{ item.tor_ovs_port }} \
