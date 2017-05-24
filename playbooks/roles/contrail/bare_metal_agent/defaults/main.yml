@@ -166,3 +166,6 @@ vrouter_dbg_str: "{{ 'vrouter_dbg=' + hostvars[inventory_hostname].get('vrouter_
 vr_memory_alloc_checks_str: "{{ 'vr_memory_alloc_checks=' + hostvars[inventory_hostname].get('vr_memory_alloc_checks') | string + ',' if hostvars[inventory_hostname].get('vr_memory_alloc_checks') or hostvars[inventory_hostname].get('vr_memory_alloc_checks') == 0 else '' }}"
 vrouter_module_params: "{{ flow_entries_str + mpls_labels_str + nexthops_str + vrfs_str + macs_str + oflow_entries_str + mac_oentries_str + max_interface_entries_str + flow_hold_limit_str + vr_memory_alloc_checks_str+ vrouter_dbg_str }}"
 vrouter_module_param_args: "{{ '--vrouter_module_params ' + vrouter_module_params if vrouter_module_params else '' }}"
+
+# Compute as gateway
+gateway_mode_config: "{{ '--compute_as_gateway ' + hostvars[inventory_hostname].get('compute_as_gateway_mode') if hostvars[inventory_hostname].get('compute_as_gateway_mode') else '' }}"
