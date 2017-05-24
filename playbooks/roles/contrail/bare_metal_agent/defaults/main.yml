@@ -19,23 +19,7 @@ dpdk_compute_packages:
 lbaas_packages:
   - haproxy
 
-vrouter_physical_interface: >-
-  {#- set interface of ctrl_data_network if passed -#}
-  {%- if ctrl_data_ip is defined -%}
-    {%- for iface in ansible_interfaces if hostvars[inventory_hostname]['ansible_' + iface | regex_replace('-', '_')].get('ipv4',{}).get('address', None) == ctrl_data_ip -%}
-      {{ iface }}
-    {%- endfor -%}
-  {%- elif ctrl_data_network is defined -%}
-    {%- set ip_in_ctrl_data_network = ansible_all_ipv4_addresses | ipaddr( ctrl_data_network ) -%}
-    {%- if ip_in_ctrl_data_network | count > 0 -%}
-      {#- Iterate all interfaces on the host and findout the interface that have the IP address-#}
-      {%- for iface in ansible_interfaces if hostvars[inventory_hostname]['ansible_' + iface | regex_replace('-', '_')].get('ipv4',{}).get('address', None) == ip_in_ctrl_data_network |first -%}
-        {{ iface }}
-      {%- endfor -%}
-    {#- No ip found on host from the network ctrl_data_network-#}
-    {%- else -%}{{ ansible_default_ipv4.interface }}{%- endif -%}
-  {#- set interface with default gateway -#}
-  {%- else -%}{{ ansible_default_ipv4.interface }}{%- endif -%}
+vrouter_physical_interface: "{{ ctrl_physical_interface }}"
 
 vrouter_physical_ansible_interface: "ansible_{{ vrouter_physical_interface | regex_replace('-', '_') }}"
 vhost_interface: vhost0
