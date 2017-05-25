@@ -77,6 +77,10 @@
 # Copy SSL certs to container
 - include: copy_ssl_certs.yml
 
+# Create /var/crash dir on host to enable kernel dump
+- name: Create /var/crash on host for kernel dump
+  file: path=/var/crash state=directory mode=777
+
 - name: "Start contrail agent container (non-kubernetes)"
   docker_container:
     name: agent
