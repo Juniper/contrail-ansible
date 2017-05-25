@@ -1,4 +1,9 @@
 ---
+- name: Set Kubernetes Api Server Ip.
+  set_fact:
+    kubernetes_api_server: "{{ kubernetes_api_server_default }}"
+  when: kubernetes_api_server is not defined
+
 - name: Configure contrailctl/kubemanager.conf
   ini_file:
     dest: "{{ contrailctl_config_directory }}/kubemanager.conf"

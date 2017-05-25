@@ -23,3 +23,4 @@
   when:
     - "'contrail-repo' not in groups"
     - "'kubernetes-contrail-controllers' not in group_names"
+    - "'kubernetes-contrail-analytics' not in group_names"

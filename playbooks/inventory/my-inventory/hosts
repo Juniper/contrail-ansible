@@ -32,3 +32,9 @@
 # connect to. This is to be set for ONLY for nested kubernetes installation.
 ;[kubernetes-contrail-controllers]
 ;192.168.0.24
+
+# Kubernetes Nested Mode.
+# Underlay Contrail Analytics Server to which kubernetes instance should
+# connect to. This is to be set for ONLY for nested kubernetes installation.
+;[kubernetes-contrail-analytics]
+;192.168.0.24
