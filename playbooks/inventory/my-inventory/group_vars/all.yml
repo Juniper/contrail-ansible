@@ -160,6 +160,11 @@ vrouter_physical_interface: eth0
 #
 #kubernetes_service_subnet: "10.96.0.0/12"
 
+# Kubernetes: Node where kubernetes-api server is running.
+# Example: kubernetes_api_server: 10.84.27.16
+#
+# kubernetes_api_server: 192.168.0.22
+
 #OPTIONAL Virtual gateway CONFIGURATION
 #=======================================
 

@@ -1,6 +1,7 @@
 ---
 compute_nodes: "{{ compute_list | join(',') }}"
-analytics_nodes: "{{ analytics_list | join(',') }}"
+analytics_nodes_tmp:  "{{ analytics_ll_ip_list if nested_mode else analytics_list }}"
+analytics_nodes: "{{ analytics_nodes_tmp | join(',') }}"
 analyticsdb_nodes: "{{ analyticsdb_list | join(',') }}"
 controller_nodes_tmp:  "{{ controller_ll_ip_list if nested_mode else controller_list }}"
 controller_nodes: "{{ controller_nodes_tmp | join(',') }}"
@@ -57,5 +58,6 @@ kubernetes_config:
   cluster_project: "{{ kubernetes_cluster_project|to_json }}"
   service_subnets: "{{ kubernetes_service_subnet }}"
   pod_subnets: "{{ kubernetes_pod_subnet }}"
+  api_server: "{{ kubernetes_api_server }}"
 kubernetes_vnc_config:
   public_fip_pool: "{{ kubernetes_public_fip_pool|to_json }}"
