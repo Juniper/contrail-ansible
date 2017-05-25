@@ -71,3 +71,6 @@ kubernetes_access_token: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJrdWJlcm
 # Kubernetes cluster is nested within an Openstack cluster.
 nested_mode: true
 
+# Kubernetes API server IP.
+kubernetes_api_server: 10.84.27.16
+
