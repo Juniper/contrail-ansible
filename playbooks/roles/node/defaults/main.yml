@@ -178,9 +178,13 @@ api_server_port: 8082
 configdb_port: 9161
 keystone_admin_port: 35357
 rabbitmq_port: 5672
+analytics_collector_port: 8086
 
 # Private/Linklocad IP's allocated for controllers.
 controller_ll_ip_list: []
+
+# Private/Linklocad IP's allocated for analytics.
+analytics_ll_ip_list: []
 
 # storage stats related default
 enable_stats_daemon: true
@@ -194,6 +198,9 @@ kubernetes_cluster_project: {domain: default-domain, project: default}
 # Kubernetes default subnets.
 kubernetes_service_subnet: '10.96.0.0/12'
 kubernetes_pod_subnet: '10.32.0.0/12'
+
+# By default, look for kubernetes api server in the localhost.
+kubernetes_api_server: '127.0.0.1'
 
 # Tor Agent inventory, required for HA Proxy configuration
 haproxy_toragent_config: {}
