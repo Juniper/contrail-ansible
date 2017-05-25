@@ -3,16 +3,9 @@
   fail: msg="os_release should be one of {{ valid_os_release }}"
   when: "os_release not in valid_os_release"
 
-# Prepares the host for provisioning by pointing the host repositories list to the SM
-# node. For nodes relying on a repo container, this is done after installing
+# For nodes relying on a repo container host repository list is setup after installing
 # docker-py to avoid trying to install docker-py via a container that is not up
 # yet
-- include: host.yml
-  tags: [always]
-  when:
-    - "'contrail-repo' not in groups"
-    - "'kubernetes-contrail-controllers' not in group_names"
-
 - include: "{{ docker_py_pkg_install_method }}.yml"
   when:
     - docker_required == true

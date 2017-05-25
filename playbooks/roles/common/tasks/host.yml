@@ -1,0 +1,3 @@
+---
+- name: include OS specific code
+  include: "host/{{ansible_os_family}}.yml"
