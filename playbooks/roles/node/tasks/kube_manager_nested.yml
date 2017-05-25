@@ -41,6 +41,29 @@
   when: controller_pvt_ip_dict is defined
 
 #
+# Iterate through list of analytics and allocate private IP's for each
+# from the configured cluster private subnet.
+#
+# The analytics IP to its allocated cluster-private IP is cached in a
+# dictionary for later use.
+#
+- name: Create dictionary of link local analytics IPs to their fabric analytics IPs.
+  set_fact:
+    cluster_private_base_ip_int: "{{ cluster_private_base_ip_int|int+1 }}"
+    analytics_pvt_ip_dict: "{{ analytics_pvt_ip_dict|default({}) | \
+        combine( {item: cluster_private_base_ip_int|ipaddr} ) }}"
+  with_items: "{{ groups['kubernetes-contrail-analytics'] | default([]) }}"
+  when: cluster_private_base_ip_int is defined
+
+# Construct the list of generate analytics IPs.
+- name: Create list of link local analytics IPs.
+  set_fact:
+    analytics_ll_ip_list: "{{ analytics_ll_ip_list | default([]) + \
+        [item.value] }}"
+  with_dict: "{{ analytics_pvt_ip_dict|default({}) }}"
+  when: analytics_pvt_ip_dict is defined
+
+#
 # Allocate private IPs for misc services.
 #
 

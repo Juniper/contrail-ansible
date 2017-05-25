@@ -1,6 +1,7 @@
 ---
 compute_nodes: "{{ compute_list | join(',') }}"
-analytics_nodes: "{{ analytics_list | join(',') }}"
+analytics_nodes_tmp:  "{{ analytics_ll_ip_list if nested_mode else analytics_list }}"
+analytics_nodes: "{{ analytics_nodes_tmp | join(',') }}"
 analyticsdb_nodes: "{{ analyticsdb_list | join(',') }}"
 controller_nodes_tmp:  "{{ controller_ll_ip_list if nested_mode else controller_list }}"
 controller_nodes: "{{ controller_nodes_tmp | join(',') }}"
@@ -50,6 +51,12 @@ analytics_group: "{{ groups['contrail-analytics'] | default([]) }}"
 analyticsdb_group: "{{ groups['contrail-analyticsdb'] | default([]) }}"
 compute_group: "{{ groups['contrail-compute'] | default([]) }}"
 ceph_controller_group: "{{ groups['ceph-controller'] | default([]) }}"
+
+# By default Kubernetes-api-server is assumed to run on the node where
+# contrail-kube-manager is running. Contrail-kube-manager is co-located
+# with contrail controller.
+kubernetes_api_server_default_list: "{{ controller_ll_ip_list if nested_mode else controller_list }}"
+kubernetes_api_server_default: "{{ kubernetes_api_server_default_list[0] }}"
 kubernetes_config:
   cluster_name: "{{ kubernetes_cluster_name | default('k8s-default') }}"
   cluster_network: "{{ nested_cluster_network|default({})|to_json }}"
@@ -57,5 +64,6 @@ kubernetes_config:
   cluster_project: "{{ kubernetes_cluster_project|to_json }}"
   service_subnets: "{{ kubernetes_service_subnet }}"
   pod_subnets: "{{ kubernetes_pod_subnet }}"
+  api_server: "{{ kubernetes_api_server|default('') }}"
 kubernetes_vnc_config:
   public_fip_pool: "{{ kubernetes_public_fip_pool|to_json }}"

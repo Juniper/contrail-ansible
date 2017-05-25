@@ -102,3 +102,20 @@
           --ipfabric_service_ip  {{ vrouter_agent_fabric_ip }} \
           --ipfabric_service_port  {{ vrouter_agent_port }} --oper add"
   when: vrouter_agent_link_local_ip is defined
+
+#
+# Create linklocal service to Analytics.
+# This linklocal service converts the generated IP for Analytics
+# to the actual fabirc IP configured in the inventory.
+#
+- set_fact: service_name="_analytics_"
+- set_fact: link_local_name="{{ kubernetes_cluster_name + service_name }}"
+- name: Create linklocal entry for analytics.
+  shell: "{{ docker_prefix }}/usr/share/contrail-utils/provision_linklocal.py --api_server_ip 127.0.0.1 \
+          --linklocal_service_name {{ link_local_name + item.key }} --admin_user {{ keystone_config['admin_user'] }} \
+          --admin_password {{ keystone_config['admin_password'] }} --admin_tenant_name {{ keystone_config['admin_tenant'] }} \
+          --linklocal_service_ip {{ item.value }} --linklocal_service_port {{ analytics_collector_port }} \
+          --ipfabric_service_ip  {{ item.key }} \
+          --ipfabric_service_port  {{ analytics_collector_port }} --oper add"
+  with_dict: "{{ analytics_pvt_ip_dict|default({}) }}"
+  when: analytics_pvt_ip_dict is defined
