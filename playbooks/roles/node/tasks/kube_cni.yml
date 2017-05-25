@@ -1,7 +1,7 @@
 ---
 - name: Install contrail cni package
   package: name="{{ contrail_cni_package_name }}" state=present
-  when: nested_mode
+  when: nested_mode or cloud_orchestrator == 'mesos'
 
 - name: Make sure cni directories exist
   file: path="{{ item }}" state=directory recurse=true
