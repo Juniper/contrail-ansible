@@ -10,18 +10,21 @@
   when:
     - docker_required == true
     - "'kubernetes-contrail-controllers' not in group_names"
+    - "'kubernetes-contrail-analytics' not in group_names"
 
 - include: "repo/{{ ansible_os_family }}.yml"
   tags: [repo]
   when:
     - "'contrail-repo' in groups"
     - "'kubernetes-contrail-controllers' not in group_names"
+    - "'kubernetes-contrail-analytics' not in group_names"
 
 - include: host.yml
   tags: [always]
   when:
     - "'contrail-repo' in groups"
     - "'kubernetes-contrail-controllers' not in group_names"
+    - "'kubernetes-contrail-analytics' not in group_names"
 
 # Intermediate dictionary necessary to derive the final analytics_list. This
 # dictionary will contain the ip address of each host in  the contrail-analytics
