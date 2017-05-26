@@ -28,7 +28,7 @@
   with_items: "{{ tor_agent_list }}"
 
 - name: Copy toragent private files onto container/BareMetal
-  copy: src="{{ tor_ssl_certs_src_dir }}/tor{{ item.tor_agent_id }}.privkey.pem" dest="{{ssl_tor_private_dir}}/tor.{{ item.tor_agent_id }}.private.pem"
+  copy: src="{{ tor_ssl_certs_src_dir }}/tor.{{ item.tor_agent_id }}.privkey.pem" dest="{{ssl_tor_private_dir}}/tor.{{ item.tor_agent_id }}.private.pem"
   when: item and tor_ssl_certs_supplied and item.tor_ovs_protocol == 'pssl'
   with_items: "{{ tor_agent_list }}"
 
