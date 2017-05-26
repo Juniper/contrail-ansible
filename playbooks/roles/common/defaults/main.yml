@@ -6,4 +6,5 @@ deployment_platform: docker
 no_upstart: "{{ true if deployment_platform == 'docker' }}"
 #Tor Agent defaults
 tor_agent: {}
+tor_agent_list: []
 kernel_version_installed: ""

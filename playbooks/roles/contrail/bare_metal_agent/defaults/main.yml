@@ -117,9 +117,6 @@ qos_priority_tagging_config: "{{ '--qos_priority_tagging ' + hostvars[inventory_
 tor_id_list: []
 tor_id_config: ""
 
-# Tor agent list
-tor_agent_list: []
-
 # Tsn mode
 tsn_mode_flag: "{{ hostvars[inventory_hostname].get('tsn_mode') | default('')}}"
 tsn_mode_enabled: "{{'--tsn_mode ' + 'True' if tsn_mode_flag else '' }}"

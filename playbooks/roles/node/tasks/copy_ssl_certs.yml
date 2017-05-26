@@ -18,24 +18,21 @@
     - { src: "{{ ssl_certs_src_dir }}/{{ ansible_hostname }}-privkey.pem", dest: "{{ ssl_cert_key_path }}" }
   when: ssl_certs_supplied
 
+- name: Get the tor_agent_list
+  set_fact:
+    tor_agent_list: "{{ tor_agent.get(ansible_default_ipv4.address) }}"
+
 - name: Copy toragent cert files onto container/BareMetal
-  vars:
-      tor_list: "{{ tor_agent.get(ansible_default_ipv4.address) }}"
   copy: src="{{ tor_ssl_certs_src_dir }}/tor.{{ item.tor_agent_id }}.cert.pem" dest="{{ssl_tor_certs_dir}}/tor.{{ item.tor_agent_id }}.cert.pem"
-  when: tor_ssl_certs_supplied
-  when: item
-  with_items: "{{ tor_list }}"
+  when: item and tor_ssl_certs_supplied and item.tor_ovs_protocol == 'pssl'
+  with_items: "{{ tor_agent_list }}"
 
 - name: Copy toragent private files onto container/BareMetal
-  vars:
-      tor_list: "{{ tor_agent.get(ansible_default_ipv4.address) }}"
   copy: src="{{ tor_ssl_certs_src_dir }}/tor{{ item.tor_agent_id }}.privkey.pem" dest="{{ssl_tor_private_dir}}/tor.{{ item.tor_agent_id }}.private.pem"
-  when: tor_ssl_certs_supplied
-  when: item
-  with_items: "{{ tor_list }}"
+  when: item and tor_ssl_certs_supplied and item.tor_ovs_protocol == 'pssl'
+  with_items: "{{ tor_agent_list }}"
 
 - name: Copy SSL CA Cert file for toragent
-  copy: src={{ item.src}} dest={{ item.dest }}
-  with_items:
-      - { src: "{{ tor_ssl_certs_src_dir }}/ca-cert.pem", dest: "{{ ssl_tor_certs_dir }}/tor-ca-cert.pem" }
-  when: tor_ssl_certs_supplied
+  copy: src="{{ tor_ssl_certs_src_dir }}/ca-cert.pem" dest="{{ ssl_tor_certs_dir }}/tor-ca-cert.pem"
+  when: item and tor_ssl_certs_supplied and item.tor_ovs_protocol == 'pssl'
+  with_items: "{{ tor_agent_list }}"
