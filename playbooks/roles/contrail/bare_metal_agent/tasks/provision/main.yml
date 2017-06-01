@@ -3,6 +3,7 @@
   uri:
     url: "{{ api_server_url }}"
     status_code: 200
+    timeout: 5
   register: api_server_connect_status
   until: api_server_connect_status.status == 200
   retries: 180
