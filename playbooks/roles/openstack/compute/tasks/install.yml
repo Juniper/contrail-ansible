@@ -1,6 +1,6 @@
 ---
 - name: Install nova compute packages
-  apt: name={{ item }} state=installed force=yes
+  apt: name={{ item }} state=latest force=yes
   with_items:
     - contrail-setup
     - nova-compute
