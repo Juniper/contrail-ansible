@@ -33,5 +33,6 @@
          --host_name {{ item.value }} \
          --host_ip {{ item.key }} \
          --oper add \
-         {{ orchestrator_opts }}"
+         {{ orchestrator_opts }} \
+         {{ dpdk_enabled }}"
   with_dict: "{{ compute_ip_hostname_dict | default({}) }}"
