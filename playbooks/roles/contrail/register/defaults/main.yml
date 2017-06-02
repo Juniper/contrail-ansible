@@ -14,3 +14,5 @@ keystone_admin_tenant: "{{ keystone_config.get('admin_tenant','admin') }}"
 
 keystone_opts: "--admin_user {{ keystone_admin_user }}  --admin_password {{ keystone_admin_password }} --admin_tenant_name {{ keystone_admin_tenant }}"
 orchestrator_opts: "{{ keystone_opts if cloud_orchestrator == 'openstack' else '' }}"
+dpdk_huge_pages: "{{ hostvars[inventory_hostname].get('huge_pages') | default('')}}"
+dpdk_enabled: "{{ '--dpdk_enabled' if dpdk_huge_pages else '' }}"
