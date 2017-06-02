@@ -4,6 +4,7 @@
     url: "{{ api_server_url }}"
     status_code: 200
     timeout: 5
+    validate_certs: no
   register: api_server_connect_status
   until: api_server_connect_status.status == 200
   retries: 180
@@ -33,5 +34,6 @@
          --host_name {{ item.value }} \
          --host_ip {{ item.key }} \
          --oper add \
-         {{ orchestrator_opts }}"
+         {{ orchestrator_opts }} \
+         {{ '--dpdk_enabled' if hostvars[compute_ctrl_ip_mgmt_ip_dict[item.key]].get('huge_pages') else '' }}"
   with_dict: "{{ compute_ip_hostname_dict | default({}) }}"
