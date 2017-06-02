@@ -52,8 +52,15 @@
     line: '  /var/lib/nova/instances/global/snapshots/** r,'
     state: present
 
+- name: check if apparmor exists
+  stat:
+    path: /sbin/apparmor_parser
+  register: app_stat_result
+
+
 - name: reparse apparmor
   shell: apparmor_parser -r /etc/apparmor.d/usr.lib.libvirt.virt-aa-helper
+  when: app_stat_result.stat.exists == True
 
 - name: modify qemu apparmor
   lineinfile:
