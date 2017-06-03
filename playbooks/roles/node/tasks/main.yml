@@ -193,6 +193,8 @@
 
 - name: Create compute_list - step 2 (when ctrl_data_network is defined)
   set_fact:
+    compute_mgmt_list: "{{ compute_list_tmp | default([]) + \
+                                          [item] }}"
     compute_list_tmp: "{{ compute_list_tmp | default([]) + \
                        [hostvars[item].get('ctrl_data_ip', item)] }}"
     compute_hostname_list_tmp: "{{ compute_hostname_list_tmp | default([]) }} + \
@@ -235,6 +237,13 @@
   with_together:
     - "{{ compute_list }}"
     - "{{ compute_hostname_list }}"
+
+- name: Create a dict mapping compute ctrl_ip to compute management IP addresses
+  set_fact:
+      compute_ctrl_ip_mgmt_ip_dict: "{{ compute_ctrl_ip_mgmt_ip_dict | default({}) | combine( {item.0: item.1} ) }}"
+  with_together:
+    - "{{ compute_list }}"
+    - "{{ compute_mgmt_list }}"
 
 - name: Create a dict mapping controller hostnames to controller IP addresses
   set_fact:
