@@ -135,7 +135,7 @@
             --admin_tenant_name {{ keystone_admin_tenant }} \
             --auth_protocol {{ keystone_auth_protocol }} \
             --tor_name {{ item.tor_name }} \
-            --http_server_port {{ item.tor_http_server_port }} \
+            {{'--http_server_port ' + item.get('tor_agent_http_server_port') if item.get('tor_agent_http_server_port') else ''}} \
             --tor_ip {{ item.tor_ip }} \
             --tor_id {{ item.tor_agent_id }} \
             --tor_ovs_port {{ item.tor_ovs_port }} \
@@ -143,10 +143,10 @@
             --tor_ovs_protocol {{ item.tor_ovs_protocol }} \
             --tor_vendor_name {{ item.tor_vendor_name }} \
             --tor_tsn_name {{ item.tor_tsn_name }} \
-            --tor_agent_ovs_ka {{ item.tor_agent_ovs_ka }} \
-            --tor_agent_name {{ item.tor_agent_name }} \
+            {{'--tor_agent_ovs_ka '+ item.get('tor_agent_ovs_ka') if item.get('tor_agent_ovs_ka') else ''}} \
+            {{'--tor_agent_name '+ item.get('tor_agent_name') if item.get('tor_agent_name') else ''}} \
             --tor_tunnel_ip  {{ item.tor_tunnel_ip }} \
-            --tor_product_name {{ item.tor_product_name }} \
+            {{'--tor_product_name '+ item.get('tor_product_name') if item.get('tor_product_name') else ''}} \
             {{ control_nodes_arg }} \
             {{ collectors_arg }}"
   when: item

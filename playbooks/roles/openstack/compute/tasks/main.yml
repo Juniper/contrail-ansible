@@ -3,5 +3,7 @@
 #  include_role: name=openstack/controller tasks_from=facts
 #
 - include: install.yml
+  when: tsn_node != True
 
 - include: configure.yml
+  when: tsn_node != True
