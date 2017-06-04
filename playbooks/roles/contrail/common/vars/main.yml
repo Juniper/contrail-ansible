@@ -30,8 +30,7 @@ api_servers_with_port: "{{ controller_list | map('regex_replace', '^(.*)$', '\\1
 collectors_with_space_delim: "{{ analytics_list | join(' ') }}"
 controllers_with_space_delim: "{{ controller_list | join(' ') }}"
 
-api_server_protocol: "{{ 'https' if api_server_use_ssl else 'http' }}"
-api_server_url: "{{ api_server_protocol }}://{{ api_server_ip }}:{{ api_server_port }}"
+api_server_url: "{{ apiserver_auth_protocol }}://{{ api_server_ip }}:{{ api_server_port }}"
 
 provision_auth: "{% if cloud_orchestrator == 'openstack' %}keystone{% else %}noauth{% endif %}"
 
