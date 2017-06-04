@@ -83,6 +83,8 @@
 
 - name: Install kernel crashdump
   package: name=linux-crashdump state=present
+  when:
+    - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
 - name: Update the grub configuration for ubuntu 16.04
   shell: 'sudo sed -i "s/crashkernel=.*\([ | \"]\)/crashkernel=384M-2G:64M,2G-16G:128M,16G-:256M\1/g" /etc/default/grub.d/kexec-tools.cfg; sudo update-grub'
