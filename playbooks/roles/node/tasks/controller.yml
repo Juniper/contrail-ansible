@@ -25,9 +25,23 @@
 - include: copy_ssl_certs.yml
 
 # An issue on running command "su" is noticed in some kernel versions in ubuntu 14.04
-# https://github.com/docker/docker/issues/9213 - Workaround for this issue if
-# seen is to launch the containers with pid_mod: host. Not using that option for
-# now as it is polluting the output of "ps" with processes from other containers
+# https://github.com/docker/docker/issues/9213 - Workaround for this for now
+- name: "Start contrail controller container for ubuntu 14.0x"
+  docker_container:
+    name: controller
+    image: "{{ controller_image }}"
+    privileged: true
+    network_mode: host
+    state: started
+    pull: "{{ always_pull_image }}"
+    tty: true
+    pid_mode: host
+    restart_policy: unless-stopped
+    capabilities:
+      - AUDIT_WRITE
+    volumes: "{{ contrail_controller_volumes }}"
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_version == '14.04' and os_release != 'ubuntu16.04'
+
 - name: "Start contrail controller container"
   docker_container:
     name: controller
@@ -41,3 +55,4 @@
     capabilities:
       - AUDIT_WRITE
     volumes: "{{ contrail_controller_volumes }}"
+  when: ansible_distribution_version != '14.04' or os_release == 'ubuntu16.04'
