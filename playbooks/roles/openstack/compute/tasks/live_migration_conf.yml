@@ -54,6 +54,7 @@
 
 - name: reparse apparmor
   shell: apparmor_parser -r /etc/apparmor.d/usr.lib.libvirt.virt-aa-helper
+  ignore_errors: yes
 
 - name: modify qemu apparmor
   lineinfile:
