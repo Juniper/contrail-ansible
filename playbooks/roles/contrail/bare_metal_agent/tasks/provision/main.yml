@@ -1,14 +1,4 @@
 ---
-- name: Wait till config api server answers
-  uri:
-    url: "{{ api_server_url }}"
-    status_code: 200
-    timeout: 5
-  register: api_server_connect_status
-  until: api_server_connect_status.status == 200
-  retries: 180
-  delay: 1
-
 - name: Parse qos niantic configuration
   set_fact:
     priority_id_list: "{{ priority_id_list + [ item.get('priority_id') ] }}"
@@ -88,7 +78,6 @@
           --keystone_admin_user {{ keystone_admin_user }} \
           --keystone_admin_password {{ keystone_admin_password }} \
           --keystone_admin_tenant_name {{ keystone_admin_tenant }} \
-          --register \
           {{ tsn_mode_enabled }} \
           {{ qos_queue_id_config }} \
           {{ qos_logical_queue_config }} \
