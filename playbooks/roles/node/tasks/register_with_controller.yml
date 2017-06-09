@@ -1,13 +1,10 @@
 ---
 - name: "Register nodes, Wait till config api server answers"
-  uri:
-    url: "{{ api_server_url }}"
-    status_code: 200
-    timeout: 5
-  register: api_server_connect_status
-  until: api_server_connect_status.status == 200
-  retries: 180
+  shell: "docker exec controller curl -s -o /dev/null --write-out %{http_code} -u{{ keystone_admin_user }}:{{ keystone_admin_password }} http://localhost:8095"
+  register: curl_result
+  until: curl_result.stdout == "200"
   delay: 1
+  retries: 180
 
 - name: "Register analytics node with controller"
   shell: "docker exec controller /usr/share/contrail-utils/provision_analytics_node.py \
