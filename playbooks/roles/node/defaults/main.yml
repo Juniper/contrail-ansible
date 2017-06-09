@@ -113,12 +113,16 @@ contrail_analytics_volumes: "{{ contrail_container_volumes + contrail_analytics_
 contrail_analyticsdb_volumes: "{{ contrail_container_volumes + contrail_analyticsdb_log_volumes + contrail_analyticsdb_data_volumes }}"
 contrail_agent_volumes: "{{ contrail_container_volumes + contrail_agent_log_volumes + contrail_agent_kernel_volumes }}"
 
+kube_manager_log_volumes:
+  - "/var/log/contrail/kubemanager:/var/log/contrail"
+kube_manager_base_volumes: "{{ contrail_container_volumes + kube_manager_log_volumes }}"
+
 # In case of openshift, /etc/origin need to be mounted to the kube_manager container
 #  which contain certs to connect with openshift master
 openshift_cert_volumes:
   - "/etc/origin:/etc/origin"
 
-kube_manager_container_volumes: "{{ contrail_container_volumes + openshift_cert_volumes if cloud_orchestrator == 'openshift' else contrail_container_volumes }}"
+kube_manager_container_volumes: "{{ kube_manager_base_volumes + openshift_cert_volumes if cloud_orchestrator == 'openshift' else kube_manager_base_volumes }}"
 
 vrouter_physical_interface: >-
   {#- set interface of ctrl_data_network if passed -#}
