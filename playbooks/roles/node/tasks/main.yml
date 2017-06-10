@@ -228,6 +228,13 @@
     - "{{ compute_list }}"
     - "{{ compute_hostname_list }}"
 
+- name: Create a dict mapping compute ctrl_ip to compute management IP addresses
+  set_fact:
+      compute_ctrl_ip_mgmt_ip_dict: "{{ compute_ctrl_ip_mgmt_ip_dict | default({}) | combine( {item.0: item.1} ) }}"
+  with_together:
+    - "{{ compute_list }}"
+    - "{{ compute_group }}"
+
 - name: Create a dict mapping controller hostnames to controller IP addresses
   set_fact:
       controller_ip_hostname_dict: "{{ controller_ip_hostname_dict | \
