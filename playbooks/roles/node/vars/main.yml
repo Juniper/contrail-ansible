@@ -19,6 +19,7 @@ global_config_detected:
   enable_config_service: "{{ enable_config_service }}"
   enable_control_service: "{{ enable_control_service }}"
   enable_webui_service: "{{ enable_webui_service }}"
+  opscenter_ip: "{{ webui_server_list_derived[0] }}"
   config_nodes: "{{ config_nodes if config_nodes else config_server_list_derived | join(',') }}"
   sandesh_ssl_enable: "{{ sandesh_ssl_enable }}"
   introspect_ssl_enable: "{{ introspect_ssl_enable }}"
