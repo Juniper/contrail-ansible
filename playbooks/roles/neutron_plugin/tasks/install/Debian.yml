@@ -1,0 +1,4 @@
+---
+- name: Install Contrail Neutron plugin packages
+  apt: name={{ item }} state=latest force=yes install_recommends=no
+  with_items: "{{ neutron_plugin_packages }}"
