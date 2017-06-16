@@ -1,0 +1,39 @@
+---
+- name: Configure the /etc/default/neutron-server configuration file with NEUTRON_PLUGIN_CONFIG path
+  lineinfile:
+    dest: "/etc/default/neutron-server"
+    line: 'NEUTRON_PLUGIN_CONFIG=/etc/neutron/plugins/opencontrail/ContrailPlugin.ini'
+    state: present
+  notify:
+    - restart neutron-server for plugin
+
+- name: Configure ContrailPlugin.ini APISERVER section
+  ini_file: dest="/etc/neutron/plugins/opencontrail/ContrailPlugin.ini" section=APISERVER option={{ item.key }} value={{ item.value }}  create=yes
+  with_dict:
+    api_server_ip: "{{ api_server_ip }}"
+    api_server_port: "{{ api_server_port }}"
+    multi_tenancy: "{{ multi_tenancy }}"
+  notify:
+    - restart neutron-server for plugin
+
+- name: Configure ContrailPlugin.ini KEYSTONE section
+  ini_file: dest="/etc/neutron/plugins/opencontrail/ContrailPlugin.ini" section=APISERVER option={{ item.key }} value={{ item.value }}  create=yes
+  with_dict:
+    admin_user: "{{ keystone_admin_user }}"
+    admin_password: "{{ keystone_admin_password }}"
+    admin_tenant_name: "{{ keystone_admin_tenant }}"
+    auth_url: "{{ keystone_auth_protocol }}://{{ keystone_ip }}:{{ keystone_admin_port }}/{{ keystone_version }}"
+  notify:
+    - restart neutron-server for plugin
+
+- name: Configure ContrailPlugin.ini keystone_authtoken section
+  ini_file: dest="/etc/neutron/plugins/opencontrail/ContrailPlugin.ini" section=keystone_authtoken option={{ item.key }} value={{ item.value }}  create=yes
+  with_dict:
+    auth_host: "{{ keystone_ip }}"
+    auth_port: "{{ keystone_public_port }}"
+    auth_protocol: "{{ keystone_auth_protocol }}"
+    admin_user: "{{ keystone_admin_user }}"
+    admin_password: "{{ keystone_admin_password }}"
+    admin_tenant_name: "{{ keystone_admin_tenant }}"
+  notify:
+    - restart neutron-server for plugin

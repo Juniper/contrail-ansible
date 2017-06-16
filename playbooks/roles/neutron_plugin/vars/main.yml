@@ -1,0 +1,4 @@
+---
+openstack_group: "{{ groups['openstack'] | default([]) }}"
+controller_group: "{{ groups['contrail-controller'] | default([]) }}"
+controller_ip: "{{ controller_list | first }}"
