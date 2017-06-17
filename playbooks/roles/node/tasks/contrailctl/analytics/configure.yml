@@ -15,6 +15,7 @@
     QUERY_ENGINE: "{{ query_engine_config | default({}) }}"
     SNMP_COLLECTOR: "{{ snmp_collector_config | default({}) }}"
     TOPOLOGY: "{{ topology_config | default({}) }}"
+    RABBITMQ: "{{ rabbitmq_config | default({}) }}"
   notify:
     - check analytics container
     - contrailctl for analytics
