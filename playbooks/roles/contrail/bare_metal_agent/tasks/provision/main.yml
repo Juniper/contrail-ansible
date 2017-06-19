@@ -160,3 +160,16 @@
             --admin_tenant_name {{ keystone_admin_tenant }} \
             --auth_protocol {{ keystone_auth_protocol }} \
             {{ tor_id_config }}"
+
+- name: Restart supervisor-vrouter for ISSU case in non dpkd sriov env
+  shell: service supervisor-vrouter stop && modprobe -r vrouter && service supervisor-vrouter start
+  when:
+    - (provision_type | default('')) == 'ISSU'
+    - (not dpdk_mode)
+    - (not sriov_interface_list)
+
+- name: Restart supervisor-vrouter for ISSU case in dpdk sriov env
+  service: name=supervisor-vrouter state=restarted
+  when:
+    - (provision_type | default('')) == 'ISSU'
+    - (dpdk_mode or sriov_interface_list)
