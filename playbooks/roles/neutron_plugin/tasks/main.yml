@@ -1,0 +1,97 @@
+---
+# Create openstack_list and controller_list
+
+# Create controller_list
+- name: Create controller_list - step 1 (controller_dict)
+  set_fact:
+    controller_dict: "{{ controller_dict|default({}) | combine( {item: \
+                      (hostvars[item]['ansible_all_ipv4_addresses'] | \
+                      ipaddr( ctrl_data_network ) | count != 0) | \
+                      ternary(hostvars[item]['ansible_all_ipv4_addresses'] | \
+                      ipaddr( ctrl_data_network ) | first, item)} ) }}"
+  with_items:
+      - "{{ controller_group }}"
+  when: ctrl_data_network is defined and controller_list is undefined
+
+- name: Create controller_list - step 2 (when ctrl_data_network is defined)
+  set_fact:
+    controller_list_tmp: "{{ controller_list_tmp | default([]) + \
+                      [hostvars[item].get('ctrl_data_ip', item)] }}"
+    controller_hostname_list_tmp: "{{ controller_hostname_list_tmp | \
+                      default([]) }} + \
+                      [ '{{ hostvars[item]['ansible_hostname'] }}' ]"
+  with_items: "{{ controller_group }}"
+  when: ctrl_data_network is not defined and controller_list is not defined
+
+- name: Create controller_list - step 3 (with ctrl_data_ip if defined)
+  set_fact:
+    controller_list_tmp: "{{ controller_list_tmp | default([]) + \
+                          [hostvars[item].get('ctrl_data_ip', \
+                          controller_dict.get(item, item))] }}"
+    controller_hostname_list_tmp: "{{ controller_hostname_list_tmp | \
+                          default([]) }} + \
+                          [ '{{ hostvars[item]['ansible_hostname'] }}' ]"
+  with_items: "{{ controller_group }}"
+  when: ctrl_data_network is defined and controller_list is not defined
+
+- name: Create controller_list - step 4 (Assign from tmp if not defined)
+  set_fact:
+      controller_list: "{{ controller_list_tmp | default([]) }}"
+      controller_hostname_list: "{{ controller_hostname_list_tmp|default([]) }}"
+  when: controller_list is not defined
+
+- name: Create openstack_list - step 1 (openstack_dict)
+  set_fact:
+    openstack_dict: "{{ openstack_dict|default({}) | combine( {item: \
+                   (hostvars[item]['ansible_all_ipv4_addresses'] | \
+                   ipaddr( ctrl_data_network ) | count != 0) | \
+                   ternary(hostvars[item]['ansible_all_ipv4_addresses'] | \
+                   ipaddr( ctrl_data_network ) | first, item)} ) }}"
+  with_items:
+      - "{{ openstack_group }}"
+  when: ctrl_data_network is defined and openstack_list is not defined
+
+- name: Create openstack_list - step 2 (when ctrl_data_network is defined)
+  set_fact:
+    openstack_list_tmp: "{{ openstack_list_tmp | default([]) + \
+                       [hostvars[item].get('ctrl_data_ip', item)] }}"
+    openstack_hostname_list_tmp: "{{ openstack_hostname_list_tmp | default([]) }} + \
+                          [ '{{ hostvars[item]['ansible_hostname'] }}' ]"
+  with_items: "{{ openstack_group }}"
+  when: ctrl_data_network is not defined and openstack_list is not defined
+
+- name: Create openstack_list - step 3 (with ctrl_data_ip if defined)
+  set_fact:
+    openstack_list_tmp: "{{ openstack_list_tmp | default([]) + \
+                       [hostvars[item].get('ctrl_data_ip', \
+                       openstack_dict.get(item, item))] }}"
+    openstack_hostname_list_tmp: "{{ openstack_hostname_list_tmp | default([]) }} + \
+                       [ '{{ hostvars[item]['ansible_hostname'] }}' ]"
+  with_items: "{{ openstack_group }}"
+  when: ctrl_data_network is defined and openstack_list is not defined
+
+- name: Create openstack_list - step 4 (Assign from tmp if not defined)
+  set_fact:
+      openstack_list: "{{ openstack_list_tmp | default([]) }}"
+      openstack_hostname_list: "{{ openstack_hostname_list_tmp | default([]) }}"
+
+- include: "repo/{{ ansible_os_family }}.yml"
+  tags: [repo]
+  when:
+    - "'contrail-repo' in groups"
+    - "'kubernetes-contrail-controllers' not in group_names"
+    - "'kubernetes-contrail-analytics' not in group_names"
+
+- name: allow unauthenticated packages for ubuntu
+  copy: content='APT::Get::AllowUnauthenticated "true";' dest=/etc/apt/apt.conf.d/99allowunauth owner=root group=root mode=0644
+
+- name: Run apt-get update
+  apt: update_cache=yes
+  when: apt_update
+  ignore_errors: yes
+
+- include: install/{{ ansible_os_family }}.yml
+  tags: [contrail.neutron_plugin.install, package]
+
+- include: provision/main.yml
+  tags: [contrail.neutron_plugin.provision, provision]

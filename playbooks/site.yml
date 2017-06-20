@@ -83,3 +83,11 @@
     - name: Setup ceph compute
       role: storage/ceph_compute
       tags: [storage.ceph_compute]
+
+- name: Configure Neutron Plugin on External Openstack Nodes
+  hosts: openstack
+  roles:
+    - name: Configure Neutron Plugin
+      role: neutron_plugin
+      tags: [neutron_plugin]
+      when: cloud_orchestrator == "openstack"
