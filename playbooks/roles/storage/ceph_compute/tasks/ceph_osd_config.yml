@@ -97,13 +97,13 @@
   register: stat_result
 
 - name: create bootstrap-osd keyring if not present
-  shell: "ceph-authtool /var/lib/ceph/bootstrap-osd/ceph.keyring -C -n client.bootstrap-osd -a {{ storage_ceph_config.osd_key }}"
+  shell: "ceph-authtool /var/lib/ceph/bootstrap-osd/ceph.keyring -C -n client.bootstrap-osd -a {{ storage_ceph_config.osd_key }} --cap mon 'allow profile bootstrap-osd'"
   when: stat_result.stat.exists == False
   become: true
   become_user: ceph
 
 - name: bootstrap-osd authentication
-  shell: "ceph auth add client.bootstrap-osd mon 'allow profile bootstrap-osd' -i /var/lib/ceph/bootstrap-osd/ceph.keyring"
+  shell: "ceph auth import -i /var/lib/ceph/bootstrap-osd/ceph.keyring"
   when: stat_result.stat.exists == False
 
 - name: change ownership
