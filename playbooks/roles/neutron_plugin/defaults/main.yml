@@ -3,7 +3,7 @@ cloud_orchestrator: openstack
 apt_update: true
 debian_neutron_plugin_packages:
   - neutron-plugin-contrail
-redhat_neutron_plugin_pacakges:
+redhat_neutron_plugin_packages:
   - neutron-plugin-contrail
   - python-contrail
   - contrail-heat

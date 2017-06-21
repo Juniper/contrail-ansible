@@ -1,4 +1,12 @@
 ---
+- name: allow unauthenticated packages for ubuntu
+  copy: content='APT::Get::AllowUnauthenticated "true";' dest=/etc/apt/apt.conf.d/99allowunauth owner=root group=root mode=0644
+
+- name: Run apt-get update
+  apt: update_cache=yes
+  when: apt_update
+  ignore_errors: yes
+
 - name: Install Contrail Neutron plugin packages
   apt: name={{ item }} state=latest force=yes install_recommends=no
   with_items: "{{ neutron_plugin_packages }}"
