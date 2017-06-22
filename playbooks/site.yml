@@ -63,8 +63,8 @@
   hosts: contrail-compute
   post_tasks:
     - name: Reboot node
-      shell: sleep 5 && /etc/contrail/contrail_reboot
-      async: 1
+      shell: sleep 15 && /etc/contrail/contrail_reboot
+      async: 20
       poll: 0
       sudo: true
       ignore_errors: true
