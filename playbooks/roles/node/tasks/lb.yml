@@ -1,4 +1,8 @@
 ---
+- name: sm_status_report - lb_started
+  debug:
+    msg: "lb_started"
+
 - name: Copy contrail lb image
   copy:
     src: "{{ docker_image_load_path }}/{{ contrail_lb_image_archive }}"

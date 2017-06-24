@@ -1,4 +1,8 @@
 ---
+- name: sm_status_report - docker_role_started                                                                                                                                   
+  debug:
+    msg: "docker_role_started"
+
 - name: resolve platform specific vars
   include_vars: "{{item}}"
   with_first_found:
