@@ -1,4 +1,8 @@
 ---
+- name: sm_status_report - analyticsdb_started                                                                                                                                   
+  debug:
+    msg: "analyticsdb_started"
+
 - name: Copy contrail analyticsdb image
   copy:
     src: "{{ docker_image_load_path }}/{{ contrail_analyticsdb_image_archive }}"
