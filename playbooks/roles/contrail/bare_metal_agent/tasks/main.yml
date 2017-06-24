@@ -1,4 +1,8 @@
 ---
+- name: sm_status_report - bare_metal_agent_started
+  debug:
+    msg: "bare_metal_agent_started"
+
 - include: install/{{ ansible_os_family }}.yml
   tags: [contrail.bare_metal_agent.package, package]
 
@@ -12,3 +16,7 @@
 
 - include: provision/main.yml
   tags: [contrail.bare_metal_agent.provision, provision]
+
+- name: sm_status_report - bare_metal_agent_completed
+  debug:
+    msg: "bare_metal_agent_completed"
