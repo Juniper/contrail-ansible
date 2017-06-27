@@ -139,4 +139,5 @@
       - "/opt/cni/bin:/host/opt_cni_bin"
       - "/etc/cni:/host/etc_cni"
       - "/var/log/contrail/cni:/host/log_cni"
+      - "/etc/network:/etc/network"
   when: cloud_orchestrator in ['kubernetes', 'openshift']
