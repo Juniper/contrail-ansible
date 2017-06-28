@@ -11,3 +11,7 @@
 
 - include: configure.yml
   when: tsn_node != True
+
+- name: sm_status_report - openstack_compute_completed
+  debug:
+    msg: "openstack_compute_completed"

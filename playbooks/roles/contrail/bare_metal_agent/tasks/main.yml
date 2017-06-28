@@ -16,3 +16,7 @@
 
 - include: provision/main.yml
   tags: [contrail.bare_metal_agent.provision, provision]
+
+- name: sm_status_report - bare_metal_agent_completed
+  debug:
+    msg: "bare_metal_agent_completed"

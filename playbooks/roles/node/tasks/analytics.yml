@@ -1,5 +1,5 @@
 ---
-- name: sm_status_report - analytics_started                                                                                                                                   
+- name: sm_status_report - analytics_started
   debug:
     msg: "analytics_started"
 
@@ -36,3 +36,7 @@
     capabilities:
       - AUDIT_WRITE
     volumes: "{{ contrail_analytics_volumes }}"
+
+- name: sm_status_report - analytics_completed
+  debug:
+    msg: "analytics_completed"
