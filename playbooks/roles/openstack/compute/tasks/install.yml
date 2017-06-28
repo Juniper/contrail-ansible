@@ -9,6 +9,15 @@
   with_items: "{{nova_compute_pkgs}}"
   when: ansible_os_family == 'RedHat'
 
+- name: Install DPDK packages, if applicable
+  apt: name={{ item }} state=latest force=yes
+  when:
+    - dpdk_mode == True
+    - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+    - ansible_distribution_version == '16.04'
+  with_items:
+    - contrail-nova-vif
+
 - name: create a symlink from /bin/true to /sbin/chkconfig
   file: src=/bin/true dest=/sbin/chkconfig state=link
   when: ansible_os_family == 'Debian'
