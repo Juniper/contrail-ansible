@@ -2,6 +2,10 @@
 #- name: Read facts from openstack/controller
 #  include_role: name=openstack/controller tasks_from=facts
 #
+- name: sm_status_report - openstack_compute_started
+  debug:
+    msg: "openstack_compute_started"
+
 - include: install.yml
   when: tsn_node != True
 

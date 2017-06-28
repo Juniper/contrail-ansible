@@ -1,4 +1,8 @@
 ---
+- name: sm_status_report - controller_started                                                                                                                                   
+  debug:
+    msg: "controller_started"
+
 - name: set /etc/hosts entry with their conrol-data IP for rabbitmq to work
   lineinfile: dest=/etc/hosts line="{{ item.key + ' ' + item.value }}"
   with_dict: "{{ controller_ip_hostname_dict }}"
