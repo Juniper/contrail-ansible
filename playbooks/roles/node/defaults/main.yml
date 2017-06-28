@@ -209,3 +209,6 @@ enable_stats_daemon: true
 
 # Tor Agent inventory, required for HA Proxy configuration
 haproxy_toragent_config: {}
+
+# Agent gateway mode
+gateway_mode: ""

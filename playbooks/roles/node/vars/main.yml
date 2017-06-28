@@ -28,12 +28,13 @@ webui_config_orig: "{{ webui_config | default({}) | combine({'webui_storage_enab
 agent_compile_vrouter_module_orig: "{{(agent_compile_vrouter_module is defined) | ternary(agent_compile_vrouter_module, 'undef')}}"
 global_config_orig: "{{ global_config_detected | combine(global_config|default({})) | combine(global_config_extra|default({})) }} "
 non_bare_metal_vrouter_compile: "{{ (agent_compile_vrouter_module_orig != 'undef') | ternary(agent_compile_vrouter_module_orig|ternary(true, false), external_vrouter_compile|ternary(false,true)) }}"
-
+gateway_mode: "{{ hostvars[inventory_hostname].get('compute_as_gateway_mode') }}"
 #For bare-metal compute in Debian, make sure  compile_vrouter_module is not true
 compile_vrouter_module_orig: "{{ (contrail_compute_mode == 'bare_metal') | ternary(false, non_bare_metal_vrouter_compile) }}"
 agent_config_orig: "{{ agent_config | default({}) | combine(\
   {'compile_vrouter_module': compile_vrouter_module_orig,\
-  'vrouter_physical_interface': vrouter_physical_interface\
+  'vrouter_physical_interface': vrouter_physical_interface,\
+  'gateway_mode': gateway_mode\
   })}}"
 
 ceph_controller_config: "{{ ceph_config | default({}) |                        \
