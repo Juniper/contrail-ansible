@@ -1,4 +1,8 @@
 ---
+- name: sm_status_report - lb_started
+  debug:
+    msg: "lb_started"
+
 - name: Copy contrail lb image
   copy:
     src: "{{ docker_image_load_path }}/{{ contrail_lb_image_archive }}"
@@ -56,3 +60,7 @@
     volumes:
       - "{{ contrailctl_config_directory }}:/etc/contrailctl/"
   when: ansible_distribution_version != '14.04' or os_release == 'ubuntu16.04'
+
+- name: sm_status_report - lb_completed
+  debug:
+    msg: "lb_completed"
