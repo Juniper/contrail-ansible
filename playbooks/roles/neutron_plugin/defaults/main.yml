@@ -1,0 +1,28 @@
+---
+cloud_orchestrator: openstack
+apt_update: true
+debian_neutron_plugin_packages:
+  - neutron-plugin-contrail
+redhat_neutron_plugin_pacakges:
+  - neutron-plugin-contrail
+  - python-contrail
+  - contrail-heat
+  - python-neutron-lbaas
+neutron_plugin_packages: "{{ debian_neutron_plugin_packages if ansible_os_family == 'Debian' else redhat_neutron_plugin_packages }}"
+api_server_ip: "{{ controller_ip }}"
+api_server_port: 8082
+multi_tenancy: True
+# external_openstack_servers - list of openstack servers managed externally
+external_openstack_servers: ""
+openstack_server_list: "{{ external_openstack_servers.split(',') if external_openstack_servers != '' else '' }}"
+openstack_list: "{{ groups['openstack'] | default([]) }}"
+keystone_config: {}
+# Keystone defaults
+keystone_version: v2.0
+keystone_ip: "{{ keystone_config.get('ip',ansible_default_ipv4.address) }}"
+keystone_admin_port: "{{ keystone_config.get('admin_port','35357') }}"
+keystone_public_port: "{{ keystone_config.get('public_port','5000') }}"
+keystone_auth_protocol: "{{ keystone_config.get('auth_protocol','http') }}"
+keystone_admin_user: "{{ keystone_config.get('admin_user','admin') }}"
+keystone_admin_password: "{{ keystone_config.get('admin_password','admin') }}"
+keystone_admin_tenant: "{{ keystone_config.get('admin_tenant','admin') }}"
