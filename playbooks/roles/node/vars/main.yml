@@ -33,7 +33,9 @@ compile_vrouter_module_orig: "{{ (contrail_compute_mode == 'bare_metal') | terna
 agent_config_orig: "{{ agent_config | default({}) | combine(\
   {'compile_vrouter_module': compile_vrouter_module_orig,\
   'vrouter_physical_interface': vrouter_physical_interface,\
-  'gateway_mode': gateway_mode\
+  'gateway_mode': gateway_mode,\
+  'non_mgmt_ip': non_mgmt_ip,\
+  'non_mgmt_gw': non_mgmt_gw
   })}}"
 
 ceph_controller_config: "{{ ceph_config | default({}) |                        \
