@@ -208,3 +208,6 @@ kubernetes_pod_subnet: '10.32.0.0/12'
 
 # Tor Agent inventory, required for HA Proxy configuration
 haproxy_toragent_config: {}
+
+# Agent gateway mode
+gateway_mode: ""
