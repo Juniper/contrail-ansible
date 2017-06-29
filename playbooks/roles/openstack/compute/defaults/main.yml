@@ -3,6 +3,11 @@ contrail_extensions: "ipam:neutron_plugin_contrail.plugins.opencontrail.contrail
 nova_conf: /etc/nova/nova.conf
 contrail_compute_mode: "container"
 
+# Contrail and Openstack HA defaults
+internal_vip: ""
+external_vip: ""
+contrail_internal_vip: ""
+
 #DPDK defaults
 dpdk_huge_pages: "{{ hostvars[inventory_hostname].get('huge_pages') | default('')}}"
 dpdk_coremask: "{{ hostvars[inventory_hostname].get('coremask') | default('')}}"
