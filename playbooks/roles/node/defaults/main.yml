@@ -141,6 +141,11 @@ vrouter_physical_interface: >-
   {#- set interface with default gateway -#}
   {%- else -%}{{ ansible_default_ipv4.interface }}{%- endif -%}
 
+#The below 2 arguments are need to be passed to contrail-compute-setup for provisioning
+##vrouter from container
+non_mgmt_ip: "{{ ctrl_data_ip if ctrl_data_ip is defined else '' }}"
+non_mgmt_gw: "{{ ctrl_data_gw if ctrl_data_gw is defined else '' }}"
+
 config_nodes: []
 config_server_list_derived: []
 webui_server_list_derived: []
