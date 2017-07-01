@@ -4,6 +4,14 @@
   with_items:
     - contrail-setup
     - nova-compute
+
+- name: Install DPDK packages, if applicable
+  apt: name={{ item }} state=latest force=yes
+  when:
+    - dpdk_mode == True
+    - ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+    - ansible_distribution_version == '16.04'
+  with_items:
     - contrail-nova-vif
 
 - name: create a symlink from /bin/true to /sbin/chkconfig
