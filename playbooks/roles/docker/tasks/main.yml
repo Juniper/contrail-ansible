@@ -1,5 +1,5 @@
 ---
-- name: sm_status_report - docker_role_started                                                                                                                                   
+- name: sm_status_report - docker_role_started
   debug:
     msg: "docker_role_started"
 
@@ -106,3 +106,8 @@
   service: name=docker state=started enabled=yes
 
 - meta: flush_handlers
+
+- name: sm_status_report - docker_role_completed
+  debug:
+    msg: "docker_role_completed"
+

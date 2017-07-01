@@ -144,3 +144,7 @@
       - "/etc/cni:/host/etc_cni"
       - "/var/log/contrail/cni:/host/log_cni"
   when: cloud_orchestrator in ['kubernetes', 'openshift']
+
+- name: sm_status_report - agent_completed                                                                                                                                   
+  debug:
+    msg: "docker_role_completed"

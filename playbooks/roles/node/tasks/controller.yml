@@ -1,5 +1,5 @@
 ---
-- name: sm_status_report - controller_started                                                                                                                                   
+- name: sm_status_report - controller_started
   debug:
     msg: "controller_started"
 
@@ -60,3 +60,7 @@
       - AUDIT_WRITE
     volumes: "{{ contrail_controller_volumes }}"
   when: ansible_distribution_version != '14.04' or os_release == 'ubuntu16.04'
+
+- name: sm_status_report - controller_completed
+  debug:
+    msg: "controller_completed"
