@@ -217,3 +217,28 @@ haproxy_toragent_config: {}
 
 # Agent gateway mode
 gateway_mode: ""
+
+# Qos-scheduling defaults
+qos_niantic: {}
+priority_config_compute: "{{ qos_niantic.get(ansible_default_ipv4.address) }}"
+priority_id_list: []
+priority_scheduling_list: []
+priority_bandwidth_list: []
+
+# Qos-queueing defaults
+qos: {}
+qos_config_compute: "{{ qos.get(ansible_default_ipv4.address) }}"
+qos_queue_id_list: []
+qos_logical_queue_list: []
+default_nic_queue: {}
+qos_default_nic_queue: "{{ true if default_nic_queue else false }}"
+qos_priority_tagging: "{{ hostvars[inventory_hostname].get('qos_priority_tagging') | string if hostvars[inventory_hostname].get('qos_priority_tagging') or
+                                 hostvars[inventory_hostname].get('qos_priority_tagging') == false else '' }}"
+
+# Vgw defaults
+vgw: {}
+vgw_config_compute: "{{ vgw.get(ansible_default_ipv4.address, {}) }}"
+vgw_intf_list: []
+vgw_public_subnet_list: []
+vgw_public_vn_name_list: []
+vgw_gateway_route_list: []
