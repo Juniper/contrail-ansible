@@ -36,7 +36,18 @@ agent_config_orig: "{{ agent_config | default({}) | combine(\
   'vrouter_physical_interface': vrouter_physical_interface,\
   'gateway_mode': gateway_mode,\
   'non_mgmt_ip': non_mgmt_ip,\
-  'non_mgmt_gw': non_mgmt_gw
+  'non_mgmt_gw': non_mgmt_gw,\
+  'priority_id_list': priority_id_list,\
+  'priority_scheduling_list': priority_scheduling_list,\
+  'priority_bandwidth_list': priority_bandwidth_list,\
+  'qos_queue_id_list': qos_queue_id_list,\
+  'qos_logical_queue_list': qos_logical_queue_list,\
+  'qos_default_nic_queue': qos_default_nic_queue,\
+  'qos_priority_tagging': qos_priority_tagging,\
+  'vgw_intf_list': vgw_intf_list,\
+  'vgw_public_subnet_list': vgw_public_subnet_list,\
+  'vgw_public_vn_name_list': vgw_public_vn_name_list,\
+  'vgw_gateway_route_list': vgw_gateway_route_list,\
   })}}"
 
 ceph_controller_config: "{{ ceph_config | default({}) |                        \
