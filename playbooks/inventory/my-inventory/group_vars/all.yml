@@ -102,8 +102,8 @@ vrouter_physical_interface: eth0
 # toragent configuration
 #tor_agent = { '10.204.216.34': [ {'tor_ip': '10.204.221.35', 'tor_agent_id': '1', 'tor_tsn_ip': '10.204.221.33', 'tor_ovs_port': '9999', 'tor_ovs_protocol': 'tcp', 'tor_name': 'contrail-tor-1', 'tor_http_server_port': '9090', 'tor_vendor_name': 'Juniper', 'tor_tsn_name':'tsn1', 'tor_agent_ovs_ka': '1000', 'tor_agent_name':'agent1', 'tor_tunnel_ip':'10.204.216.54', 'tor_product_name':'qfx1'} , {'tor_ip': '10.204.221.35', 'tor_agent_id': '2', 'tor_tsn_ip': '10.204.221.33', 'tor_ovs_port': '9999', 'tor_ovs_protocol': 'tcp', 'tor_name': 'contrail-tor-2', 'tor_http_server_port': '9090', 'tor_vendor_name': 'Juniper', 'tor_tsn_name':'tsn2', 'tor_agent_ovs_ka': '1000','tor_agent_name':'agent2', 'tor_tunnel_ip':'10.204.216.55', 'tor_product_name':'qfx2'}] }
 
-# Qos queueing configuration
-#qos =  {
+# Qos queueing configuration, define in a single line.
+#qos:  {
 #       '192.168.0.25': [ {'hardware_q_id': '3', 'logical_queue':['1', '6-10', '12-15']},
 #                         {'hardware_q_id': '5', 'logical_queue':['2']},
 #                         {'hardware_q_id': '8', 'logical_queue':['3-5']},
@@ -112,8 +112,8 @@ vrouter_physical_interface: eth0
 #                         {'hardware_q_id': '6', 'logical_queue':['17-20'], 'default': 'True'}]
 #       }
 
-# Qos scheduling configuration
-#qos_niantic =  {
+# Qos scheduling configuration, define in a single line.
+#qos_niantic:  {
 #       '192.168.0.25': [ { 'priority_id': '1', 'scheduling': 'strict', 'bandwidth': '0'},
 #                         { 'priority_id': '2', 'scheduling': 'rr', 'bandwidth': '20'},
 #                         { 'priority_id': '3', 'scheduling': 'rr', 'bandwidth': '10'}],
@@ -177,6 +177,7 @@ vrouter_physical_interface: eth0
 #ipam_subnets: Subnets used by vn. It can be single or multiple
 #gateway_routes: If any route is present then only those routes will be published
 #by VGW or Default route (0.0.0.0) will be published
+# Below vgw definition should be in single line.
 
 #vgw =  {
 #   '192.168.0.25': {'vgw1':{'vn':'default-domain:admin:public:public', 'ipam_subnets': ['10.204.220.128/29', '10.204.220.136/29'], 'gateway_routes': ['8.8.8.0/24', '1.1.1.0/24'] },
