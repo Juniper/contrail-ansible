@@ -18,8 +18,8 @@
 192.168.0.24
 
 [contrail-compute]
-192.168.0.25
-192.168.0.26
+192.168.0.25 qos_priority_tagging=False #Knob to configure priority tagging when in DCB mode. Default value is true
+192.168.0.26 compute_as_gateway_mode=server #Gateway Mode
 
 ##
 # Only enable if you setup with openstack (when cloud_orchestrator is openstack)
