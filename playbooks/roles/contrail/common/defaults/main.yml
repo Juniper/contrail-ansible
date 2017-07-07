@@ -57,8 +57,8 @@ external_rabbitmq_servers: ""
 # external_rabbitmq_servers to be used as rabbitmq_server_list if it is set
 rabbitmq_server_list: "{{ external_rabbitmq_servers.split(',') if external_rabbitmq_servers != '' else config_server_list }}"
 rabbitmq_port: 5672
-rabbitmq_user: guest
-rabbitmq_password: guest
+rabbitmq_user: "{{ rabbitmq_config.get('user','guest') }}"
+rabbitmq_password: "{{ rabbitmq_config.get('password','guest') }}"
 
 config_ip: "{{ controller_ip }}"
 api_server_ip: "{{ config_ip }}"
