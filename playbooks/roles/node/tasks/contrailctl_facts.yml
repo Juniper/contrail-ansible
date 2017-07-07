@@ -30,3 +30,4 @@
     "{{item.section}}_{{ item.option }}": "{{ item.value }}"
   with_inidata:
     keystone: "{{ keystone_config |default({}) }}"
+    rabbitmq: "{{ rabbitmq_config |default({}) }}"
