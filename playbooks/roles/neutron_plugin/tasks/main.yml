@@ -82,14 +82,6 @@
     - "'kubernetes-contrail-controllers' not in group_names"
     - "'kubernetes-contrail-analytics' not in group_names"
 
-- name: allow unauthenticated packages for ubuntu
-  copy: content='APT::Get::AllowUnauthenticated "true";' dest=/etc/apt/apt.conf.d/99allowunauth owner=root group=root mode=0644
-
-- name: Run apt-get update
-  apt: update_cache=yes
-  when: apt_update
-  ignore_errors: yes
-
 - include: install/{{ ansible_os_family }}.yml
   tags: [contrail.neutron_plugin.install, package]
 
