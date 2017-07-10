@@ -374,3 +374,9 @@
 - include: storage_ceph_controller.yml
   tags: [container.ceph_controller, ceph_controller]
   when: "'ceph-controller' in group_names"
+
+# Support for vcenter plugin role
+- include: vc_plugin.yml
+  tags: [container.vc_plugin, vc_plugin]
+  when: "'contrail-vc-plugin' in group_names"
+

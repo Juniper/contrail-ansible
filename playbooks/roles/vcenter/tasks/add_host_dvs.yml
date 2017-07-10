@@ -1,0 +1,18 @@
+---
+- name: Add esxi host to DVS
+  vmware_dvs_host:
+    hostname: "{{ esxi_host.vcenter_server.hostname }}"
+    username: "{{ esxi_host.vcenter_server.username }}"
+    password: "{{ esxi_host.vcenter_server.password }}"
+    validate_certs: "{{ esxi_host.vcenter_server.validate_certs }}"
+    esxi_hostname: "{{ esxi_host.name }}"
+    switch_name: "{{ esxi_host.vcenter_server.dv_switch.dv_switch_name }}"
+    vmnics: []
+    state: present
+  register: host_added
+  async: 3600
+  poll: 0
+
+- name: Save add host task result
+  set_fact:
+    hosts_added: "{{ hosts_added | default([]) + [host_added] }}"
