@@ -1,0 +1,17 @@
+---
+- name: Configure contrailctl/controller.conf
+  ini_file:
+    dest: "{{ contrailctl_config_directory }}/vcenterplugin.conf"
+    section: "{{ item.section }}"
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+    create: yes
+  with_inidata:
+    GLOBAL: "{{ global_config_orig }}"
+    VCPLUGIN: "{{ vc_plugin_config | default({}) }}"
+  notify:
+    - check vcplugin container
+    - contrailctl for vcplugin
+
+- meta: flush_handlers
+
