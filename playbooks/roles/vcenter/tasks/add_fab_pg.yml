@@ -1,0 +1,17 @@
+---
+- name: "Create fab port group {{ esxi_host }}"
+  vmware_portgroup:
+    hostname: "{{ esxi_host.name }}"
+    username: "{{ esxi_host.username }}"
+    password: "{{ esxi_host.password }}"
+    validate_certs: "{{ esxi_host.vcenter_server.validate_certs }}"
+    switch_name: "{{ std_switch_name }}"
+    portgroup_name: "{{ std_pg_name }}"
+    vlan_id: 0
+  async: 3600
+  poll: 0
+  register: res
+
+- name: "Save fab pg task results {{ res }}"
+  set_fact:
+    pgs_completed: "{{ pgs_completed | default ([]) + [res] }}"
