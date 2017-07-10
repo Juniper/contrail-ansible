@@ -1,0 +1,18 @@
+---
+- name: "Fix mac address assignment type {{ esxi_host }}"
+  vars: 
+    vmname: "ContrailVM-{{ esxi_host.vcenter_server.datacentername }}-{{ esxi_host.name }}"
+  shell: "python /opt/contrail/bin/fix_mac.py \
+          --host {{ esxi_host.vcenter_server.hostname }} \
+          --port {{ esxi_host.vcenter_server.port | default(vcenter_port) }} \
+          --user {{ esxi_host.vcenter_server.username }} \
+          --password {{ esxi_host.vcenter_server.password }} \
+          --mac {{ esxi_host.contrail_vm.mac }} \
+          --vm_name {{ esxi_host.contrail_vm.name | default (vmname) }}"
+  async: 3600
+  poll: 0
+  register: change_mac_result
+
+- name: "Save fix_mac task results {{ change_mac_result }}"
+  set_fact:
+    mac_changed: "{{ mac_changed | default ([]) + [change_mac_result] }}"
