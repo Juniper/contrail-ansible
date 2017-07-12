@@ -84,6 +84,7 @@ analytics_ip: "{{ analytics_list[0] | default('') }}"
 contrail_container_volumes:
   - "{{ contrailctl_config_directory }}:/etc/contrailctl/"
   - "/etc/selinux:/etc/selinux"
+  - "/etc/timezone:/etc/timezone"
 
 contrail_controller_log_volumes:
   - "/var/log/contrail/controller:/var/log/contrail"
