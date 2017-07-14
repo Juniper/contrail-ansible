@@ -70,3 +70,6 @@ kubernetes_config:
   api_server: "{{ kubernetes_api_server|default('') }}"
 kubernetes_vnc_config:
   public_fip_pool: "{{ kubernetes_public_fip_pool|to_json }}"
+
+kubernetes_agent_global_config:
+  cloud_orchestrator: "{{ cloud_orchestrator }}"
