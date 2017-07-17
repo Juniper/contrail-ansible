@@ -13,7 +13,7 @@
     create: yes
   with_inidata:
     GLOBAL: "{{ global_config_orig }}"
-    KUBERNETES: "{{ kubernetes_config | default({}) }}"
+    KUBERNETES: "{{ kubernetes_api_config | combine(kubernetes_config) }}"
     KUBERNETES_VNC: "{{ kubernetes_vnc_config | default({}) }}"
     AUTH: "{{ keystone_config | default({}) }}"
 
