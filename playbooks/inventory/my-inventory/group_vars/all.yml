@@ -183,3 +183,8 @@ vrouter_physical_interface: eth0
 #                   'vgw2':{'vn':'default-domain:admin:public1:public1', 'ipam_subnets': ['10.204.220.144/29']}},
 #   '192.168.0.26': {'vgw2':{'vn':'default-domain:admin:public1:public1', 'ipam_subnets': ['10.204.220.144/29']}}
 #       }
+
+# Link-Local Metadata Service
+# By default server manager will retrieve metadata secret from openstack node and update this key
+# openstack nova.conf and contrail-vrouter-agent.conf will have same value for metadata_proxy_shared_secret
+#neutron_metadata_proxy_shared_secret = <secret>

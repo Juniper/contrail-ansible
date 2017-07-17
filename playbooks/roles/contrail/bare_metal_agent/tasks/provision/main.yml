@@ -99,7 +99,8 @@
           {{ vgw_intf_list_config }} \
           {{ vgw_gateway_routes_config }} \
           {{ vrouter_module_param_args }} \
-          {{ gateway_mode_config }}"
+          {{ gateway_mode_config }} \
+          {{ neutron_metadata_proxy_shared_secret_config }}"
 
 - name: Display all variables/facts known for a host
 
