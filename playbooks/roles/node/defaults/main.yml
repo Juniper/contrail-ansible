@@ -85,6 +85,7 @@ controller_ip_hostname_dict: {}
 contrail_container_volumes:
   - "{{ contrailctl_config_directory }}:/etc/contrailctl/"
   - "/etc/selinux:/etc/selinux"
+  - "/etc/timezone:/etc/timezone"
 
 contrail_controller_log_volumes:
   - "/var/log/contrail/controller:/var/log/contrail"
