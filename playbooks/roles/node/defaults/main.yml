@@ -202,6 +202,9 @@ analytics_ll_ip_list: []
 # storage stats related default
 enable_stats_daemon: true
 
+# kubernetes_api_server default
+kubernetes_api_server: {}
+
 # By default no public fip pool is configured.
 kubernetes_public_fip_pool: {}
 
