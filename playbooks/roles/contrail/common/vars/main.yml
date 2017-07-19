@@ -65,3 +65,6 @@ my_controller_ip: "{{ controller_list | intersect(ansible_all_ipv4_addresses)|fi
 my_analytics_ip: "{{ analytics_list | intersect(ansible_all_ipv4_addresses)|first }}"
 my_analyticsdb_ip: "{{ analyticsdb_list | intersect(ansible_all_ipv4_addresses)|first }}"
 my_compute_ip: "{{ compute_list | intersect(ansible_all_ipv4_addresses)|first }}"
+
+nova_compute_service: "{{'openstack-nova-compute' if ansible_distribution == 'CentOS' else 'nova-compute'}}"
+libvirt_service: "{{'libvirtd' if ansible_distribution == 'CentOS' else 'libvirt-bin'}}"

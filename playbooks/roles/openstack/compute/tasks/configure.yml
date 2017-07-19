@@ -10,6 +10,11 @@
       sriov_physnets: "{{  sriov_physnets_list | join(',')  if sriov_physnets_list else '' }}"
       sriov_interfaces: "{{  sriov_intf_list | join(',')  if sriov_intf_list else '' }}"
 
+- name: create /etc/contrail
+  file: >-
+    path=/etc/contrail
+    state=directory
+
 - name: Create /etc/contrail/ctrl-details
   template: src=ctrl-details.j2 dest=/etc/contrail/ctrl-details
 
