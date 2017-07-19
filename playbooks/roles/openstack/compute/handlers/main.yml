@@ -1,6 +1,6 @@
 ---
 - name: restart nova-compute
-  service: name=nova-compute state=restarted
+  service: name="{{nova_compute_service}}" state=restarted
 
 - name: restart libvirt
-  service: name=libvirt-bin state=restarted
+  service: name="{{libvirt_service}}" state=restarted
