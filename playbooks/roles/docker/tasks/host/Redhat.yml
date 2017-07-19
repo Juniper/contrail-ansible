@@ -1,0 +1,23 @@
+---
+- name: "Add contrail yum repo {{contrail_image_id}}"
+  yum_repository:
+    name: "{{contrail_image_id}}"
+    file: cobbler-config
+    description: "Contrail Package Repo"
+    baseurl: "{{contrail_yum_repo}}"
+    priority: 1
+    gpgcheck: no
+
+#- name: Add Centos thirdparty-repo
+  #yum_repository:
+    #name: contrail-centos-repo
+    #file: cobbler-config
+    #description: "Contrail Package Repo"
+    #baseurl: http://10.87.143.130/cobbler/repo_mirror/contrail-centos-repo
+    #priority: 99
+    #gpgcheck: no
+
+- name: install docker using package
+  yum:
+     name: "{{ docker_package_name }}"
+     state: latest

@@ -83,6 +83,11 @@ kernel_installed: "{{ true if kernel_version_installed == kernel_version else fa
 kernel_compute_packages: "{{ upgrade_kernel_vrouter_packages if kernel_upgraded or kernel_installed else default_kernel_compute_packages }}"
 compute_packages_to_install: "{{ dpdk_compute_packages if dpdk_config else kernel_compute_packages }}"
 compute_packages: "{{ compute_packages_to_install + lbaas_packages if enable_lbaas else compute_packages_to_install }}"
+compute_packages_redhat:
+ - contrail-openstack-vrouter
+ - contrail-vrouter-common
+ - contrail-vrouter
+ - contrail-vrouter-init
 
 #SRIOV defaults
 sriov: {}
