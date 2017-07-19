@@ -1,9 +1,14 @@
 ---
 - name: Install nova compute packages
   apt: name={{ item }} state=latest force=yes
-  with_items:
-    - contrail-setup
-    - nova-compute
+  with_items: "{{nova_compute_pkgs}}"
+  when: ansible_os_family == 'Debian'
+
+- name: Install nova compute packages
+  yum: name={{ item }} state=latest
+  with_items: "{{nova_compute_pkgs}}"
+  when: ansible_os_family == 'RedHat'
 
 - name: create a symlink from /bin/true to /sbin/chkconfig
   file: src=/bin/true dest=/sbin/chkconfig state=link
+  when: ansible_os_family == 'Debian'
