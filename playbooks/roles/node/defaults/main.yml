@@ -149,8 +149,9 @@ non_mgmt_gw: "{{ ctrl_data_gw if ctrl_data_gw is defined else '' }}"
 
 config_nodes: []
 config_server_list_derived: []
-webui_server_list_derived: []
 config_ip: "{{ controller_list[0] | default('') }}"
+webui_nodes: []
+webui_server_list_derived: []
 
 # contrail-cni for mesos and contrail-kub-cni for others
 contrail_cni_package_name: "{{ 'contrail-cni' if cloud_orchestrator == 'mesos' else 'contrail-k8s-cni' }}"
