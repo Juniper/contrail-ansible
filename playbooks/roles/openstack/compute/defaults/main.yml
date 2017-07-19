@@ -29,3 +29,15 @@ libvirt_qemu_abs: /etc/apparmor.d/abstractions/libvirt-qemu
 
 #tsn defaults
 tsn_node: "{{ hostvars[inventory_hostname].get('tsn_mode') | default('False')}}"
+
+nova_compute_pkgs_default:
+  - contrail-setup
+  - nova-compute
+
+nova_compute_pkgs_redhat:
+  - contrail-setup
+  - openstack-nova-compute
+  - contrail-vrouter-agent
+
+nova_compute_pkgs: "{{nova_compute_pkgs_redhat if ansible_os_family == 'RedHat' else nova_compute_pkgs_default}}"
+
