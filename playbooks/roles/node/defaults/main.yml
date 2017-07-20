@@ -201,6 +201,9 @@ controller_ll_ip_list: []
 # Private/Linklocad IP's allocated for analytics.
 analytics_ll_ip_list: []
 
+# kuberenets_api_server default
+kubernetes_api_server: {}
+
 # By default no public fip pool is configured.
 kubernetes_public_fip_pool: {}
 

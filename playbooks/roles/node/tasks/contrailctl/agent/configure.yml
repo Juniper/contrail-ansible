@@ -9,6 +9,7 @@
   with_inidata:
     GLOBAL: "{{ global_config_orig }}"
     AGENT: "{{ agent_config_orig }}"
+    KUBERNETES: "{{ kubernetes_api_config }}"
   notify:
     - check agent container
     - contrailctl for agent
