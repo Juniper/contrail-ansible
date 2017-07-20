@@ -1,0 +1,34 @@
+---
+- name: Parse qos niantic configuration
+  set_fact:
+    priority_id_list: "{{ priority_id_list + [ item.get('priority_id') ] }}"
+    priority_scheduling_list: "{{ priority_scheduling_list + [ item.get('scheduling') ] }}"
+    priority_bandwidth_list: "{{ priority_bandwidth_list + [ item.get('bandwidth') ] }}"
+  when: item
+  with_items: "{{ priority_config_compute }}"
+
+- name: Parse qos configuration
+  set_fact:
+    qos_queue_id_list: "{{ qos_queue_id_list + [ item.get('hardware_q_id') ] }}"
+    qos_logical_queue_list: "{{ qos_logical_queue_list  + [ item.get('logical_queue') | join(';') | regex_replace(' ','') | regex_replace(';',',') ] }}"
+  with_items: "{{ qos_config_compute }}"
+  when:
+    - item
+    - "'default' not in item.keys()"
+
+- name: Parse default queue qos configuration
+  set_fact:
+    default_nic_queue: "{{ [item] }}"
+    qos_queue_id_list: "{{ qos_queue_id_list + [ item.get('hardware_q_id') ] }}"
+  with_items: "{{ qos_config_compute }}"
+  when:
+    - item
+    - "'default' in item.keys()"
+
+- name: Parse logical queue mapping for default queue
+  set_fact:
+    qos_logical_queue_list: "{{ qos_logical_queue_list  + [ item.get('logical_queue') | join(';') | regex_replace(' ','') | regex_replace(';',',') ] }}"
+  with_items: "{{ default_nic_queue }}"
+  when:
+    - item
+    - "'logical_queue' in item.keys()"
