@@ -64,14 +64,14 @@
   post_tasks:
     - name: Reboot node
       shell: sleep 15 && /etc/contrail/contrail_reboot
-      async: 20
+      async: 60
       poll: 0
       sudo: true
       ignore_errors: true
       when: contrail_compute_mode == 'bare_metal' or contrail_compute_mode == 'container'
 
     - name: Waiting for server to come back
-      local_action: wait_for port=22 host={{ inventory_hostname }} state=started delay=30 timeout=600
+      local_action: wait_for port=22 host={{ inventory_hostname }} state=started delay=120 timeout=600
       sudo: false
       when: contrail_compute_mode == 'bare_metal' or contrail_compute_mode == 'container'
 
