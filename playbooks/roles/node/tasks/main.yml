@@ -368,6 +368,16 @@
   tags: [container.kube_manager, kube_manager]
   when: "'contrail-kubernetes' in group_names and cloud_orchestrator in ['kubernetes', 'openshift']"
 
+- include: qos.yml
+  when:
+    - qos is defined or qos_niantic is defined
+    - contrail_compute_mode == 'container'
+
+- include: vgw_facts.yml
+  when:
+    - vgw is defined
+    - contrail_compute_mode == 'container'
+
 - include: "agent.yml"
   tags: [container.agent, agent]
   when: "'contrail-compute' in group_names and contrail_compute_mode == 'container' and not nested_mode"

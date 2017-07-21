@@ -30,6 +30,20 @@ agent_compile_vrouter_module_orig: "{{(agent_compile_vrouter_module is defined) 
 global_config_orig: "{{ global_config_detected | combine(global_config|default({})) | combine(global_config_extra|default({})) }} "
 non_bare_metal_vrouter_compile: "{{ (agent_compile_vrouter_module_orig != 'undef') | ternary(agent_compile_vrouter_module_orig|ternary(true, false), external_vrouter_compile|ternary(false,true)) }}"
 gateway_mode: "{{ hostvars[inventory_hostname].get('compute_as_gateway_mode') }}"
+# Vrouter module params defaults
+flow_entries_str: "{{ 'flow_entries=' + hostvars[inventory_hostname].get('flow_entries') | string + ',' if hostvars[inventory_hostname].get('flow_entries') else '' }}"
+mpls_labels_str: "{{ 'mpls_labels=' + hostvars[inventory_hostname].get('mpls_labels') | string  + ',' if hostvars[inventory_hostname].get('mpls_labels') else '' }}"
+nexthops_str: "{{ 'nexthops=' + hostvars[inventory_hostname].get('nexthops') | string + ',' if hostvars[inventory_hostname].get('nexthops') else '' }}"
+vrfs_str: "{{ 'vrfs=' + hostvars[inventory_hostname].get('vrfs') | string + ',' if hostvars[inventory_hostname].get('vrfs') else '' }}"
+macs_str: "{{ 'macs=' + hostvars[inventory_hostname].get('macs') | string + ',' if hostvars[inventory_hostname].get('macs') else '' }}"
+oflow_entries_str: "{{ 'oflow_entries=' + hostvars[inventory_hostname].get('oflow_entries') | string + ',' if hostvars[inventory_hostname].get('oflow_entries') else '' }}"
+mac_oentries_str: "{{ 'mac_oentries=' + hostvars[inventory_hostname].get('mac_oentries') | string + ',' if hostvars[inventory_hostname].get('mac_oentries') else '' }}"
+max_interface_entries_str: "{{ 'max_interface_entries=' + hostvars[inventory_hostname].get('max_interface_entries') | string + ',' if hostvars[inventory_hostname].get('max_interface_entries') else '' }}"
+flow_hold_limit_str: "{{ 'flow_hold_limit=' + hostvars[inventory_hostname].get('flow_hold_limit') | string + ',' if hostvars[inventory_hostname].get('flow_hold_limit') else '' }}"
+vrouter_dbg_str: "{{ 'vrouter_dbg=' + hostvars[inventory_hostname].get('vrouter_dbg') | string + ',' if hostvars[inventory_hostname].get('vrouter_dbg') or hostvars[inventory_hostname].get('vrouter_dbg') == 0 else '' }}"
+vr_memory_alloc_checks_str: "{{ 'vr_memory_alloc_checks=' + hostvars[inventory_hostname].get('vr_memory_alloc_checks') | string + ',' if hostvars[inventory_hostname].get('vr_memory_alloc_checks') or hostvars[inventory_hostname].get('vr_memory_alloc_checks') == 0 else '' }}"
+vrouter_module_params: "{{ flow_entries_str + mpls_labels_str + nexthops_str + vrfs_str + macs_str\
+                           + oflow_entries_str + mac_oentries_str + max_interface_entries_str + flow_hold_limit_str + vr_memory_alloc_checks_str+ vrouter_dbg_str }}"
 #For bare-metal compute in Debian, make sure  compile_vrouter_module is not true
 compile_vrouter_module_orig: "{{ (contrail_compute_mode == 'bare_metal') | ternary(false, non_bare_metal_vrouter_compile) }}"
 agent_config_orig: "{{ agent_config | default({}) | combine(\
@@ -37,7 +51,19 @@ agent_config_orig: "{{ agent_config | default({}) | combine(\
   'vrouter_physical_interface': vrouter_physical_interface,\
   'gateway_mode': gateway_mode,\
   'non_mgmt_ip': non_mgmt_ip,\
-  'non_mgmt_gw': non_mgmt_gw
+  'non_mgmt_gw': non_mgmt_gw,\
+  'priority_id_list': priority_id_list,\
+  'priority_scheduling_list': priority_scheduling_list,\
+  'priority_bandwidth_list': priority_bandwidth_list,\
+  'qos_queue_id_list': qos_queue_id_list,\
+  'qos_logical_queue_list': qos_logical_queue_list,\
+  'qos_default_nic_queue': qos_default_nic_queue,\
+  'qos_priority_tagging': qos_priority_tagging,\
+  'vgw_intf_list': vgw_intf_list,\
+  'vgw_public_subnet_list': vgw_public_subnet_list,\
+  'vgw_public_vn_name_list': vgw_public_vn_name_list,\
+  'vgw_gateway_route_list': vgw_gateway_route_list,\
+  'vrouter_module_params': vrouter_module_params,\
   })}}"
 
 ceph_controller_config: "{{ ceph_config | default({}) |                        \
