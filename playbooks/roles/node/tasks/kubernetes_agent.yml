@@ -1,0 +1,40 @@
+---
+- name: Copy contrail kubernetes agent image
+  copy:
+    src: "{{ docker_image_load_path }}/{{ contrail_kubernetes_agent_image_archive }}"
+    dest: "/tmp/{{ contrail_kubernetes_agent_image_archive }}"
+  when: docker_registry is not defined or load_contrail_kubernetes_agent_image is defined
+
+- name: "Load contrail kubernetes agent image"
+  docker_image:
+    name: contrail-kubernetes-agent
+    tag: "{{ contrail_version }}"
+    timeout: "{{ container_image_load_timeout }}"
+    load_path: "/tmp/{{ contrail_kubernetes_agent_image_archive }}"
+  when: docker_registry is not defined  or load_contrail_kubernetes_agent_image is defined
+
+- name: Configure contrailctl/kubernetes-agent.conf
+  include: "contrailctl/kubernetes-agent/{{ contrailctl_config_mode }}.yml"
+
+- name: "Stop any existing contrail kubernetes agent container"
+  docker_container:
+    name: contrail-kubernetes-agent
+    state: absent
+    force_kill: true
+
+- name: "Start contrail kubernetes agent container"
+  docker_container:
+    name: contrail-kubernetes-agent
+    image: "{{ contrail_kubernetes_agent_image }}"
+    privileged: true
+    pull: "{{ always_pull_image }}"
+    state: started
+    tty: true
+    detach: true
+    cleanup: true
+    volumes:
+      - "{{ contrailctl_config_directory }}:/etc/contrailctl/"
+      - "/var/lib/contrail:/var/lib/contrail"
+      - "/opt/cni/bin:/host/opt_cni_bin"
+      - "/etc/cni:/host/etc_cni"
+      - "/var/log/contrail/cni:/host/log_cni"
