@@ -1,0 +1,13 @@
+---
+- name: Post-deploy playbook for contrail
+  hosts: control
+  tasks:
+
+    - name: Install python-openstack 
+      package: 
+        name: python-openstackclient
+        state: latest
+
+    - name: Disable the nova-compute on the openstack container
+      shell: . /etc/kolla/admin-openrc.sh && nova service-disable {{ ansible_hostname }} nova-compute
+
