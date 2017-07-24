@@ -1,12 +1,14 @@
 # neutron.conf
 [DEFAULT]
 debug = {{ neutron_logging_debug }}
-
 log_dir = /var/log/kolla/neutron
 
 # NOTE(elemoine): set use_stderr to False or the logs will also be sent to
 # stderr and collected by Docker
 use_stderr = False
+
+auth_strategy = keystone
+dhcp_agent_notification = False
 
 bind_host = {{ api_interface_address }}
 bind_port = {{ neutron_server_port }}
@@ -34,8 +36,8 @@ host = {{ ansible_hostname }}_{{ item }}
 {% endif %}
 
 allow_overlapping_ips = true
-core_plugin = ml2
-service_plugins = router{% if enable_neutron_lbaas | bool %},lbaasv2{% endif %}{% if enable_neutron_qos | bool %},qos{% endif %}{% if enable_neutron_vpnaas | bool %},neutron_vpnaas.services.vpn.plugin.VPNDriverPlugin{% endif %}{% if neutron_plugin_agent == "sfc" %}flow_classifier,sfc{% endif %}{% if enable_neutron_fwaas | bool %},neutron.services.firewall.fwaas_plugin.FirewallPlugin{% endif %}
+core_plugin = neutron_plugin_contrail.plugins.opencontrail.contrail_plugin.NeutronPluginContrailCoreV2
+service_plugins = neutron_plugin_contrail.plugins.opencontrail.loadbalancer.v2.plugin.LoadBalancerPluginV2
 
 {% if enable_neutron_agent_ha | bool %}
 dhcp_agents_per_network = {{ dhcp_agents_per_network }}
@@ -54,6 +56,8 @@ router_distributed = True
 dns_domain = {{ designate_ns_record }}.
 external_dns_driver = designate
 {% endif %}
+
+api_extensions_path = extensions:/usr/lib/python2.7/site-packages/neutron_plugin_contrail/extensions:/usr/lib/python2.7/site-packages/neutron_lbaas/extensions
 
 [nova]
 auth_url = {{ keystone_admin_url }}
@@ -79,6 +83,15 @@ max_retries = -1
 [keystone_authtoken]
 auth_uri = {{ keystone_internal_url }}
 auth_url = {{ keystone_admin_url }}
+identity_uri = http://{{ api_interface_address }}:5000
+admin_tenant_name = service
+admin_user = neutron
+admin_password = c0ntrail123
+auth_host = {{ api_interface_address }}
+admin_token = c0ntrail123
+auth_protocol = http
+
+
 auth_type = password
 project_domain_id = default
 user_domain_id = default

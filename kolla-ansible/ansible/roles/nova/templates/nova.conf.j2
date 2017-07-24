@@ -142,7 +142,11 @@ url = {{ internal_protocol }}://neutron-server:{{ neutron_server_port }}
 {% else %}
 url = {{ internal_protocol }}://{{ kolla_internal_fqdn }}:{{ neutron_server_port }}
 {% endif %}
+
+{% if metadata_secret is defined %}
 metadata_proxy_shared_secret = {{ metadata_secret }}
+{% endif %}
+
 service_metadata_proxy = true
 
 auth_url = {{ keystone_admin_url }}

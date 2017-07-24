@@ -104,7 +104,21 @@
   notify:
     - "Restart {{ service_name }} container"
 
-- name: Copying over ml2_conf.ini
+- name: Copying over opencontrail_plugin.ini
+  vars:
+    service_name: "neutron-server"
+    neutron_server: "{{ neutron_services[service_name] }}"
+  template:
+    src: "{{ role_path }}/templates/neutron_opencontrail.conf.j2"
+    dest: "{{ node_config_directory }}/{{ service_name }}/ContrailPlugin.ini"
+  register: neutron_opencontrail_conf
+  when:
+    - neutron_server.enabled | bool
+    - neutron_server.host_in_groups | bool
+  notify:
+    - "Restart {{ service_name }} container"
+
+- name: "Copying over ml2_conf.ini {{ neutron_opencontrail_conf }}"
   vars:
     service_name: "{{ item.key }}"
     services_need_ml2_conf_ini:
