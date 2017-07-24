@@ -3,4 +3,6 @@
 nova_metadata_ip = {% if orchestration_engine == 'KUBERNETES' %}nova-metadata{% else %}{{ kolla_internal_fqdn }}{% endif %}
 
 nova_metadata_port = {{ nova_metadata_port }}
+{% if metadata_secret is defined %}
 metadata_proxy_shared_secret = {{ metadata_secret }}
+{% endif %}
