@@ -12,13 +12,13 @@
 #config_strategy: "COPY_ALWAYS"
 
 # Valid options are [ centos, oraclelinux, ubuntu ]
-#kolla_base_distro: "centos"
+kolla_base_distro: "ubuntu"
 
 # Valid options are [ binary, source ]
 #kolla_install_type: "binary"
 
 # Valid option is Docker repository tag
-#openstack_release: "auto"
+openstack_release: "4.0.0"
 
 # Location of configuration overrides
 #node_custom_config: "/etc/kolla/config"
@@ -27,7 +27,8 @@
 # the hosts running keepalived for high-availability. When running an All-In-One
 # without haproxy and keepalived, this should be the first IP on your
 # 'network_interface' as set in the Networking section below.
-kolla_internal_vip_address: "10.10.10.254"
+kolla_internal_vip_address: "192.168.1.22"
+enable_haproxy: "no"
 
 # This is the DNS name that maps to the kolla_internal_vip_address VIP. By
 # default it is the same as kolla_internal_vip_address.
@@ -51,10 +52,15 @@ kolla_internal_vip_address: "10.10.10.254"
 # Below is an example of a private repository with authentication. Note the
 # Docker registry password can also be set in the passwords.yml file.
 
-#docker_registry: "172.16.0.10:4000"
+docker_registry: "192.168.1.1:4000"
 #docker_namespace: "companyname"
 #docker_registry_username: "sam"
 #docker_registry_password: "correcthorsebatterystaple"
+keystone_admin_url: "{{ admin_protocol }}://{{ kolla_internal_fqdn }}:{{ keystone_admin_port }}"
+keystone_internal_url: "{{ internal_protocol }}://{{ kolla_internal_fqdn }}:{{ keystone_public_port }}"
+keystone_public_url: "{{ public_protocol }}://{{ kolla_external_fqdn }}:{{ keystone_public_port }}"
+enable_nova: "yes"
+
 
 
 ###############################
@@ -69,7 +75,7 @@ kolla_internal_vip_address: "10.10.10.254"
 # Yet another way to workaround the naming problem is to create a bond for the
 # interface on all hosts and give the bond name here. Similar strategy can be
 # followed for other types of interfaces.
-#network_interface: "eth0"
+network_interface: "eth1"
 
 # These can be adjusted for even more customization. The default is the same as
 # the 'network_interface'. These interfaces must contain an IPv4 address.
@@ -84,17 +90,24 @@ kolla_internal_vip_address: "10.10.10.254"
 # though an IP address can exist on this interface, it will be unusable in most
 # configurations. It is recommended this interface not be configured with any IP
 # addresses for that reason.
-#neutron_external_interface: "eth1"
+neutron_external_interface: "eth2"
 
 # Valid options are [ openvswitch, linuxbridge ]
-#neutron_plugin_agent: "openvswitch"
+neutron_plugin_agent: "openvswitch"
 
 
 ####################
 # keepalived options
 ####################
 # Arbitrary unique number from 0..255
-#keepalived_virtual_router_id: "51"
+#keepalived_virtual_router_id: "151"
+nova_compute_image_full: "192.168.1.1:4000/kolla/ubuntu-binary-nova-compute:5.0.0"
+#neutron_server_image_full: "192.168.1.11:5100/kolla/ubuntu-binary-neutron-server:4.0.3"
+#neutron_server_image_full: "192.168.1.1:4000/kolla/ubuntu-binary-neutron-server-contrail-debug:5.0.0"
+neutron_server_image_full: "192.168.1.1:4000/kolla/ubuntu-binary-neutron-server:5.0.0"
+enable_neutron_opencontrail: "yes"
+contrail_api_interface_address: "192.168.1.21"
+
 
 
 ####################
