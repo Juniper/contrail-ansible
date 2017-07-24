@@ -1,0 +1,27 @@
+---
+- name: Add contrail apt repository if required
+  apt_repository:
+    repo: "deb {{ contrail_apt_repo }} ./"
+    state: present
+  register: apt_repo_added
+  when: contrail_apt_repo is defined and contrail_apt_repo != ""
+  ignore_errors: yes
+
+- name: Allow unauthenticated packages for contrail packages to work
+  copy: content='APT::Get::AllowUnauthenticated "true";' dest=/etc/apt/apt.conf.d/99allowunauth
+  when: contrail_apt_repo is defined and contrail_apt_repo != ""
+
+# If installing contrail_apt_repo entry, use higher priority for that to make
+# sure all packages use the contrail repo
+- name: Pin contrail apt repo "contrail" release to priority 999
+  copy: src=apt-preferences.conf dest=/etc/apt/preferences.d/contrail_repo.pref
+  when: contrail_apt_repo is defined and contrail_apt_repo != "" and apt_repo_added.get('changed',false)
+
+- name: Run apt-get update
+  apt: update_cache=yes
+  when: contrail_apt_repo is defined and contrail_apt_repo != "" and apt_repo_added.get('changed',false)
+  ignore_errors: yes
+
+- name: install docker using package
+  package: name="{{ docker_package_name }}" state=installed
+
