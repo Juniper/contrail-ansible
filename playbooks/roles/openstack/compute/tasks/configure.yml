@@ -37,6 +37,7 @@
   with_dict:
     rabbit_hosts: "{{ rabbitmq_servers_with_port }}"
     rabbit_password: "{{ rabbitmq_password }}"
+    rabbit_userid: "{{ rabbitmq_user }}"
 
 # Workaround for bug https://bugs.launchpad.net/juniperopenstack/+bug/1655543
 - name: Copy vrouter-port-control from agent container to compute
