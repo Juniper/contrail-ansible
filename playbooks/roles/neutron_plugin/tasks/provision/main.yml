@@ -4,8 +4,10 @@
     dest: "/etc/default/neutron-server"
     line: 'NEUTRON_PLUGIN_CONFIG=/etc/neutron/plugins/opencontrail/ContrailPlugin.ini'
     state: present
+  when: ansible_os_family == 'Debian'
   notify:
     - restart neutron-server for plugin
+
 
 - name: Configure ContrailPlugin.ini APISERVER section
   ini_file: dest="/etc/neutron/plugins/opencontrail/ContrailPlugin.ini" section=APISERVER option={{ item.key }} value={{ item.value }}  create=yes
@@ -16,8 +18,9 @@
   notify:
     - restart neutron-server for plugin
 
+
 - name: Configure ContrailPlugin.ini KEYSTONE section
-  ini_file: dest="/etc/neutron/plugins/opencontrail/ContrailPlugin.ini" section=APISERVER option={{ item.key }} value={{ item.value }}  create=yes
+  ini_file: dest="/etc/neutron/plugins/opencontrail/ContrailPlugin.ini" section=KEYSTONE option={{ item.key }} value={{ item.value }}  create=yes
   with_dict:
     admin_user: "{{ keystone_admin_user }}"
     admin_password: "{{ keystone_admin_password }}"
@@ -26,14 +29,21 @@
   notify:
     - restart neutron-server for plugin
 
-- name: Configure ContrailPlugin.ini keystone_authtoken section
-  ini_file: dest="/etc/neutron/plugins/opencontrail/ContrailPlugin.ini" section=keystone_authtoken option={{ item.key }} value={{ item.value }}  create=yes
+
+- name: Configure neutron.conf service_plugin 
+  ini_file: dest="/etc/neutron/neutron.conf" section=DEFAULT option={{ item.key }} value={{ item.value }}  create=yes
   with_dict:
-    auth_host: "{{ keystone_ip }}"
-    auth_port: "{{ keystone_public_port }}"
-    auth_protocol: "{{ keystone_auth_protocol }}"
-    admin_user: "{{ keystone_admin_user }}"
-    admin_password: "{{ keystone_admin_password }}"
-    admin_tenant_name: "{{ keystone_admin_tenant }}"
+    core_plugin        : "neutron_plugin_contrail.plugins.opencontrail.contrail_plugin.NeutronPluginContrailCoreV2"
+    service_plugins    : "neutron_plugin_contrail.plugins.opencontrail.loadbalancer.v2.plugin.LoadBalancerPluginV2"
+    api_extensions_path: "extensions:/usr/lib/python2.7/site-packages/neutron_plugin_contrail/extensions:/usr/lib/python2.7/site-packages/neutron_lbaas/extensions"
+
+  notify:
+    - restart neutron-server for plugin
+
+- name: Configure neutron.conf service_provider
+  ini_file: dest="/etc/neutron/neutron.conf" section=service_providers option={{ item.key }} value={{ item.value }}  create=yes
+  with_dict:
+    service_provider : "LOADBALANCER:Opencontrail:neutron_plugin_contrail.plugins.opencontrail.loadbalancer.driver.OpencontrailLoadbalancerDriver:default"
+
   notify:
     - restart neutron-server for plugin
