@@ -115,3 +115,5 @@ vncapi_conf: "/etc/contrail/vnc_api_lib.ini"
 
 systemd_wants_files: []
 apt_update: true
+
+openstack_sku: 'newton'
