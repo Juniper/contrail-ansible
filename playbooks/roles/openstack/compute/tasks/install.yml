@@ -1,4 +1,17 @@
 ---
+- name: Hack to install ocata nova-compute when running with kolla openstack
+  file:
+    path: /etc/apt/preferences.d/contrail_repo.pref
+    state: absent
+  when:
+    openstack_sku == 'ocata'
+
+- name: Add ocata repo
+  apt_repository:
+    repo: 'deb http://ubuntu-cloud.archive.canonical.com/ubuntu xenial-updates/ocata main'
+  when:
+    openstack_sku == 'ocata'
+
 - name: Install nova compute packages
   apt: name={{ item }} state=latest force=yes
   with_items: "{{nova_compute_pkgs}}"
