@@ -99,3 +99,6 @@ kubernetes_config:
   pod_subnets: "{{ kubernetes_pod_subnet }}"
 kubernetes_vnc_config:
   public_fip_pool: "{{ kubernetes_public_fip_pool|to_json }}"
+
+kubernetes_agent_global_config:
+  cloud_orchestrator: "{{ cloud_orchestrator }}"

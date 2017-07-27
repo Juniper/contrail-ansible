@@ -1,0 +1,20 @@
+---
+- name: Configure contrailctl/kubernetesagent.conf
+  ini_file:
+    dest: "{{ contrailctl_config_directory }}/kubernetesagent.conf"
+    section: "{{ item.section }}"
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+    create: yes
+  with_inidata:
+    GLOBAL: "{{ kubernetes_agent_global_config | default({}) }}"
+
+- name: Set vrouter agent ip if this is a nested mode deploymnent.
+  ini_file: dest="{{ contrailctl_config_directory }}/kubernetesagent.conf" section=AGENT option=ip value={{ vrouter_agent_link_local_ip }}  create=yes
+  when:
+    - nested_mode
+    - vrouter_agent_link_local_ip is defined
+
+- name: Set nested mode flag if this is a nested mode deploymnent.
+  ini_file: dest="{{ contrailctl_config_directory }}/kubernetesagent.conf" section=GLOBAL option=nested_mode value=True  create=yes
+  when: nested_mode
