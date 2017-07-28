@@ -127,8 +127,7 @@ tor_id_list: []
 tor_id_config: ""
 # Tsn mode
 tsn_mode_flag: "{{ hostvars[inventory_hostname].get('tsn_mode') | default('')}}"
-tsn_mode_enabled: "{{'--tsn_mode ' + tsn_mode_flag if tsn_mode_flag else '' }}"
-
+tsn_mode_enabled: "{{'--tsn_mode ' + 'True' if tsn_mode_flag else '' }}"
 # Vgw defaults
 vgw: {}
 vgw_config_compute: "{{ vgw.get(ansible_default_ipv4.address, {}) }}"
@@ -160,4 +159,5 @@ vrouter_module_param_args: "{{ '--vrouter_module_params ' + vrouter_module_param
 gateway_mode_config: "{{ '--compute_as_gateway ' + hostvars[inventory_hostname].get('compute_as_gateway_mode') if hostvars[inventory_hostname].get('compute_as_gateway_mode') else '' }}"
 
 #Link-Local Metadata Service password
-metadata_shared_secret_config: "{{ '--metadata_secret ' + hostvars[inventory_hostname].get('neutron_metadata_proxy_shared_secret') if hostvars[inventory_hostname].get('neutron_metadata_proxy_shared_secret') else '' }}"
+neutron_config: {}
+metadata_proxy_secret_config: "{{ '--metadata_secret ' + neutron_config.get('metadata_proxy_secret', '') if neutron_config.get('metadata_proxy_secret') else '' }}"
