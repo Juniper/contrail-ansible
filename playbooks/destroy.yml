@@ -1,0 +1,10 @@
+---
+- name: Apply role destroy
+  hosts: 
+    - contrail-controller
+    - contrail-analytics 
+    - contrail-analyticsdb
+    - contrail-lb
+  roles:
+    - name: Role destroy to containers
+      role: destroy
