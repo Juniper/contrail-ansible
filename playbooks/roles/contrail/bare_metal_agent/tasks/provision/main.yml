@@ -100,7 +100,7 @@
           {{ vgw_gateway_routes_config }} \
           {{ vrouter_module_param_args }} \
           {{ gateway_mode_config }} \
-          {{ metadata_shared_secret_config }}"
+          {{ metadata_proxy_secret_config }}"
 
 - name: Display all variables/facts known for a host
 
