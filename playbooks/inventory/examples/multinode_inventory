@@ -150,8 +150,3 @@ ansible_become=true
 ;        'analyticsdb_cassandra_password': '<analyticsdb_cassandra_password>'
 ;        'redis_password': '<redis_password>'
 ;}
-
-# Link-Local Metadata Service
-# By default server manager will retrieve metadata secret from openstack node and update this key
-# openstack nova.conf and contrail-vrouter-agent.conf will have same value for metadata_proxy_shared_secret
-#neutron_metadata_proxy_shared_secret = <secret>
