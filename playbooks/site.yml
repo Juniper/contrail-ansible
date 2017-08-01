@@ -54,6 +54,16 @@
         - contrail_compute_mode == 'bare_metal'
         - provision_type != 'contrail_cloud'
 
+- name: Setup VCenter compute node
+  hosts: contrail-vc-compute
+  roles:
+    - name: Run common code
+      role: common
+    - name: Setup openstack compute in case of openstack
+      role: openstack/compute
+      tags: [openstack.compute]
+      when: cloud_orchestrator == "openstack" and vcenter_compute_mode == "bare_metal"
+
 - name: Register roles with controller API
   hosts: contrail-controllers
   roles:
