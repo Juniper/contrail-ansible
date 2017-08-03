@@ -1,4 +1,4 @@
 ---
-- name: install docker using package
-  package: name="{{ docker_package_name }}" state=installed
 
+- name: "Include for {{ ansible_os_family }}"
+  include: "host/{{ ansible_os_family }}.yml"
