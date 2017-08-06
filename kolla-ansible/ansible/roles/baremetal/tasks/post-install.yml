@@ -45,6 +45,7 @@
   when:
     - ansible_distribution == "Ubuntu"
     - apparmor_libvirtd_profile.stat.exists | bool
+  ignore_errors: yes
 
 - name: Create docker group
   group:
