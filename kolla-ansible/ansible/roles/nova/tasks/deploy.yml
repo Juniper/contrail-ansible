@@ -33,3 +33,5 @@
   meta: flush_handlers
 
 - include: simple_cell_setup.yml
+  when: 
+    - enable_nova_compute | bool

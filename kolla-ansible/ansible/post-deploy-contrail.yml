@@ -2,12 +2,23 @@
 - name: Post-deploy playbook for contrail
   hosts: control
   tasks:
+  - name: Install python-openstack
+    package:
+      name: python-openstackclient
+      state: latest
 
-    - name: Install python-openstack 
-      package: 
-        name: python-openstackclient
-        state: latest
+  - name: Disable the nova-compute on the openstack container
+    shell: . /etc/kolla/admin-openrc.sh && nova service-disable {{ ansible_hostname }} nova-compute
+    ignore_errors: yes
+    when: enable_nova_compute | bool
 
-    - name: Disable the nova-compute on the openstack container
-      shell: . /etc/kolla/admin-openrc.sh && nova service-disable {{ ansible_hostname }} nova-compute
+  - name: Run simple cell setup if required
+    include: roles/nova/tasks/simple_cell_setup.yml
+    when: not enable_nova_compute | bool
 
+    ## FIXME: This does not work for some reason!!
+    #- name: Run simple cell setup if required
+    #  include_role:
+    #    name: nova
+    #    tasks_from: simple_cell_setup
+    #  when: not enable_nova_compute | bool

@@ -1,11 +1,13 @@
 ---
 project_name: "nova"
 
+enable_nova_compute: "yes"
+
 nova_services:
   nova-libvirt:
     container_name: nova_libvirt
     group: compute
-    enabled: True
+    enabled: "{{ enable_nova_compute | bool }}"
     image: "{{ nova_libvirt_image_full }}"
     pid_mode: "host"
     privileged: True
@@ -111,7 +113,7 @@ nova_services:
     group: "compute"
     image: "{{ nova_compute_image_full }}"
     privileged: True
-    enabled: "{{ not enable_nova_fake | bool }}"
+    enabled: "{{ not enable_nova_fake | bool }} and {{ enable_nova_compute | bool }}"
     volumes:
       - "{{ node_config_directory }}/nova-compute/:{{ container_config_directory }}/:ro"
       - "/etc/localtime:/etc/localtime:ro"
