@@ -1,4 +1,11 @@
 ---
+- name: Setup esxi/vcenter tasks
+  hosts: localhost
+  roles:
+    - name: Run esxi role
+      role: vcenter
+      when: vcenter_servers is defined
+
 - name: Common system settings on base hosts
   hosts: all
 

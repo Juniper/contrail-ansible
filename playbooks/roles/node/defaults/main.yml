@@ -69,6 +69,7 @@ contrail_kubernetes_agent_image_archive: "contrail-kubernetes-agent-{{ os_releas
 contrail_repo_ubuntu_image_archive: "contrail-repo-ubuntu-{{ contrail_version }}.tar.gz"
 contrail_repo_centos_image_archive: "contrail-repo-centos7-{{ contrail_version }}.tar.gz"
 storage_ceph_controller_image_archive: "contrail-ceph-controller-{{ os_release }}-{{ contrail_version }}.tar.gz"
+contrail_vc_plugin_image_archive: "contrail-vcenter-plugin-{{ os_release }}-{{ contrail_version }}.tar.gz"
 contrailctl_config_directory: /etc/contrailctl
 contrail_apt_repo_port: 1567
 contrail_yum_repo_port: "{{ contrail_apt_repo_port }}"
@@ -114,11 +115,15 @@ contrail_agent_kernel_volumes:
   - "/usr/src:/usr/src"
   - "/var/lib/contrail:/var/lib/contrail"
 
+contrail_vcplugin_log_volumes:
+  - "/var/log/contrail/vcplugin:/var/log/contrail"
+
 contrail_controller_volumes: "{{ contrail_container_volumes + contrail_controller_log_volumes + contrail_controller_data_volumes }}"
 contrail_analytics_volumes: "{{ contrail_container_volumes + contrail_analytics_log_volumes }}"
 contrail_analyticsdb_volumes: "{{ contrail_container_volumes + contrail_analyticsdb_log_volumes + contrail_analyticsdb_data_volumes }}"
 contrail_agent_volumes: "{{ contrail_container_volumes + contrail_agent_log_volumes + contrail_agent_kernel_volumes }}"
 
+contrail_vcplugin_volumes: "{{ contrail_container_volumes + contrail_vcplugin_log_volumes }}"
 kube_manager_log_volumes:
   - "/var/log/contrail/kubemanager:/var/log/contrail"
 kube_manager_base_volumes: "{{ contrail_container_volumes + kube_manager_log_volumes }}"
