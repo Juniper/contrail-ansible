@@ -1,0 +1,22 @@
+---
+- name: Create temp file
+  tempfile:
+    suffix: temp.json
+  register: filename
+
+- name: Populate servers json
+  shell: "server-manager display server -d -s >> {{filename.path}}"
+
+- name: Get SM ip
+  shell: cat /opt/contrail/server_manager/sm-config.ini | grep listen_ip_addr | awk '{print $3}'
+  register: smipstr
+
+- name: Run preconfig script
+#  shell: "python /opt/contrail/server_manager/client/preconfig.py \
+#          --server-json {{filename.path}} --server-manager-ip {{smipstr.stdout}}"
+  shell: "python /opt/contrail/server_manager/client/preconfig.py \
+          --server-json {{filename.path}} --server-manager-ip 10.84.29.52"
+  register: res
+  retries: 10
+  delay: 30
+  until: res | success

@@ -39,7 +39,7 @@
     discovery_operation: "{{ vm_dvs_discovery_options }}"
     discovery_proto: "{{ vm_dvs_dic_proto }}"
     state: present
-  when: vc_server.dv_switch_control_data.dv_switch_name
+  when: vc_server.dv_switch_control_data is defined and vc_server.dv_switch_control_data.dv_switch_name
 
 - name: Add portgroup in control-data dvs
   vmware_dvs_portgroup:
@@ -53,7 +53,7 @@
     num_ports: "{{ vm_dvs_num_ports | int }}"
     portgroup_type: "{{ vm_dvs_pg_type }}"
     state: present
-  when: vc_server.dv_switch_control_data.dv_switch_name
+  when: vc_server.dv_switch_control_data is defined and vc_server.dv_switch_control_data.dv_switch_name
 
 - name: Add mgmt DVS in a DC
   vmware_dvswitch:
@@ -68,7 +68,7 @@
     discovery_operation: "{{ vm_dvs_discovery_options }}"
     discovery_proto: "{{ vm_dvs_dic_proto }}"
     state: present
-  when: vc_server.dv_switch_mgmt.dv_switch_name
+  when: vc_server.dv_switch_mgmt is defined and vc_server.dv_switch_mgmt.dv_switch_name
 
 - name: Add portgroup in mgmt dvs
   vmware_dvs_portgroup:
@@ -82,4 +82,4 @@
     num_ports: "{{ vm_dvs_num_ports | int }}"
     portgroup_type: "{{ vm_dvs_pg_type }}"
     state: present
-  when: vc_server.dv_switch_mgmt.dv_switch_name
+  when: vc_server.dv_switch_mgmt is defined and vc_server.dv_switch_mgmt.dv_switch_name
