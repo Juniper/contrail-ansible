@@ -142,3 +142,8 @@
   register: power_on
   until: power_on.finished
   retries: 300
+
+- name: Run preconfig to setup control-data interface on contrailVM
+  include: preconfig.yml esxi_host={{item}}
+  with_items: "{{ esxi_servers }}"
+
