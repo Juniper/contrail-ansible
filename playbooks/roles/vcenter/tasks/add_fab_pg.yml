@@ -21,7 +21,7 @@
     switch_name: "{{ esxi_host.std_switch_list[1].switch_name | default(std_switch_name) }}"
     portgroup_name: "{{ esxi_host.std_switch_list[1].pg_name | default(std_pg_name) }}"
     vlan_id: 0
-  when: esxi_host.std_switch_list[1]
+  when: esxi_host.std_switch_list | length > 1
 
 - name: "Save fab pg task results {{ res }}"
   set_fact:

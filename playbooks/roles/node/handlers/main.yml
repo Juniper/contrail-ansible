@@ -31,3 +31,10 @@
   shell: "docker exec -i agent contrailctl config sync -c agent -F -v -t configure,service"
   when: agent_container_ps.stdout != ''
 
+- name: check vcplugin container
+  shell: "docker ps -q --filter 'label=contrail.role=vcenter-plugin' --filter 'status=running'"
+  register: vcplugin_container_ps
+
+- name: contrailctl for vcplugin
+  shell: "docker exec -i vcplugin contrailctl config sync -c controller -F -v -t configure"
+  when: vcplugin_container_ps.stdout != ''

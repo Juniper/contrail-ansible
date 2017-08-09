@@ -23,7 +23,9 @@
     switch_name: "{{ esxi_host.vcenter_server.dv_switch_control_data.dv_switch_name }}"
     vmnics: [ "{{ esxi_host.vcenter_server.dv_port_group_control_data.uplink | default('') }}" ]
     state: present
-  when: esxi_host.vcenter_server.dv_switch_control_data.dv_switch_name
+  when: >
+         esxi_host.vcenter_server.dv_switch_control_data is defined and
+         esxi_host.vcenter_server.dv_switch_control_data.dv_switch_name
 
 - name: Add esxi host to mgmt DVS
   vmware_dvs_host:
@@ -35,7 +37,9 @@
     switch_name: "{{ esxi_host.vcenter_server.dv_switch_mgmt.dv_switch_name }}"
     vmnics: [ "{{ esxi_host.vcenter_server.dv_port_group_mgmt.uplink | default('') }}"]
     state: present
-  when: esxi_host.vcenter_server.dv_switch_mgmt.dv_switch_name
+  when: >
+         esxi_host.vcenter_server.dv_switch_mgmt is defined and
+         esxi_host.vcenter_server.dv_switch_mgmt.dv_switch_name
 
 - name: Save add host task result
   set_fact:

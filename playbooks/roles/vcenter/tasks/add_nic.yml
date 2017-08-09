@@ -9,6 +9,7 @@
 - name: "Add nics to ContrailVM {{ nets }}"
   vars: 
     vmname: "ContrailVM-{{ esxi_host.vcenter_server.datacentername }}-{{ esxi_host.name }}"
+    nics: "{{ nets + [{'name': esxi_host.vcenter_server.dv_port_group.dv_portgroup_name}] }}" 
   vmware_guest:
     hostname: "{{ esxi_host.vcenter_server.hostname }}"
     username: "{{ esxi_host.vcenter_server.username }}"
@@ -17,7 +18,8 @@
     datacenter: "{{ esxi_host.vcenter_server.datacentername }}"
     cluster: "{{ esxi_host.cluster }}"
     name: "{{ esxi_host.contrail_vm.name | default (vmname) }}"
-    networks: "{{ nets }}"
+    networks: "{{ nics }}"
+    state: present
   async: 3600
   poll: 0
   register: add_nic_result
