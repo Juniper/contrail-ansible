@@ -98,6 +98,9 @@ vrouter_physical_interface: eth0
 # Introspect SSL Enable/Disable
 #introspect_ssl_enable=false
 
+# Metadata Service SSL Enable/Disable
+# metadata_ssl_enable: false
+
 # Haproxy SSL termination for api-server
 # apiserver_auth_protocol - https or http Default: True
 # apiserver_insecure - Boolean Default: False

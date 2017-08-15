@@ -100,7 +100,8 @@
           {{ vrouter_module_param_args }} \
           {{ gateway_mode_config }} \
           {{ dpdk_config }} \
-          {{ metadata_proxy_secret_config }}"
+          {{ metadata_proxy_secret_config }} \
+          {{ metadata_use_ssl }}"
 
 - name: Display all variables/facts known for a host
 
