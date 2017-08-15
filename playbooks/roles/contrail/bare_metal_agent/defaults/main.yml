@@ -161,3 +161,7 @@ gateway_mode_config: "{{ '--compute_as_gateway ' + hostvars[inventory_hostname].
 #Link-Local Metadata Service password
 neutron_config: {}
 metadata_proxy_secret_config: "{{ '--metadata_secret ' + neutron_config.get('metadata_proxy_secret', '') if neutron_config.get('metadata_proxy_secret') else '' }}"
+
+# Metadata Service SSL Enable/Disable
+metadata_ssl_enable: False
+metadata_use_ssl: "{{ '--metadata_use_ssl ' if metadata_ssl_enable else '' }}"

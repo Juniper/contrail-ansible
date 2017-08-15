@@ -65,6 +65,7 @@ agent_config_orig: "{{ agent_config | default({}) | combine(\
   'vgw_gateway_route_list': vgw_gateway_route_list,\
   'vrouter_module_params': vrouter_module_params,\
   'compute_controller_list': compute_controller_list,\
+  'metadata_ssl_enable': metadata_ssl_enable,\
   })}}"
 
 ceph_controller_config: "{{ ceph_config | default({}) |                        \
