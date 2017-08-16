@@ -9,6 +9,7 @@
           --user {{ esxi_host.vcenter_server.username }} \
           --password {{ esxi_host.vcenter_server.password }} \
           --datacenter_name {{ esxi_host.vcenter_server.datacentername }} \
+          --datastore_name {{ esxi_host.datastore }} \
           --cluster_name {{ esxi_host.cluster }} \
           --host_name {{ esxi_host.name }} \
           --vm_name {{ esxi_host.contrail_vm.name | default (vmname) }} \
