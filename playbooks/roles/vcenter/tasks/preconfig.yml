@@ -5,17 +5,15 @@
   register: filename
 
 - name: Populate servers json
-  shell: "server-manager display server -d -s >> {{filename.path}}"
+  shell: "server-manager display server --server_id {{esxi_host.id_in_sm}} -d -s >> {{filename.path}}"
 
 - name: Get SM ip
   shell: cat /opt/contrail/server_manager/sm-config.ini | grep listen_ip_addr | awk '{print $3}'
   register: smipstr
 
 - name: Run preconfig script
-#  shell: "python /opt/contrail/server_manager/client/preconfig.py \
-#          --server-json {{filename.path}} --server-manager-ip {{smipstr.stdout}}"
   shell: "python /opt/contrail/server_manager/client/preconfig.py \
-          --server-json {{filename.path}} --server-manager-ip 10.84.29.52"
+          --server-json {{filename.path}} --server-manager-ip {{smipstr.stdout}}"
   register: res
   retries: 10
   delay: 30
