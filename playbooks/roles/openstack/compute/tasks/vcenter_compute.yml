@@ -1,0 +1,36 @@
+---
+- name: "Configure the vmware details for Vcenter Compute mode {{ vcenter_server_config }} "
+  ini_file: dest={{ nova_conf }} section=vmware option={{ item.key }} value={{ item.value }} create=yes
+  notify: restart nova-compute
+  with_dict:
+      host_ip: "{{ vcenter_server_config.hostname }}"
+      host_username: "{{ vcenter_server_config.username }}"
+      host_password: "{{ vcenter_server_config.password }}"
+      cluster_name: "{{ vcenter_server_config.clusternames[0] }}"
+      vcenter_dvswitch: "{{ vcenter_server_config.dv_switch.dv_switch_name }}"
+      insecure: True
+
+- name: Configure compute driver for VCenter Compute mode - Nova
+  ini_file: dest={{ nova_conf }} section=DEFAULT option={{ item.key }} value={{ item.value }} create=yes
+  notify: restart nova-compute
+  with_dict:
+    compute_driver: "vmwareapi.contrailVCDriver"
+
+- name: Configure compute driver for VCenter Compute mode - Nova
+  ini_file: dest={{ nova_conf }} section=compute option={{ item.key }} value={{ item.value }} create=yes
+  notify: restart nova-compute
+  with_dict:
+    compute_driver: "vmwareapi.contrailVCDriver"
+
+- name: Configure compute driver for VCenter Compute mode - Nova-compute
+  ini_file: dest={{ nova_compute_conf }} section=DEFAULT option={{ item.key }} value={{ item.value }} create=yes
+  notify: restart nova-compute
+  with_dict:
+    compute_driver: "vmwareapi.contrailVCDriver"
+
+- name: Configure compute driver for VCenter Compute mode - Nova-compute - Pre-Newton
+  ini_file: dest={{ nova_compute_conf }} section=libvirt option={{ item.key }} value={{ item.value }} create=yes
+  notify: restart nova-compute
+  with_dict:
+    virt_type: "vmwareapi"
+  when: openstack_sku != 'newton' and openstack_sku != 'ocata'
