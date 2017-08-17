@@ -85,6 +85,10 @@
   when:
     - openstack_sku == 'ocata'
 
+# Configure nova and nova-compute for Vcenter Compute scenario
+- name: "Configure Vmware details for Vcenter Compute scenario - {{ vcenter_server_config }}"
+  include: vcenter_compute.yml
+  when: vcenter_server_config is defined and vcenter_server_config.vcenter_compute_ip == inventory_hostname
 
 # Workaround for bug https://bugs.launchpad.net/juniperopenstack/+bug/1655543
 - name: Copy vrouter-port-control from agent container to compute
