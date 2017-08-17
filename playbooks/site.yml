@@ -53,7 +53,7 @@
     - name: Setup openstack compute in case of openstack
       role: openstack/compute
       tags: [openstack.compute]
-      when: cloud_orchestrator == "openstack" and enable_openstack_compute
+      when: cloud_orchestrator == "openstack" and enable_openstack_compute and compute_not_on_esxi
     - name: Setup baremetal agent
       role: contrail/bare_metal_agent
       tags: [contrail.bare_metal_agent]
@@ -69,7 +69,7 @@
     - name: Setup openstack compute in case of openstack
       role: openstack/compute
       tags: [openstack.compute]
-      when: cloud_orchestrator == "openstack" and vcenter_compute_mode == "bare_metal"
+      when: cloud_orchestrator == "openstack" and vcenter_compute_mode == "bare_metal" and enable_openstack_on_vc_compute
 
 - name: Register roles with controller API
   hosts: contrail-controllers
