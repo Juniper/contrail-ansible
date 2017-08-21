@@ -135,14 +135,7 @@
     pull: "{{ always_pull_image }}"
     capabilities:
       - AUDIT_WRITE
-    volumes:
-      - "/lib/modules:/lib/modules"
-      - "/usr/src:/usr/src"
-      - "{{ contrailctl_config_directory }}:/etc/contrailctl/"
-      - "/var/lib/contrail:/var/lib/contrail"
-      - "/opt/cni/bin:/host/opt_cni_bin"
-      - "/etc/cni:/host/etc_cni"
-      - "/var/log/contrail/cni:/host/log_cni"
+    volumes: "{{ contrail_agent_kubernetes_volumes }}"
   when: cloud_orchestrator in ['kubernetes', 'openshift']
 
 - name: sm_status_report - agent_completed                                                                                                                                   
