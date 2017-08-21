@@ -16,6 +16,9 @@
     KUBERNETES: "{{ kubernetes_api_config | combine(kubernetes_config) }}"
     KUBERNETES_VNC: "{{ kubernetes_vnc_config | default({}) }}"
     AUTH: "{{ keystone_config | default({}) }}"
+  notify:
+    - check kubemanager container
+    - contrailctl for kubemanager
 
 - name: Override keystone IP in contrailctl/kubemanager.conf with generated linklocal ip, in nested mode.
   ini_file: dest="{{ contrailctl_config_directory }}/kubemanager.conf" section=AUTH option=ip value={{ keystone_link_local_ip }}  create=yes
