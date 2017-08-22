@@ -1,5 +1,12 @@
 ---
-- name: Configure contrailctl/controller.conf
+- name: find the right config dict for the plugin
+  set_fact:
+    config_to_use_vc_only: "{{ item }}"
+    config_to_use_vc_compute: "{{ item if item.vc_plugin_ip == ansible_host }}"
+  with_items:
+    "{{ vc_plugin_config }}"
+
+- name: Configure contrailctl/vc_plugin.conf
   ini_file:
     dest: "{{ contrailctl_config_directory }}/vcenterplugin.conf"
     section: "{{ item.section }}"
@@ -8,10 +15,18 @@
     create: yes
   with_inidata:
     GLOBAL: "{{ global_config_orig }}"
-    VCPLUGIN: "{{ vc_plugin_config | default({}) }}"
+    VCPLUGIN: "{{ config_to_use_vc_only if cloud_orchestrator == 'vcenter' else config_to_use_vc_compute }}"
   notify:
     - check vcplugin container
     - contrailctl for vcplugin
+
+- name: Configure vcenterplugin.conf KEYSTONE section
+  ini_file: dest="{{ contrailctl_config_directory }}/vcenterplugin.conf" section=KEYSTONE option={{ item.key }} value={{ item.value }}  create=yes
+  with_dict: "{{ keystone_config | default({}) }}"
+  notify:
+    - check analytics container
+    - contrailctl for analytics
+  when: cloud_orchestrator == "openstack"
 
 - meta: flush_handlers
 
