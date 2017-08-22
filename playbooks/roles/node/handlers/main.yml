@@ -38,3 +38,11 @@
 - name: contrailctl for vcplugin
   shell: "docker exec -i vcplugin contrailctl config sync -c controller -F -v -t configure"
   when: vcplugin_container_ps.stdout != ''
+
+- name: check kubemanager container
+  shell: "docker ps -q --filter 'label=contrail.role=kube-manager' --filter 'status=running'"
+  register: kubemanager_container_ps
+
+- name: contrailctl for kubemanager
+  shell: "docker exec -i contrail-kube-manager contrailctl config sync -c kubemanager -F -v -t configure,service"
+  when: kubemanager_container_ps.stdout != ''
