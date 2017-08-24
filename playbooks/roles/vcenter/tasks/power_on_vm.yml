@@ -1,5 +1,5 @@
 ---
-- name: "Add nics to ContrailVM {{ esxi_host }}"
+- name: Power On ContrailVM
   vars: 
     vmname: "ContrailVM-{{ esxi_host.vcenter_server.datacentername }}-{{ esxi_host.name }}"
   vmware_guest:
@@ -15,6 +15,6 @@
   poll: 0
   register: res
 
-- name: "Save add_nic task results {{ add_nic_result }} {{ esxi_host }} {{ vmname }}"
+- name: Save Power On VM task result
   set_fact:
     powerd_on: "{{ powerd_on | default ([]) + [res] }}"
