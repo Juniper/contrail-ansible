@@ -1,0 +1,20 @@
+---
+- name: Find rightful esx host for the compute
+  set_fact:
+    esx_host: "{{ item }}"
+  with_items: "{{ esxi_hosts }}"
+  when: item.name == hostvars[inventory_hostname].get('esxi_host')
+
+- name: "Create esxi vars for compute -- {{esx_host}} --- {{hostvars[inventory_hostname].get('ctrl_data_ip')}} --- {{hostvars[inventory_hostname].get('esxi_host')}}"
+  set_fact:
+    vmware_username: "{{ esx_host.username }}"
+    vmware_passwd: "{{ esx_host.password }}"
+    vmware_vmpg_switch: "{{ esx_host.vcenter_server.dv_switch.dv_switch_name }}"
+    mode: "{{ esx_host.contrail_vm.mode }}"
+    vmware_vmpg_vswitch_mtu: "{{ esx_host.vcenter_server.dv_switch.dvs_mtu | default('1500') }}"
+    vmware_datanic_mtu: "{{ esx_host.contrail_vm.fab_mtu | default('1500') }}"
+
+- name: Create compute command string for vc orchestrator
+  set_fact:
+    vc_orchestrator_config: "{{ '--vmware ' + hostvars[inventory_hostname].get('esxi_host') + ' --vmware_username ' + vmware_username + ' --vmware_passwd ' + vmware_passwd + ' --vmware_vmpg_vswitch ' + vmware_vmpg_switch + ' --mode ' + mode + ' --vmware_vmpg_vswitch_mtu ' + vmware_vmpg_vswitch_mtu + ' --vmware_datanic_mtu ' + vmware_datanic_mtu + ' --hypervisor ' + 'vmware' }}"
+
