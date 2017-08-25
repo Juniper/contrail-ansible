@@ -7,6 +7,7 @@
     baseurl: "{{contrail_yum_repo}}"
     priority: 1
     gpgcheck: no
+  when: contrail_image_id is defined and contrail_image_id != ""
 
 - name: install docker using package
   yum:
