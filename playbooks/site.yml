@@ -1,4 +1,11 @@
 ---
+- name: Setup esxi/vcenter tasks
+  hosts: localhost
+  roles:
+    - name: Run esxi role
+      role: vcenter
+      when: vcenter_servers is defined
+
 - name: Common system settings on base hosts
   hosts: all
 
@@ -19,6 +26,7 @@
                           'contrail-lb' not in group_names and \
                           'ceph-controller' not in group_names else \
                           true }}"
+        provision_type: "{{ provision_type | default('') }}"
 
   roles:
     - name: Run common code
@@ -45,11 +53,23 @@
     - name: Setup openstack compute in case of openstack
       role: openstack/compute
       tags: [openstack.compute]
-      when: cloud_orchestrator == "openstack" and enable_openstack_compute
+      when: cloud_orchestrator == "openstack" and enable_openstack_compute and compute_not_on_esxi
     - name: Setup baremetal agent
       role: contrail/bare_metal_agent
       tags: [contrail.bare_metal_agent]
-      when: contrail_compute_mode == 'bare_metal'
+      when:
+        - contrail_compute_mode == 'bare_metal'
+        - provision_type != 'contrail_cloud'
+
+- name: Setup VCenter compute node
+  hosts: contrail-vc-compute
+  roles:
+    - name: Run common code
+      role: common
+    - name: Setup openstack compute in case of openstack
+      role: openstack/compute
+      tags: [openstack.compute]
+      when: cloud_orchestrator == "openstack" and vcenter_compute_mode == "bare_metal" and enable_openstack_on_vc_compute
 
 - name: Register roles with controller API
   hosts: contrail-controllers
@@ -77,13 +97,17 @@
       poll: 0
       sudo: true
       ignore_errors: true
-      when: contrail_compute_mode == 'bare_metal' or contrail_compute_mode == 'container'
+      when:
+        - (contrail_compute_mode == 'bare_metal' or contrail_compute_mode == 'container')
+        - (provision_type == '')
 
     # Skip this task from being run on the SM Lite node itself to avoid timing issues with Reboot
     - name: Waiting for server to come back
       local_action: wait_for port=22 host={{ inventory_hostname }} state=started delay=30 timeout=600
       sudo: false
-      when: contrail_compute_mode == 'bare_metal' or contrail_compute_mode == 'container'
+      when:
+        - (contrail_compute_mode == 'bare_metal' or contrail_compute_mode == 'container')
+        - (provision_type == '')
 
 - name: Setup ceph compute node
   hosts: ceph-compute

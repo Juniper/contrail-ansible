@@ -66,7 +66,11 @@
 - include: vgw_facts.yml
   tags: always
 
-- name: Run contrail-compute-setup script, logs at /var/log/contrail/contrail_vrouter_provisioning.log
+- include: vcenter_facts.yml
+  tags: always
+  when: hostvars[inventory_hostname].get('esxi_host')
+
+- name: "Run contrail-compute-setup script, logs at /var/log/contrail/contrail_vrouter_provisioning.log --- {{vc_orchestrator_config}}"
 
   shell: "contrail-compute-setup --cfgm_ip {{ config_ip }} \
           --keystone_ip {{ keystone_ip }} \
@@ -101,6 +105,7 @@
           {{ vrouter_module_param_args }} \
           {{ gateway_mode_config }} \
           {{ metadata_proxy_secret_config }}
+          {{ vc_orchestrator_config }} \
           {{ metadata_use_ssl }}"
 
 - name: Display all variables/facts known for a host

@@ -38,7 +38,8 @@ multi_intf_gw_config: "{{ '--non_mgmt_gw ' + vhost_gateway if vhost_gateway else
 no_of_controllers: "{{ controller_list | length }}"
 vrouter_max_control_nodes: 3
 contrail_compute_mode: "bare_metal"
-hypervisor: "libvirt"
+hypervisor: "{{ 'vmware' if cloud_orchestrator == 'vcenter' else 'libvirt' }}"
+vc_orchestrator_config: ""
 
 ssl_certs_dir: "/etc/contrail/ssl"
 xmpp_auth_enable: False
