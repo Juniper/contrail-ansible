@@ -35,6 +35,7 @@ tsn_node: "{{ hostvars[inventory_hostname].get('tsn_mode') | default('False')}}"
 nova_compute_pkgs_default:
   - contrail-setup
   - nova-compute
+  - python-bitstring
 
 nova_compute_pkgs_redhat:
   - contrail-setup
