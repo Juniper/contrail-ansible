@@ -1,6 +1,9 @@
 ---
 contrail_compute_mode: bare_metal
+vcenter_compute_mode: "bare_metal"
 enable_openstack_compute: "{{ false if provision_type == 'ISSU' else true }}"
+compute_not_on_esxi: true
+enable_openstack_on_vc_compute: false
 enable_lbaas: true
 deployment_platform: docker
 no_upstart: "{{ true if deployment_platform == 'docker' }}"
