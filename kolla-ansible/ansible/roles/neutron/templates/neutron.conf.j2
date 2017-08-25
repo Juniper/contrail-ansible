@@ -86,9 +86,9 @@ auth_url = {{ keystone_admin_url }}
 identity_uri = http://{{ api_interface_address }}:5000
 admin_tenant_name = service
 admin_user = neutron
-admin_password = c0ntrail123
+admin_password = {{ keystone_admin_password }}
 auth_host = {{ api_interface_address }}
-admin_token = c0ntrail123
+admin_token = {{ keystone_admin_password }}
 auth_protocol = http
 
 
