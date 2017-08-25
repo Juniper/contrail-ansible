@@ -1,0 +1,41 @@
+---
+- name: Destroy analytics containers
+  script: ../scripts/cleanup_containers.sh analytics
+  when: "'contrail-analytics' in group_names"
+
+- name: Cleanup analytics configs
+  file: 
+    path: /etc/contrailctl/analytics.conf
+    state: absent
+  when: "'contrail-analytics' in group_names"
+
+- name: Destroy controller containers
+  script: ../scripts/cleanup_containers.sh controller
+  when: "'contrail-controllers' in group_names"
+
+- name: Cleanup controller configs
+  file: 
+    path: /etc/contrailctl/controller.conf
+    state: absent
+  when: "'contrail-controllers' in group_names"
+
+- name: Destroy analyticsdb containers
+  script: ../scripts/cleanup_containers.sh analyticsdb
+  when: "'contrail-analyticsdb' in group_names"
+
+- name: Cleanup analyticsdb configs
+  file: 
+    path: /etc/contrailctl/analyticsdb.conf
+    state: absent
+  when: "'contrail-analyticsdb' in group_names"
+
+- name: Destroy lb containers
+  script: ../scripts/cleanup_containers.sh lb
+  when: "'contrail-lb' in group_names"
+
+- name: Cleanup lb configs
+  file: 
+    path: /etc/contrailctl/lb.conf
+    state: absent
+  when: "'contrail-lb' in group_names"
+
