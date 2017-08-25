@@ -1,6 +1,6 @@
 ---
 contrail_compute_mode: bare_metal
-enable_openstack_compute: true
+enable_openstack_compute: "{{ false if provision_type == 'ISSU' else true }}"
 enable_lbaas: true
 deployment_platform: docker
 no_upstart: "{{ true if deployment_platform == 'docker' }}"
