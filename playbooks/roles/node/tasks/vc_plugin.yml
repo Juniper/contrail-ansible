@@ -1,0 +1,34 @@
+---
+- name: Copy contrail vcplugin image
+  copy:
+    src: "{{ docker_image_load_path }}/{{ contrail_vc_plugin_image_archive }}"
+    dest: "/tmp/{{ contrail_vc_plugin_image_archive }}"
+  when: docker_registry is not defined or load_contrail_controller_image is defined
+
+- name: "Load contrail vcplugin image"
+  docker_image:
+    name: contrail-vcplugin
+    tag: "{{ contrail_version }}"
+    timeout: "{{ container_image_load_timeout }}"
+    load_path: "/tmp/{{ contrail_vc_plugin_image_archive }}"
+  when: docker_registry is not defined or load_contrail_controller_image is defined
+
+- name: Configure contrailctl/vcenterplugin.conf
+  include: "contrailctl/vc_plugin/{{ contrailctl_config_mode }}.yml"
+
+# Copy SSL certs to container
+- include: copy_ssl_certs.yml
+
+- name: "Start contrail vcplugin container"
+  docker_container:
+    name: vcplugin
+    image: "{{ vcenterplugin_image }}"
+    privileged: true
+    network_mode: host
+    state: started
+    pull: "{{ always_pull_image }}"
+    tty: true
+    restart_policy: unless-stopped
+    capabilities:
+      - AUDIT_WRITE
+    volumes: "{{ contrail_vcplugin_volumes }}"
