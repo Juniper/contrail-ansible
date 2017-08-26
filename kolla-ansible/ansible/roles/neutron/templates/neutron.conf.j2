@@ -36,8 +36,10 @@ host = {{ ansible_hostname }}_{{ item }}
 {% endif %}
 
 allow_overlapping_ips = true
+{% if enable_neutron_opencontrail | bool %}
 core_plugin = neutron_plugin_contrail.plugins.opencontrail.contrail_plugin.NeutronPluginContrailCoreV2
 service_plugins = neutron_plugin_contrail.plugins.opencontrail.loadbalancer.v2.plugin.LoadBalancerPluginV2
+{% endif %}
 
 {% if enable_neutron_agent_ha | bool %}
 dhcp_agents_per_network = {{ dhcp_agents_per_network }}
@@ -86,9 +88,9 @@ auth_url = {{ keystone_admin_url }}
 identity_uri = http://{{ api_interface_address }}:5000
 admin_tenant_name = service
 admin_user = neutron
-admin_password = c0ntrail123
+admin_password = {{ keystone_admin_password }}
 auth_host = {{ api_interface_address }}
-admin_token = c0ntrail123
+admin_token = {{ keystone_admin_password }}
 auth_protocol = http
 
 
@@ -141,4 +143,12 @@ password = {{ designate_keystone_password }}
 allow_reverse_dns_lookup = True
 ipv4_ptr_zone_prefix_size = 24
 ipv6_ptr_zone_prefix_size = 116
+{% endif %}
+
+{% if enable_neutron_opencontrail | bool %}
+[quotas]
+quota_network=-1
+quota_subnet=-1
+quota_port=-1
+quota_driver=neutron_plugin_contrail.plugins.opencontrail.quota.driver.QuotaDriver
 {% endif %}
