@@ -2,9 +2,9 @@
 - name: find the right config dict for the plugin
   set_fact:
     config_to_use_vc_only: "{{ item }}"
-    config_to_use_vc_compute: "{{ item if item.vc_plugin_ip == ansible_host }}"
-  with_items:
-    "{{ vc_plugin_config }}"
+    config_to_use_vc_compute: "{{ item }}"
+  with_items: "{{ vc_plugin_config }}"
+  when: item.vc_plugin_ip == inventory_hostname
 
 - name: Configure contrailctl/vc_plugin.conf
   ini_file:

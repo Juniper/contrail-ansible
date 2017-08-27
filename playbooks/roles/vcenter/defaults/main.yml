@@ -9,7 +9,7 @@ std_pg_name: contrail-fab-pg
 
 # VM DVS defaults
 vm_dvs_mtu: 1500
-vm_dvs_uplink_qty: 1
+vm_dvs_uplink_qty: 8
 vm_dvs_discovery_options: listen
 vm_dvs_dic_proto: cdp
 
