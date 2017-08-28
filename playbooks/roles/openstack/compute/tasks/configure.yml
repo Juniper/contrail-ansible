@@ -48,8 +48,8 @@
   notify: restart nova-compute
   with_dict:
     url: "{{ neutron_protocol }}://{{ openstack_ip }}:{{ neutron_port }}"
-    metadata_proxy_shared_secret: "{{ neutron_password }}"
-    service metadata_proxy: "true"
+    service_metadata_proxy: "true"
+    metadata_proxy_shared_secret: "{{ neutron_config.get('metadata_proxy_secret', '') }}"
     auth_url: "{{ keystone_auth_protocol }}://{{ keystone_ip }}:{{ keystone_admin_port }}"
     auth_type: "password"
     project_domain_name: "default"
