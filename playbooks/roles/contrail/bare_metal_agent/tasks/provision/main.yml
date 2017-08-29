@@ -78,6 +78,7 @@
           --keystone_admin_user {{ keystone_admin_user }} \
           --keystone_admin_password {{ keystone_admin_password }} \
           --keystone_admin_tenant_name {{ keystone_admin_tenant }} \
+          --agent_mode {{ agent_mode }} \
           {{ tsn_mode_enabled }} \
           {{ qos_queue_id_config }} \
           {{ qos_logical_queue_config }} \
@@ -100,8 +101,9 @@
           {{ vgw_gateway_routes_config }} \
           {{ vrouter_module_param_args }} \
           {{ gateway_mode_config }} \
-          {{ metadata_proxy_secret_config }}
-          {{ metadata_use_ssl }}"
+          {{ metadata_proxy_secret_config }} \
+          {{ metadata_use_ssl }} \
+          {{ tsn_servers_config }} "
 
 - name: Display all variables/facts known for a host
 

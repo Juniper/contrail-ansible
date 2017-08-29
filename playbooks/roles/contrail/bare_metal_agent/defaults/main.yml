@@ -165,3 +165,10 @@ metadata_proxy_secret_config: "{{ '--metadata_secret ' + neutron_config.get('met
 # Metadata Service SSL Enable/Disable
 metadata_ssl_enable: False
 metadata_use_ssl: "{{ '--metadata_use_ssl ' if metadata_ssl_enable else '' }}"
+
+# Agent mode
+agent_mode: 'vrouter'
+
+# Tsn List
+tsn_server_list: []
+tsn_servers_config: "{{ ' --tsn_servers ' + tsn_server_list | join(' ') if tsn_server_list else '' }}"

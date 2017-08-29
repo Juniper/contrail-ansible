@@ -263,3 +263,9 @@ vgw_intf_list: []
 vgw_public_subnet_list: []
 vgw_public_vn_name_list: []
 vgw_gateway_route_list: []
+
+# Agent mode
+agent_mode: 'vrouter'
+
+# Tsn List
+tsn_server_list: []
