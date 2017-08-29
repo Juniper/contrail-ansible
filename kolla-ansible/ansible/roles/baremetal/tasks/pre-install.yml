@@ -29,6 +29,19 @@
 #  when: contrail_apt_repo is defined and contrail_apt_repo != "" and apt_repo_added.get('changed',false)
 #  ignore_errors: yes
 
+# Copy Xenial sources.list template to target and run apt-get update
+- name: Enable docker repo apt
+  template:
+    src: xenial_apt_repo.j2
+    dest: /etc/apt/sources.list.d/xenial_ubuntu.list
+  become: True
+  when: ansible_os_family == 'Debian'
+
+- name: Run apt-get update
+  apt: update_cache=yes
+  when: ansible_os_family == 'Debian'
+  ignore_errors: yes
+
 # NOTE: raw install is required to support cloud images which do not have python installed
 - name: "Install python2 and python-simplejson"
   become: True
