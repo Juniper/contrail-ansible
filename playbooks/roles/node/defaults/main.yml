@@ -263,3 +263,9 @@ vgw_intf_list: []
 vgw_public_subnet_list: []
 vgw_public_vn_name_list: []
 vgw_gateway_route_list: []
+
+# Tsn evpn mode (Tsn HA)
+tsn_evpn_mode: 'False'
+
+# Tsn List
+tsn_server_list: []
