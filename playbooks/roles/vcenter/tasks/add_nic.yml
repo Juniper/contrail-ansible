@@ -5,7 +5,7 @@
 
 - name: "Build networks list -- {{ esxi_host.contrail_vm.networks }}"
   set_fact:
-    nets: "{{ nets | default([]) + [ {'name': x.pg, 'mac': x.mac} ] }}"
+    nets: "{{ nets | default([]) + [ {'name': x.pg} ] }}"
   with_items: "{{ esxi_host.contrail_vm.networks }}"
   loop_control:
     loop_var: x
