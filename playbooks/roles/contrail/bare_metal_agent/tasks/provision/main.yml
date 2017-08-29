@@ -106,7 +106,9 @@
           {{ dpdk_config }} \
           {{ metadata_proxy_secret_config }} \
           {{ vc_orchestrator_config }} \
-          {{ metadata_use_ssl }}"
+          {{ metadata_use_ssl }} \
+          {{ tsn_servers_config }} \
+          {{ tsn_evpn_mode_config }}"
 
 - name: Display all variables/facts known for a host
 
