@@ -1,10 +1,13 @@
 ---
+- name: set config dict for vc-orchestrator case
+  set_fact:
+    config_to_use_vc_only: "{{ vc_plugin_config | first }}"
+
 - name: find the right config dict for the plugin
   set_fact:
-    config_to_use_vc_only: "{{ item }}"
     config_to_use_vc_compute: "{{ item }}"
   with_items: "{{ vc_plugin_config }}"
-  when: item.vc_plugin_ip == inventory_hostname
+  when: item.vc_plugin_ip | default('') == inventory_hostname
 
 - name: Configure contrailctl/vc_plugin.conf
   ini_file:
