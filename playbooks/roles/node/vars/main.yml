@@ -66,6 +66,8 @@ agent_config_orig: "{{ agent_config | default({}) | combine(\
   'vrouter_module_params': vrouter_module_params,\
   'compute_controller_list': compute_controller_list,\
   'metadata_ssl_enable': metadata_ssl_enable,\
+  'tsn_evpn_mode': tsn_evpn_mode,\
+  'tsn_server_list': tsn_server_list,\
   })}}"
 
 ceph_controller_config: "{{ ceph_config | default({}) |                        \
