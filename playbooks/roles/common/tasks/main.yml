@@ -9,11 +9,16 @@
 - name: set /etc/hosts entry for hostname
   lineinfile: dest=/etc/hosts line="127.0.0.1 {{ ansible_hostname }}"
 
+- name: Create vcenter plugin dict for vc-orchestrator case
+  set_fact:
+    vc_plugin_config_dict: "{{ vc_plugin_config | first }}"
+  when: cloud_orchestrator == 'vcenter'
+
 - name: "Create vcenter plugin dict list of dicts"
   set_fact:
     vc_plugin_config_dict: "{{ item }}"
   with_items: "{{ vc_plugin_config | default({}) }}"
-  when: item.vcenter_compute_ip == inventory_hostname
+  when: item.vcenter_compute_ip | default('') == inventory_hostname
 
 - name: "Get esxi_host if defined"
   set_fact:
