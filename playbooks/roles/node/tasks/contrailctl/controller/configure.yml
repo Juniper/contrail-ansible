@@ -1,4 +1,9 @@
 ---
+- name: set config dict in vc-orchestrator case for webui
+  set_fact:
+    vc_plugin_config_webui: "{{ vc_plugin_config | first }}"
+  when: cloud_orchestrator == 'vcenter'
+
 - name: Configure contrailctl/controller.conf
   ini_file:
     dest: "{{ contrailctl_config_directory }}/controller.conf"
@@ -20,6 +25,7 @@
     WEBUI: "{{ webui_config_orig | default({}) }}"
     CASSANDRA: "{{ cassandra_config | default({}) }}"
     RABBITMQ: "{{ rabbitmq_config | default({}) }}"
+    VCPLUGIN: "{{ vc_plugin_config_webui | default({}) }}"
   notify:
     - check controller container
     - contrailctl for controller
