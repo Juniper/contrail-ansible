@@ -1,8 +1,6 @@
 ---
 project_name: "nova"
 
-enable_nova_compute: "yes"
-
 nova_services:
   nova-libvirt:
     container_name: nova_libvirt

@@ -2,40 +2,40 @@
 - name: Gather facts
   setup:
 
-# Uncomment these tasks to use packages from the contrail repository once the
-# packages are available
-#- name: "Add contrail apt repository if required {{ contrail_apt_repo }}"
-#  apt_repository:
-#    repo: "deb {{ contrail_apt_repo }} ./"
-#    state: present
-#  register: apt_repo_added
-#  when:
-#    - contrail_apt_repo is defined
-#    - contrail_apt_repo != ""
-#    - ansible_os_family == 'Debian'
-#
-#- name: Allow unauthenticated packages for contrail packages to work
-#  copy: content='APT::Get::AllowUnauthenticated "true";' dest=/etc/apt/apt.conf.d/99allowunauth
-#  when: contrail_apt_repo is defined and contrail_apt_repo != "" and ansible_os_family == "Debian"
-#
-## If installing contrail_apt_repo entry, use higher priority for that to make
-## sure all packages use the contrail repo
-#- name: Pin contrail apt repo "contrail" release to priority 999
-#  copy: src=apt-preferences.conf dest=/etc/apt/preferences.d/contrail_repo.pref
-#  when: contrail_apt_repo is defined and contrail_apt_repo != "" and apt_repo_added.get('changed',false)
-#
-#- name: Run apt-get update
-#  apt: update_cache=yes
-#  when: contrail_apt_repo is defined and contrail_apt_repo != "" and apt_repo_added.get('changed',false)
-#  ignore_errors: yes
+- name: "Add contrail apt repository if required {{ contrail_apt_repo }}"
+  apt_repository:
+    repo: "deb {{ contrail_apt_repo }}"
+    state: present
+  register: apt_repo_added
+  when:
+    - contrail_apt_repo is defined
+    - contrail_apt_repo != ""
+    - ansible_os_family == 'Debian'
+
+- name: Allow unauthenticated packages for contrail packages to work
+  copy: content='APT::Get::AllowUnauthenticated "true";' dest=/etc/apt/apt.conf.d/99allowunauth
+  when: contrail_apt_repo is defined and contrail_apt_repo != "" and ansible_os_family == "Debian"
+
+# If installing contrail_apt_repo entry, use higher priority for that to make
+# sure all packages use the contrail repo
+- name: Pin contrail apt repo "contrail" release to priority 999
+  copy: src=apt-preferences.conf dest=/etc/apt/preferences.d/contrail_repo.pref
+  when: contrail_apt_repo is defined and contrail_apt_repo != "" and apt_repo_added.get('changed',false)
+
+- name: Run apt-get update
+  apt: update_cache=yes
+  when: contrail_apt_repo is defined and contrail_apt_repo != "" and apt_repo_added.get('changed',false)
+  ignore_errors: yes
 
 # Copy Xenial sources.list template to target and run apt-get update
-- name: Enable docker repo apt
+- name: Enable xenial repo apt
   template:
     src: xenial_apt_repo.j2
     dest: /etc/apt/sources.list.d/xenial_ubuntu.list
   become: True
-  when: ansible_os_family == 'Debian'
+  when:
+    - ansible_os_family == 'Debian'
+    - ansible_distribution_version == '16.04'
 
 - name: Run apt-get update
   apt: update_cache=yes
