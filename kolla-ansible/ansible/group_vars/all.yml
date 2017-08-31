@@ -1,6 +1,23 @@
 ---
 # The options in this file can be overridden in 'globals.yml'
 
+####################### CONTRAIL ADDITIONS - BEGIN ###########################
+# contrail_additions :  Selectively enable or disable nova-compute. 
+# Set this to "yes" when contrail-compute is on a different node from openstack
+# and set this to "no" on an All-in-One node. 
+# If "Waiting for nova-compute service up" task fails or if VM creation fails, 
+# this will most likely be the culprit
+enable_nova_compute: "yes"
+
+# contrail_additions : Ideally leave this to yes if you want the opencontrail
+# neutron plugin. "no" means pure openstack neutron - without contrail neutron plugin
+enable_neutron_opencontrail: "yes"
+
+# contrail_additions : IP address where contrail-api is listening on - on an
+# all-in-one, it will be same as kolla_internal_vip_address
+contrail_api_interface_address: "{{ kolla_internal_vip_address }}"
+####################### CONTRAIL ADDITIONS - BEGIN ###########################
+
 # The "temp" files that are created before merge need to stay persistent due
 # to the fact that ansible will register a "change" if it has to create them
 # again. Persistent files allow for idempotency
