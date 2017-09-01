@@ -13,6 +13,10 @@ enable_nova_compute: "yes"
 # neutron plugin. "no" means pure openstack neutron - without contrail neutron plugin
 enable_neutron_opencontrail: "yes"
 
+# contrail_additions : Ideally leave this to yes if you want the opencontrail
+# heat plugin. "no" means pure openstack heat - without contrail heat plugin
+enable_heat_opencontrail: "yes"
+
 # contrail_additions : IP address where contrail-api is listening on - on an
 # all-in-one, it will be same as kolla_internal_vip_address
 contrail_api_interface_address: "{{ kolla_internal_vip_address }}"
