@@ -81,7 +81,17 @@
       sudo: true
       ignore_errors: true
       when:
-        - (contrail_compute_mode == 'bare_metal' or contrail_compute_mode == 'container')
+        - (contrail_compute_mode == 'bare_metal')
+        - (provision_type == '')
+
+    - name: Reboot node having container
+      shell: sleep 15 && docker exec -i agent /etc/contrail/contrail_reboot
+      async: 20
+      poll: 0
+      sudo: true
+      ignore_errors: true
+      when:
+        - (contrail_compute_mode == 'container')
         - (provision_type == '')
 
     # Skip this task from being run on the SM Lite node itself to avoid timing issues with Reboot
