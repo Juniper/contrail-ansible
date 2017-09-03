@@ -9,9 +9,6 @@
     switch_name: "{{ esxi_host.vcenter_server.dv_switch.dv_switch_name }}"
     vmnics: []
     state: present
-  register: host_added
-  async: 3600
-  poll: 0
 
 - name: Add esxi host to control-data DVS
   vmware_dvs_host:
@@ -41,6 +38,3 @@
          esxi_host.vcenter_server.dv_switch_mgmt is defined and
          esxi_host.vcenter_server.dv_switch_mgmt.dv_switch_name
 
-- name: Save add host task result
-  set_fact:
-    hosts_added: "{{ hosts_added | default([]) + [host_added] }}"

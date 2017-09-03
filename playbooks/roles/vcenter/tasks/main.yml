@@ -66,13 +66,6 @@
   include: add_host_dvs.yml esxi_host={{item}}
   with_items: "{{ esxi_servers }}"
 
-- name: "Wait for add host task complete {{hosts_added}}"
-  async_status: jid={{item.ansible_job_id}}
-  with_items: "{{ hosts_added }}"
-  register: t2
-  until: t2.finished
-  retries: 300
-
 - name: create fabric PG in esxi host
   include: add_fab_pg.yml esxi_host={{item}}
   when: item.std_switch_list
