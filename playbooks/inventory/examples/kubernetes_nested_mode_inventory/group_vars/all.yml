@@ -74,3 +74,6 @@ nested_mode: true
 # Kubernetes API server IP.
 kubernetes_api_server: 10.84.27.16
 
+#OPTIONAL rabbitmq configuration
+#================================
+#rabbitmq_config={'password': 'mypass', 'user': 'myuser', 'port': '5672', 'ssl_port': '5671', 'rabbit_ha_qeueus': False}
