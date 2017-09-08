@@ -20,6 +20,10 @@ enable_heat_opencontrail: "yes"
 # contrail_additions : IP address where contrail-api is listening on - on an
 # all-in-one, it will be same as kolla_internal_vip_address
 contrail_api_interface_address: "{{ kolla_internal_vip_address }}"
+
+enable_keystone_v3: "yes"
+keystone_admin_project_name: "admin"
+keystone_admin_project_domain_name: "Default"
 ####################### CONTRAIL ADDITIONS - BEGIN ###########################
 
 # The "temp" files that are created before merge need to stay persistent due

@@ -52,3 +52,9 @@ memcache_servers = {% for host in groups['memcached'] %}{{ hostvars[host]['ansib
 [oslo_messaging_notifications]
 driver = messagingv2
 {% endif %}
+
+{% if enable_keystone_v3 | bool %}
+[resource]
+admin_project_name = {{ keystone_admin_project_name }}
+admin_project_domain_name = {{ keystone_admin_project_domain_name }}
+{% endif %}

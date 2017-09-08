@@ -81,7 +81,7 @@
   ini_file: dest={{ nova_conf }} section=DEFAULT option={{ item.key }} value={{ item.value }}  create=yes
   notify: restart nova-compute
   with_dict:
-    transport_url: "rabbit://{{ rabbitmq_user }}:{{ rabbitmq_password }}@{{ rabbitmq_server_list[0] }}:{{ rabbitmq_port }}"
+    transport_url: "rabbit://{% for h in rabbitmq_server_list %}{{ rabbitmq_user }}:{{ rabbitmq_password }}@{{ h | trim() }}:{{ rabbitmq_port }}{% if not loop.last %},{% endif %}{% endfor %}"
   when:
     - openstack_sku == 'ocata'
 
