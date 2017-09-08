@@ -192,3 +192,7 @@ vrouter_physical_interface: eth0
 #                   'vgw2':{'vn':'default-domain:admin:public1:public1', 'ipam_subnets': ['10.204.220.144/29']}},
 #   '192.168.0.26': {'vgw2':{'vn':'default-domain:admin:public1:public1', 'ipam_subnets': ['10.204.220.144/29']}}
 #       }
+
+#OPTIONAL rabbitmq configuration
+#================================
+#rabbitmq_config={'password': 'mypass', 'user': 'myuser', 'port': '5672', 'ssl_port': '5671', 'rabbit_ha_qeueus': False}
