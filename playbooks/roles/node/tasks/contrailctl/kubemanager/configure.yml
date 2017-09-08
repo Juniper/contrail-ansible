@@ -16,6 +16,7 @@
     KUBERNETES: "{{ kubernetes_api_config | combine(kubernetes_config) }}"
     KUBERNETES_VNC: "{{ kubernetes_vnc_config | default({}) }}"
     AUTH: "{{ keystone_config | default({}) }}"
+    RABBITMQ: "{{ rabbitmq_config | default({}) }}"
   notify:
     - check kubemanager container
     - contrailctl for kubemanager
