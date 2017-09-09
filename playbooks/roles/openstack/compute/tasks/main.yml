@@ -6,6 +6,18 @@
   debug:
     msg: "openstack_compute_started"
 
+- name: create vcenter servers list of dicts
+  set_fact:
+    vcenter_servers_dicts: "{{ vcenter_servers_dicts | default ([]) + item.values() }}"
+  with_items: "{{ vcenter_servers }}"
+  when: vcenter_servers is defined
+
+- name: "Create VCenter Server Dict"
+  set_fact:
+    vcenter_server_config: "{{ item }}"
+  with_items: "{{ vcenter_servers_dicts }}"
+  when: vcenter_servers_dicts is defined and item.vcenter_compute_ip == inventory_hostname
+
 - include: install.yml
   when: tsn_node != True
 

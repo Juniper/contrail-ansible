@@ -9,6 +9,33 @@
 - name: set /etc/hosts entry for hostname
   lineinfile: dest=/etc/hosts line="127.0.0.1 {{ ansible_hostname }}"
 
+- name: Create vcenter plugin dict for vc-orchestrator case
+  set_fact:
+    vc_plugin_config_dict: "{{ vc_plugin_config | first }}"
+  when: cloud_orchestrator == 'vcenter'
+
+- name: "Create vcenter plugin dict list of dicts"
+  set_fact:
+    vc_plugin_config_dict: "{{ item }}"
+  with_items: "{{ vc_plugin_config | default({}) }}"
+  when: item.vcenter_compute_ip | default('') == inventory_hostname
+
+- name: "Get esxi_host if defined"
+  set_fact:
+    esxi_host: "{{ hostvars[inventory_hostname].get('esxi_host') | default('')}}"
+
+- name: "Create compute_not_on_esxi"
+  set_fact:
+    compute_not_on_esxi: "{{ (esxi_host == '') if esxi_host is defined else true }}"
+  when:
+    - "'contrail-compute' in groups"
+
+- name: "Create enable_openstack_on_vc_compute"
+  set_fact:
+    enable_openstack_on_vc_compute: "{{ (vc_plugin_config_dict.get('mode') == 'vcenter-as-compute') if vc_plugin_config_dict is defined else false }}"
+  when:
+    - "'contrail-vc-compute' in groups"
+
 - name: Disable selinux for redhat systems
   command: setenforce 0
   when: cloud_orchestrator != 'openstack' and ansible_os_family == 'RedHat' and ansible_selinux.status == 'enabled'

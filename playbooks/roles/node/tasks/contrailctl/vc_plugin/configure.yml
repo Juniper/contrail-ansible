@@ -1,0 +1,35 @@
+---
+- name: set config dict for vc-orchestrator case
+  set_fact:
+    config_to_use_vc_only: "{{ vc_plugin_config | first }}"
+
+- name: find the right config dict for the plugin
+  set_fact:
+    config_to_use_vc_compute: "{{ item }}"
+  with_items: "{{ vc_plugin_config }}"
+  when: item.vc_plugin_ip | default('') == inventory_hostname
+
+- name: Configure contrailctl/vc_plugin.conf
+  ini_file:
+    dest: "{{ contrailctl_config_directory }}/vcenterplugin.conf"
+    section: "{{ item.section }}"
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+    create: yes
+  with_inidata:
+    GLOBAL: "{{ global_config_orig }}"
+    VCPLUGIN: "{{ config_to_use_vc_only if cloud_orchestrator == 'vcenter' else config_to_use_vc_compute }}"
+  notify:
+    - check vcplugin container
+    - contrailctl for vcplugin
+
+- name: Configure vcenterplugin.conf KEYSTONE section
+  ini_file: dest="{{ contrailctl_config_directory }}/vcenterplugin.conf" section=KEYSTONE option={{ item.key }} value={{ item.value }}  create=yes
+  with_dict: "{{ keystone_config | default({}) }}"
+  notify:
+    - check vcplugin container
+    - contrailctl for vcplugin
+  when: cloud_orchestrator == "openstack"
+
+- meta: flush_handlers
+
