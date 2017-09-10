@@ -169,7 +169,7 @@ webui_nodes: []
 webui_server_list_derived: []
 
 # List of controller nodes for a compute node
-compute_controller_list: ''
+compute_controller_list: []
 
 # contrail-cni for mesos and contrail-kub-cni for others
 contrail_cni_package_name: "{{ 'contrail-cni' if cloud_orchestrator == 'mesos' else 'contrail-k8s-cni' }}"
