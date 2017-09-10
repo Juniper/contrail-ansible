@@ -97,7 +97,7 @@
     - keystone_policy.stat.exists
   with_dict: "{{ keystone_services }}"
   notify:
-    - Restart keystone containers
+    - Restart keystone container
 
 - name: Copying over wsgi-keystone.conf
   vars:

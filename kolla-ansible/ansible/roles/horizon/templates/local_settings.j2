@@ -88,6 +88,9 @@ OPENSTACK_API_VERSIONS = {
 # will require the user to enter the Domain name in addition to the username
 # for login.
 #OPENSTACK_KEYSTONE_MULTIDOMAIN_SUPPORT = False
+{% if enable_keystone_v3 | bool %}
+OPENSTACK_KEYSTONE_MULTIDOMAIN_SUPPORT = True
+{% endif %}
 
 # Overrides the default domain used when running on single-domain model
 # with Keystone V3. All entities will be created in the default domain.
@@ -96,6 +99,9 @@ OPENSTACK_API_VERSIONS = {
 #    "cloud_admin": "rule:admin_required and domain_id:<your domain id>"
 # This value must match the domain id specified there.
 #OPENSTACK_KEYSTONE_DEFAULT_DOMAIN = 'default'
+{% if enable_keystone_v3 | bool %}
+OPENSTACK_KEYSTONE_DEFAULT_DOMAIN = 'default'
+{% endif %}
 
 # Set this to True to enable panels that provide the ability for users to
 # manage Identity Providers (IdPs) and establish a set of rules to map
