@@ -238,6 +238,9 @@ kubernetes_cluster_project: {domain: default-domain, project: default}
 kubernetes_service_subnet: '10.96.0.0/12'
 kubernetes_pod_subnet: '10.32.0.0/12'
 
+# Default interface name of data kubernetes node interface.
+kubernetes_default_node_data_interface: 'eth0'
+
 # Tor Agent inventory, required for HA Proxy configuration
 haproxy_toragent_config: {}
 
