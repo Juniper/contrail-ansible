@@ -3,6 +3,10 @@
   debug:
     msg: "docker_role_started"
 
+- name: show external_vrouter_compile
+  debug:
+    msg: "external_vrouter_compile : {{ external_vrouter_compile }}"
+
 - name: resolve platform specific vars
   include_vars: "{{item}}"
   with_first_found:
@@ -22,7 +26,7 @@
     dest: "/tmp/{{ vrouter_module_compiler_centos7_image_archive }}"
   when:
     - docker_registry is not defined or load_contrail_vrouter_module_compiler_centos7_image is defined
-    - ansible_os_family == 'RedHat'
+    - external_vrouter_compile and ansible_os_family == 'RedHat'
 
 - name: "Load vrouter compiler image"
   docker_image:
@@ -32,7 +36,7 @@
     load_path: "/tmp/{{ vrouter_module_compiler_centos7_image_archive }}"
   when:
     - docker_registry is not defined or load_vrouter_module_compiler_centos7_image is defined
-    - ansible_os_family == 'RedHat'
+    - external_vrouter_compile and ansible_os_family == 'RedHat'
 
 - name: "Compile vrouter module"
   docker_container:
