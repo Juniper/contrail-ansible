@@ -1,4 +1,16 @@
 ---
+# Create compute_interface_dict
+- name: Create compute_interface_dict
+  set_fact:
+    compute_interface_dict: "{{ compute_interface_dict|default({}) | combine( {item: \
+                   hostvars[item].get('kubernetes_node_interface', kubernetes_default_node_data_interface)} ) }}"
+  with_items:
+      - "{{ compute_group }}"
+
+- name: Get the data interface of this compute host
+  set_fact:
+    k8s_node_data_interface: "{{ compute_interface_dict[inventory_hostname] }}"
+
 - name: Configure contrailctl/kubernetesagent.conf
   ini_file:
     dest: "{{ contrailctl_config_directory }}/kubernetesagent.conf"

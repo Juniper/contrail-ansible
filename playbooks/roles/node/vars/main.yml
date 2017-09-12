@@ -106,3 +106,4 @@ kubernetes_vnc_config:
 
 kubernetes_agent_global_config:
   cloud_orchestrator: "{{ cloud_orchestrator }}"
+  kubernetes_node_data_interface: "{{ k8s_node_data_interface if k8s_node_data_interface else kubernetes_default_node_data_interface }}"
