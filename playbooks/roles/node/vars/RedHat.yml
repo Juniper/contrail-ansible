@@ -1,5 +1,5 @@
 ---
-external_vrouter_compile: true
+external_vrouter_compile: "{{ false if ansible_os_family == 'RedHat' and os_release == 'redhat7' else true }}"
 kernel_source_packages:
   - "kernel-headers-{{ ansible_kernel }}"
   - "kernel-devel-{{ ansible_kernel }}"
