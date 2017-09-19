@@ -822,3 +822,10 @@ REST_API_REQUIRED_SETTINGS = ['OPENSTACK_HYPERVISOR_FEATURES',
 # before loading any data into the admin views, set the following attribute to
 # True
 #ADMIN_FILTER_DATA_FIRST=False
+
+#Params to enable customized contrail horizon
+{% if enable_contrail_horizon | bool %}
+HORIZON_CONFIG['customization_module'] = 'contrail_openstack_dashboard.overrides'
+LOGOUT_URL='/horizon/auth/logout/'
+{% endif %}
+
