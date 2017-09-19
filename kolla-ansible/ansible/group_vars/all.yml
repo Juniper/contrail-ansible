@@ -517,6 +517,7 @@ nova_backend: "{{ 'rbd' if nova_backend_ceph | bool else 'default' }}"
 # Horizon options
 #######################
 horizon_backend_database: "{{ enable_murano | bool }}"
+enable_contrail_horizon: "yes"
 
 #################
 # Octavia options
