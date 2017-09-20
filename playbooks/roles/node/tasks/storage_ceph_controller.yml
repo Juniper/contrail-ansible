@@ -1,4 +1,8 @@
 ---
+- name: sm_status_report - ceph_master_started
+  debug:
+    msg: "ceph_master_started"
+
 - name: Copy storage ceph_controller image
   copy:
     src: "{{ docker_image_load_path }}/{{ storage_ceph_controller_image_archive }}"
@@ -30,3 +34,7 @@
       - AUDIT_WRITE
     volumes:
       - "{{ contrailctl_config_directory }}:/etc/contrailctl/"
+
+- name: sm_status_report - ceph_master_completed
+  debug:
+    msg: "ceph_master_completed"

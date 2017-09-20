@@ -1,4 +1,8 @@
 ---
+- name: sm_status_report - ceph_compute_started
+  debug:
+    msg: "ceph_compute_started"
+
 - name: ceph pool vars
   debug:
     msg:
@@ -72,3 +76,7 @@
     msg:
       - "item {{ceph_util_host_ssd_osd_list}}"
   when: ansible_host == first_compute and ceph_util_host_ssd_osd_list is defined
+
+- name: sm_status_report - ceph_compute_completed
+  debug:
+    msg: "ceph_compute_completed"
