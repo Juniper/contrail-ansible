@@ -277,3 +277,10 @@ tsn_evpn_mode: False
 
 # Tsn List
 tsn_server_list: []
+
+webui_auth_protocol: 'http'
+
+# SSL Cert/Keys
+ssl_certfile: "{{ ssl_certs_dir }}/server.pem"
+ssl_keyfile: "{{ ssl_certs_dir }}/server-privkey.pem"
+ssl_cafile: "{{ ssl_certs_dir }}/ca-cert.pem"
