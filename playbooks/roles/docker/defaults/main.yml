@@ -16,3 +16,7 @@ docker_install_method: installer
 
 # This would be different in case of supporting package based install method with package from docker.com
 docker_package_name: docker
+
+deployment_platform: docker
+no_upstart: "{{ true if deployment_platform == 'docker' }}"
+serial_value: 1
