@@ -8,7 +8,7 @@
 
 - name: Common system settings on base hosts
   hosts: all
-
+  serial: "{{ serial_value }}"
   # docker_required is set to true if the node is running atleast one of
   # contrail-controller, contrail-analytics, contrail-analyticsdb, contrail-lb,
   # contrail-compute in 'container' mode.
@@ -29,14 +29,18 @@
         provision_type: "{{ provision_type | default('') }}"
 
   roles:
-    - name: Run common code
-      role: common
     - name: Setup docker engine on nodes
       role: docker
       tags: [contrail.containers, contrail.containers.docker]
       when:
         - deployment_platform == "docker" and docker_required == true
         - "'kubernetes-contrail-controllers' not in group_names"
+
+- name: Common system settings on base hosts
+  hosts: all
+  roles:
+    - name: Run common code
+      role: common
     - name: Upgrade kernel to the version supplied with this image
       role: contrail/upgrade_kernel
       tags: [contrail.upgrade_kernel]
