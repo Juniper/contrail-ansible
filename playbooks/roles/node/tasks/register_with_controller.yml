@@ -1,6 +1,6 @@
 ---
 - name: "Register nodes, Wait till config api server answers"
-  shell: "docker exec controller curl -s -o /dev/null --write-out %{http_code} -u{{ keystone_admin_user }}:{{ keystone_admin_password }} http://localhost:8095"
+  shell: "docker exec controller curl -s -o /dev/null --write-out %{http_code} -u{{ keystone_admin_user }}:{{ keystone_admin_password }} http://localhost:{{ api_server_admin_port }}"
   register: curl_result
   until: curl_result.stdout == "200"
   delay: 1
@@ -14,6 +14,7 @@
          --oper add \
          {{ orchestrator_opts }}"
   with_dict: "{{ analytics_ip_hostname_dict | default ({}) }}"
+  when: cloud_orchestrator == 'openstack'
 
 - name: "Register analyticsdb node with controller"
   shell: "docker exec controller /usr/share/contrail-utils/provision_database_node.py \
@@ -23,6 +24,7 @@
          --oper add \
          {{ orchestrator_opts }}"
   with_dict: "{{ analyticsdb_ip_hostname_dict | default ({}) }}"
+  when: cloud_orchestrator == 'openstack'
 
 - name: "Register compute node with controller"
   shell: "docker exec controller /usr/share/contrail-utils/provision_vrouter.py \
@@ -33,3 +35,16 @@
          {{ orchestrator_opts }} \
          {{ '--dpdk_enabled' if hostvars[compute_ctrl_ip_mgmt_ip_dict[item.key]].get('huge_pages') else '' }}"
   with_dict: "{{ compute_ip_hostname_dict | default({}) }}"
+  when: cloud_orchestrator == 'openstack'
+
+- name: "Register esxi compute node with controller"
+  shell: "docker exec controller /usr/share/contrail-utils/provision_vrouter.py \
+         --api_server_ip 127.0.0.1 \
+         --host_name {{ item.value }} \
+         --host_ip {{ item.key }} \
+         --oper add \
+         {{ orchestrator_opts }} \
+         {{ '--dpdk_enabled' if hostvars[compute_ctrl_ip_mgmt_ip_dict[item.key]].get('huge_pages') else '' }}"
+  with_dict: "{{ compute_ip_hostname_dict | default({}) }}"
+  when: cloud_orchestrator == 'vcenter'
+

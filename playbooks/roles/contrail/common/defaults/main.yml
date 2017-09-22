@@ -66,6 +66,7 @@ api_server_ip: "{{ config_ip }}"
 api_server_port: 8082
 apiserver_auth_protocol: "{{ global_config.get('apiserver_auth_protocol','http') }}"
 region: RegionOne
+api_server_admin_port: "{{ 8082 if cloud_orchestrator == 'vcenter' else 8095}}"
 
 # Analytics defaults
 # Analytics node list, defaults to controller node list.
