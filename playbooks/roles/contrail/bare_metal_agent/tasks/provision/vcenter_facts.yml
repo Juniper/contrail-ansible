@@ -16,5 +16,5 @@
 
 - name: Create compute command string for vc orchestrator
   set_fact:
-    vc_orchestrator_config: "{{ '--vmware ' + hostvars[inventory_hostname].get('esxi_host') + ' --vmware_username ' + vmware_username + ' --vmware_passwd ' + vmware_passwd + ' --vmware_vmpg_vswitch ' + vmware_vmpg_switch + ' --mode ' + mode + ' --vmware_vmpg_vswitch_mtu ' + vmware_vmpg_vswitch_mtu + ' --vmware_datanic_mtu ' + vmware_datanic_mtu + ' --hypervisor ' + 'vmware' }}"
+    vc_orchestrator_config: "{{ '--vmware ' + hostvars[inventory_hostname].get('esxi_host') + ' --vmware_username ' + \"vmware_username\" + ' --vmware_passwd ' + \"vmware_passwd\" + ' --vmware_vmpg_vswitch ' + \"vmware_vmpg_switch\" + ' --mode ' + mode + ' --vmware_vmpg_vswitch_mtu ' + vmware_vmpg_vswitch_mtu + ' --vmware_datanic_mtu ' + vmware_datanic_mtu + ' --hypervisor ' + 'vmware' }}"
 
