@@ -97,6 +97,19 @@
     creates: /usr/bin/vrouter-port-control
   when: "'contrail-compute' in group_names and contrail_compute_mode != 'bare_metal'"
 
+# Need to enable attach_disconnected for qemu to access
+# the dpdk socket file. The feature is enabled by default
+# in older version of apparmor, but is disabled in
+# version > 2.10
+- name: Configure apparmor if present
+  lineinfile:
+    dest: /etc/apparmor.d/libvirt/TEMPLATE.qemu
+    regexp: 'profile LIBVIRT_TEMPLATE {'
+    line: 'profile LIBVIRT_TEMPLATE (attach_disconnected) {'
+    state: present
+  notify: restart libvirt
+  ignore_errors: yes
+
 - name: Configure qemu
   blockinfile:
     dest: /etc/libvirt/qemu.conf
