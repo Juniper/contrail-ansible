@@ -24,7 +24,11 @@ contrail_api_interface_address: "{{ kolla_internal_vip_address }}"
 enable_keystone_v3: "yes"
 keystone_admin_project_name: "admin"
 keystone_admin_project_domain_name: "Default"
-####################### CONTRAIL ADDITIONS - BEGIN ###########################
+
+# contrail_additions : We don't use neutron_l3_agent. Set this to "yes" if it is
+# needed for any reason
+enable_neutron_l3_agent: "no"
+####################### CONTRAIL ADDITIONS - END ###########################
 
 # The "temp" files that are created before merge need to stay persistent due
 # to the fact that ansible will register a "change" if it has to create them
