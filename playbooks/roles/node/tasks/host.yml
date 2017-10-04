@@ -1,7 +1,4 @@
 ---
-- name: include OS specific code
-  include: "host/{{ansible_os_family}}.yml"
-
 - name: Create contrailctl config directory
   file: path="{{ contrailctl_config_directory }}" state=directory
 

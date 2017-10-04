@@ -1,5 +1,6 @@
 ---
 contrail_compute_mode: bare_metal
+cloud_orchestrator: openstack
 vcenter_compute_mode: "bare_metal"
 enable_openstack_compute: "{{ false if provision_type == 'ISSU' else true }}"
 compute_not_on_esxi: true
@@ -11,3 +12,4 @@ no_upstart: "{{ true if deployment_platform == 'docker' }}"
 tor_agent: {}
 tor_agent_list: []
 kernel_version_installed: ""
+config_server_list_derived: []
