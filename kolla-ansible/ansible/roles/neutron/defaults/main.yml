@@ -151,7 +151,7 @@ neutron_services:
     container_name: "neutron_l3_agent"
     image: "{{ neutron_l3_agent_image_full }}"
     privileged: True
-    enabled: "{{ not enable_neutron_vpnaas | bool }}"
+    enabled: "{{ not enable_neutron_vpnaas | bool and enable_neutron_l3_agent | bool }}"
     host_in_groups: >-
       {{
       True if orchestration_engine == 'KUBERNETES' else
