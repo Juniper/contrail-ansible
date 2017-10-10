@@ -1,14 +1,8 @@
 ---
-- name: Setup esxi/vcenter tasks
-  hosts: localhost
-  roles:
-    - name: Run esxi role
-      role: vcenter
-      when: vcenter_servers is defined
 
 - name: Common system settings on base hosts
-  hosts: all
-  serial: "{{ serial_value }}"
+  hosts: contrail-compute
+
   # docker_required is set to true if the node is running atleast one of
   # contrail-controller, contrail-analytics, contrail-analyticsdb, contrail-lb,
   # contrail-compute in 'container' mode.
@@ -28,26 +22,11 @@
                           true }}"
         provision_type: "{{ provision_type | default('') }}"
 
-  roles:
-    - name: Setup docker engine on nodes
-      role: docker
-      tags: [contrail.containers, contrail.containers.docker]
-      when:
-        - deployment_platform == "docker" and docker_required == true
-        - "'kubernetes-contrail-controllers' not in group_names"
-
-- name: Common system settings on base hosts
+- name: Call Common Code
   hosts: all
   roles:
     - name: Run common code
       role: common
-    - name: Upgrade kernel to the version supplied with this image
-      role: contrail/upgrade_kernel
-      tags: [contrail.upgrade_kernel]
-      when: kernel_upgrade and ansible_os_family == 'Debian'
-    - name: Setup the containers
-      role: node
-      tags: [node]
 
 - name: Setup compute node
   hosts: contrail-compute
@@ -57,23 +36,19 @@
     - name: Setup openstack compute in case of openstack
       role: openstack/compute
       tags: [openstack.compute]
-      when: cloud_orchestrator == "openstack" and enable_openstack_compute and compute_not_on_esxi
+      when:
+        - cloud_orchestrator       == "openstack"
+        - enable_openstack_compute is defined
+        - compute_not_on_esxi      is defined
+        - enable_openstack_compute == true
+        - compute_not_on_esxi      == true
+
     - name: Setup baremetal agent
       role: contrail/bare_metal_agent
       tags: [contrail.bare_metal_agent]
       when:
         - contrail_compute_mode == 'bare_metal'
         - provision_type != 'contrail_cloud'
-
-- name: Setup VCenter compute node
-  hosts: contrail-vc-compute
-  roles:
-    - name: Run common code
-      role: common
-    - name: Setup openstack compute in case of openstack
-      role: openstack/compute
-      tags: [openstack.compute]
-      when: cloud_orchestrator == "openstack" and vcenter_compute_mode == "bare_metal" and enable_openstack_on_vc_compute
 
 - name: Register roles with controller API
   hosts: contrail-controllers
@@ -84,14 +59,6 @@
       role: contrail/register
       tags: [contrail.register]
       when: cloud_orchestrator == 'openstack' or cloud_orchestrator == 'vcenter'
-
-- name: Configure Neutron Plugin on External Openstack Nodes
-  hosts: openstack
-  roles:
-    - name: Configure Neutron Plugin
-      role: neutron_plugin
-      tags: [neutron_plugin]
-      when: cloud_orchestrator == "openstack"
 
 - name: Reboot compute nodes
   hosts: contrail-compute
