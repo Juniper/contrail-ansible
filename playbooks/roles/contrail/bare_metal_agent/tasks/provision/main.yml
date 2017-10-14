@@ -146,7 +146,9 @@
             --tor_tunnel_ip  {{ item.tor_tunnel_ip }} \
             {{'--tor_product_name '+ item.get('tor_product_name') if item.get('tor_product_name') else ''}} \
             {{ control_nodes_arg }} \
-            {{ collectors_arg }}"
+            {{ collectors_arg }} \
+            {{ xmpp_auth_flag }} \
+            {{ xmpp_dns_auth_flag }}"
   when: item
   with_items: "{{ tor_agent_list }}"
 
