@@ -92,6 +92,7 @@ contrail_container_volumes:
   - "/etc/selinux:/etc/selinux"
   - "/etc/timezone:/etc/timezone"
   - "/etc/localtime:/etc/localtime"
+  - "/var/crashes:/var/crashes"
 
 contrail_controller_log_volumes:
   - "/var/log/contrail/controller:/var/log/contrail"
