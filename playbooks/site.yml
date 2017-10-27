@@ -83,7 +83,7 @@
     - name: Register analytics, analyticsdb and agent with controller API
       role: contrail/register
       tags: [contrail.register]
-      when: cloud_orchestrator == 'openstack' or cloud_orchestrator == 'vcenter'
+      when: (cloud_orchestrator == 'openstack' or cloud_orchestrator == 'vcenter') and enable_config_service
 
 - name: Configure Neutron Plugin on External Openstack Nodes
   hosts: openstack
