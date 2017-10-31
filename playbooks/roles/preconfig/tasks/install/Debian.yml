@@ -1,0 +1,54 @@
+---
+- name: "Add preconfig thirdparty repo {{ thirdparty_apt_repo }}"
+  apt_repository:
+    repo: "{{ thirdparty_apt_repo }}"
+    state: present
+  register: apt_repo_added
+  when:
+    - thirdparty_apt_repo is defined
+    - thirdparty_apt_repo != ""
+    - ansible_os_family == 'Debian'
+
+- name: "Add Xenial Internet repos for Ocata"
+  apt_repository:
+    repo: "{{ item }}"
+    state: present
+  register: apt_repo_added
+  with_items: "{{ xenial_repos }}"
+  when:
+    - openstack_sku == "ocata"
+    - xenial_repos is defined
+
+- name: Allow unauthenticated packages for contrail packages to work
+  copy: content='APT::Get::AllowUnauthenticated "true";' dest=/etc/apt/apt.conf.d/99allowunauth
+  when: thirdparty_apt_repo is defined and thirdparty_apt_repo != "" and ansible_os_family == "Debian"
+
+- name: Run apt-get update
+  apt: update_cache=yes
+  when: thirdparty_apt_repo is defined and thirdparty_apt_repo != "" and apt_repo_added.get('changed',false)
+  ignore_errors: yes
+
+- name: Install Preconfig packages
+  apt: name={{ item }} state=latest force=yes install_recommends=no
+  with_items: "{{ preconfig_packages_to_install }}"
+
+# Ubuntu device drivers have to be removed before install
+- name: Remove old device drivers
+  shell: "{{ item }}"
+  with_items:
+    - "rmmod i40e"
+    - "rmmod bnxt_en"
+  ignore_errors: True
+
+- name: Install required kernel modules
+  modprobe:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - i40e
+    - bnxt_en
+  register: kernel_modules_installed
+
+- name: rebuild initramfs after device driver install
+  shell: "update-initramfs -k all -u"
+
