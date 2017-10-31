@@ -1,0 +1,38 @@
+---
+- name: sm_status_report - preconfig_started
+  debug:
+    msg: "preconfig_started"
+
+- name: Set correct NTP config line on server
+  set_fact:
+    server_ntp_conf: "{{smgr_ip}} if smgr_ip != ansible_default_ipv4.address else '127.127.1.0  iburst maxpoll 9'"
+
+- name: Set Server Manager IP Address
+  set_fact:
+    smgr_ip: "{{ ansible_env['SSH_CLIENT'].split() | first }}"
+
+- name: Update /etc/hosts with Server Manager IP
+  lineinfile:
+    dest: /etc/hosts
+    regexp: '^{{ smgr_ip }} server_manager'
+    line: '{{ smgr_ip }} server_manager'
+    state: present
+
+- name: Update /etc/hosts with Servers Own Hostname and Domain
+  lineinfile:
+    dest: /etc/hosts
+    regexp: '.*{{item}}$'
+    line: '{{hostvars[item].ansible_default_ipv4.address}} {{hostvars[item].ansible_hostname}}.{{domain_name}} {{hostvars[item].ansible_hostname}}'
+    state: present
+  with_items: '{{groups.all}}'
+  when: domain_name != ""
+
+- include: install/{{ ansible_os_family }}.yml
+  tags: [preconfig, package]
+
+- include: provision/main.yml
+  tags: [preconfig, provision]
+
+- name: sm_status_report - preconfig_completed
+  debug:
+    msg: "preconfig_completed"
