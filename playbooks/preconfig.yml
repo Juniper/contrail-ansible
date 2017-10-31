@@ -1,0 +1,7 @@
+---
+- name: Run preconfig on all targets
+  hosts: all
+  roles:
+    - name: Run preconfig role
+      role: preconfig
+      tags: [preconfig]

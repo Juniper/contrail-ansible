@@ -1,0 +1,28 @@
+---
+domain_name: ""
+cloud_orchestrator: openstack
+apt_update: true
+common_preconfig_packages:
+  - ntp
+  - ntpdate
+  - python-netaddr
+  - ifenslave-2.6
+  - ifenslave
+  - biosdevname
+  - sysstat
+  - ethtool
+  - vlan
+  - i40e-dkms
+  - bnxt-en-dkms
+non_ocata_packages:
+  - puppet
+smgr_ip: "{{ ansible_env['SSH_CLIENT'].split() | first }}"
+server_ntp_conf: "{{ smgr_ip if smgr_ip != ansible_default_ipv4.address else '127.127.1.0  iburst maxpoll 9' }}"
+openstack_sku: mitaka
+preconfig_packages_to_install: "{{ common_preconfig_packages +  non_ocata_packages if openstack_sku != 'ocata' else common_preconfig_packages }}"
+install_puppet: "{{ false if openstack_sku == 'ocata' else true }}"
+thirdparty_apt_repo: "{{ 'deb http://server_manager/thirdparty_packages_ubuntu_1604/ ./' if ansible_distribution_version == '16.04' else 'deb http://server_manager/thirdparty_packages/ ./' }}"
+xenial_repos:
+  - "deb http://archive.ubuntu.com/ubuntu xenial main"
+  - "deb http://archive.ubuntu.com/ubuntu xenial universe"
+  - "deb http://archive.ubuntu.com/ubuntu xenial multiverse"

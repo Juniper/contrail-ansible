@@ -1,0 +1,14 @@
+---
+- name: Update /etc/hosts with Puppet
+  lineinfile:
+    dest: /etc/hosts
+    regexp: '^{{ smgr_ip }} puppet'
+    line: '{{ smgr_ip }} puppet'
+    state: present
+
+- name: Create puppet.conf from template
+  template: src=templates/puppet.conf.j2 dest=/etc/puppet/puppet.conf
+            owner=root group=root mode=0644
+
+- name: Update default puppet config file for non-server-manager node
+  shell: "sed -i 's/initialize(name, path, source, ignore = nil, environment = nil, source_permissions = :ignore)/initialize(name, path, source, ignore = nil, environment = nil, source_permissions = :use)/g' /usr/lib/ruby/vendor_ruby/puppet/configurer/downloader.rb"
