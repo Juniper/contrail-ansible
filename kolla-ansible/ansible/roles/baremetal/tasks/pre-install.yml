@@ -24,21 +24,6 @@
 
 - name: Run apt-get update
   apt: update_cache=yes
-  when: contrail_apt_repo is defined and contrail_apt_repo != "" and apt_repo_added.get('changed',false)
-  ignore_errors: yes
-
-# Copy Xenial sources.list template to target and run apt-get update
-- name: Enable xenial repo apt
-  template:
-    src: xenial_apt_repo.j2
-    dest: /etc/apt/sources.list.d/xenial_ubuntu.list
-  become: True
-  when:
-    - ansible_os_family == 'Debian'
-    - ansible_distribution_version == '16.04'
-
-- name: Run apt-get update
-  apt: update_cache=yes
   when: ansible_os_family == 'Debian'
   ignore_errors: yes
 
