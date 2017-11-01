@@ -95,6 +95,43 @@
 
 - name: Reboot compute nodes
   hosts: contrail-compute
+  pre_tasks:
+    - name: check if vrouter module is loaded
+      shell: lsmod | grep -wq vrouter && echo yes || echo no
+      register: vrouter_loaded
+      ignore_errors: yes
+
+    - name: check if vhost module is loaded
+      shell: lsmod | grep -wq vhost && echo yes || echo no
+      register: vhost_loaded
+      ignore_errors: yes
+
+    - debug:
+       msg:
+         - "VHOST0_EXISTS    {{ vhost_loaded.stdout}}"
+         - "VROUTER_EXISTS   {{ vrouter_loaded.stdout}}"
+
+    - name: Check if vhost0 is there
+      set_fact:
+        vhost0_exists: >-
+          false
+          {%- for ifname in ansible_interfaces if ifname == 'vhost0'-%}
+            true
+          {%- endfor -%}
+        vrouter_loaded : "{{vrouter_loaded.stdout}}"
+        vhost_loaded : "{{vhost_loaded.stdout}}"
+    - debug:
+       msg:
+         - "VHOST0_EXISTS {{ vhost0_exists }}"
+    - name: configure reboot_required variable
+      set_fact:
+        reboot_required: >-
+          {%- if vrouter_loaded == "no" or vhost_loaded == "no" or vhost0_exists == false -%}
+            true
+          {%- else %}
+            false
+          {%- endif -%}
+
   post_tasks:
 
     - name: Reboot node
@@ -106,6 +143,7 @@
       when:
         - (contrail_compute_mode == 'bare_metal')
         - (provision_type == '')
+        - (reboot_required == true)
 
     - name: Reboot node having container
       shell: sleep 15 && docker exec -i agent /etc/contrail/contrail_reboot
@@ -124,6 +162,7 @@
       when:
         - (contrail_compute_mode == 'bare_metal' or contrail_compute_mode == 'container')
         - (provision_type == '')
+        - (reboot_required == true)
 
 - name: Setup ceph compute node
   hosts: ceph-compute
