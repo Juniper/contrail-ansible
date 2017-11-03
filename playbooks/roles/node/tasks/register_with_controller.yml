@@ -6,6 +6,52 @@
   delay: 1
   retries: 180
 
+- name: "Register control node with controller, no md5 and api auth"
+  shell: "docker exec controller /usr/share/contrail-utils/provision_control.py \
+         --use_admin_api \
+         --host_name {{ item.value }} \
+         --host_ip {{ item.key }} \
+         --router_asn {{ router_asn }} \
+         --oper add \
+         {{ orchestrator_opts }}"
+  with_dict: "{{ controlnode_ip_hostname_dict | default ({}) }}"
+  when: cloud_orchestrator == 'openstack' and api_aaa_mode != 'no-auth'
+
+- name: "Register control node with controller, no md5 and no api auth"
+  shell: "docker exec controller /usr/share/contrail-utils/provision_control.py \
+         --api_server_ip 127.0.0.1 \
+         --host_name {{ item.value }} \
+         --router_asn {{ router_asn }} \
+         --host_ip {{ item.key }} \
+         --oper add \
+         {{ orchestrator_opts }}"
+  with_dict: "{{ controlnode_ip_hostname_dict | default ({}) }}"
+  when: cloud_orchestrator == 'openstack' and api_aaa_mode == 'no-auth'
+
+- name: "Register control node with controller, md5 and api auth"
+  shell: "docker exec controller /usr/share/contrail-utils/provision_control.py \
+         --use_admin_api \
+         --host_name {{ item.value }} \
+         --host_ip {{ item.key }} \
+         --router_asn {{ router_asn }} \
+         --md5 {{ bgp_md5 }} \
+         --oper add \
+         {{ orchestrator_opts }}"
+  with_dict: "{{ controlnode_ip_hostname_dict | default ({}) }}"
+  when: cloud_orchestrator == 'openstack' and api_aaa_mode != 'no-auth' and bgp_md5 is defined
+
+- name: "Register control node with controller, md5 and no api auth"
+  shell: "docker exec controller /usr/share/contrail-utils/provision_control.py \
+         --api_server_ip 127.0.0.1 \
+         --host_name {{ item.value }} \
+         --host_ip {{ item.key }} \
+         --router_asn {{ router_asn }} \
+         --md5 {{ bgp_md5 }} \
+         --oper add \
+         {{ orchestrator_opts }}"
+  with_dict: "{{ controlnode_ip_hostname_dict | default ({}) }}"
+  when: cloud_orchestrator == 'openstack' and api_aaa_mode == 'no-auth' and bgp_md5 is defined
+
 - name: "Register analytics node with controller"
   shell: "docker exec controller /usr/share/contrail-utils/provision_analytics_node.py \
          --use_admin_api \
