@@ -28,7 +28,7 @@ control_servers_with_xmpp_port: "{{ control_node_list | map('regex_replace', '^(
 control_servers_with_dns_port: "{{ control_node_list | map('regex_replace', '^(.*)$', '\\1:' + control_dns_port|string) | join(' ') }}"
 api_servers_with_port: "{{ controller_list | map('regex_replace', '^(.*)$', '\\1:' + api_server_port|string) | join(' ') }}" 
 collectors_with_space_delim: "{{ analytics_list | join(' ') }}"
-controllers_with_space_delim: "{{ controller_list | join(' ') }}"
+controllers_with_space_delim: "{{ control_server_list_derived | join(' ') }}"
 
 api_aaa_mode: "{{ api_config.get('aaa_mode','cloud-admin') if api_config is defined else 'cloud-admin' }}"
 api_server_admin_port: "{{ '8095' if cloud_orchestrator == 'openstack' and api_aaa_mode != 'no-auth' else api_server_port }}"

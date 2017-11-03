@@ -261,6 +261,24 @@
   with_items: "{{ controller_group }}"
   when: ctrl_data_network is not defined
 
+- name: Create control_server_list_derived
+  set_fact:
+      control_server_list_derived: "{{control_server_list_derived + \
+          [hostvars[item].get('ctrl_data_ip', controller_dict.get(item, item))]\
+          if 'control' in hostvars[item].get('controller_components', []) \
+          else control_server_list_derived}}"
+  with_items: "{{ controller_group }}"
+  when: ctrl_data_network is defined
+
+- name: Create control_server_list_derived when ctrl_data_network is not defined
+  set_fact:
+      control_server_list_derived: "{{control_server_list_derived + \
+          [hostvars[item].get('ctrl_data_ip', item)] \
+          if 'control' in hostvars[item].get('controller_components', []) \
+          else control_server_list_derived}}"
+  with_items: "{{ controller_group }}"
+  when: ctrl_data_network is not defined
+
 - name: Create webui_server_list_derived
   set_fact:
       webui_server_list_derived: "{{webui_server_list_derived + \
