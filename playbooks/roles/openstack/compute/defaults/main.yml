@@ -35,6 +35,7 @@ nova_compute_pkgs_default:
   - contrail-setup
   - nova-compute
   - python-bitstring
+  - python-barbicanclient
 
 nova_compute_pkgs_redhat:
   - contrail-setup
