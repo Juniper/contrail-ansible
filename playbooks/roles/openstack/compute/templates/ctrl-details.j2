@@ -15,6 +15,7 @@ export QUANTUM_PORT={{ neutron_port }}
 export COMPUTE={{ ansible_default_ipv4.address }}
 export SELF_MGMT_IP={{ ansible_default_ipv4.address }}
 export CONTROLLER_MGMT={{ openstack_mgmt_ip }}
+export CONTROLLER_CTRL_DATA_IP={{ openstack_ctrl_data_ip }}
 export INTERNAL_VIP={{ internal_vip }}
 export CONTRAIL_INTERNAL_VIP={{ contrail_internal_vip }}
 export EXTERNAL_VIP={{ external_vip }}
