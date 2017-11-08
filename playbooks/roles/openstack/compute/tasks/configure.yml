@@ -107,6 +107,7 @@
     regexp: 'profile LIBVIRT_TEMPLATE {'
     line: 'profile LIBVIRT_TEMPLATE (attach_disconnected) {'
     state: present
+    backrefs: yes
   notify: restart libvirt
   ignore_errors: yes
 
