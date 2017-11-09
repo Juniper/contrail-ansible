@@ -20,11 +20,11 @@ metadata_listen_port = {{ nova_metadata_port }}
 
 {% if metadata_ssl_enable | bool %}
 enabled_ssl_apis= metadata
-nova_metadata_protocol= https
-nova_metadata_insecure= True
-ssl_cert_file= /etc/nova/ssl/certs/nova.pem
-ssl_key_file= /etc/nova/ssl/private/novakey.pem
-ssl_ca_file= /etc/nova/ssl/certs/ca.pem
+nova_metadata_protocol = https
+nova_metadata_insecure = False
+ssl_cert_file = /etc/nova/ssl/certs/nova.pem
+ssl_key_file = /etc/nova/ssl/private/novakey.pem
+ssl_ca_file = /etc/nova/ssl/certs/ca.pem
 {% endif %}
 
 use_neutron = True
