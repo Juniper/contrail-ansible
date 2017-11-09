@@ -28,6 +28,15 @@ keystone_admin_project_domain_name: "Default"
 # contrail_additions : We don't use neutron_l3_agent. Set this to "yes" if it is
 # needed for any reason
 enable_neutron_l3_agent: "no"
+
+# contrail_additions : metadata_ssl_enable is set to "yes" to support the SSL
+# encryption feature for vrouter when proxying.
+metadata_ssl_enable: "no"
+
+# contrail_additions : local_ssl_directory is set to the directory where the
+# <hostname>.pem, <hostname>-privkey.pem, ca-cert.pem files are present
+local_ssl_directory: "/etc/contrail_smgr/puppet/ssl"
+
 ####################### CONTRAIL ADDITIONS - END ###########################
 
 # The "temp" files that are created before merge need to stay persistent due
