@@ -108,7 +108,9 @@
           {{ metadata_use_ssl }} \
           {{ tsn_servers_config }} \
           {{ vc_orchestrator_config }} \
-          {{ tsn_evpn_mode_config }} "
+          {{ tsn_evpn_mode_config }} \
+          {{ vrouter_1G_hugepages_args }} \
+          {{ vrouter_2M_hugepages_args }}"
 
 - name: Display all variables/facts known for a host
 
