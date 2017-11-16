@@ -126,7 +126,7 @@
     - name: configure reboot_required variable
       set_fact:
         reboot_required: >-
-          {%- if vrouter_loaded == "no" or vhost_loaded == "no" or vhost0_exists == false -%}
+          {%- if vrouter_loaded == "no" or vhost_loaded == "no" or vhost0_exists == false  or vrouter_kmod_hugepage == true -%}
             true
           {%- else %}
             false
