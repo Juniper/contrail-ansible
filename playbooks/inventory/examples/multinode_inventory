@@ -54,7 +54,7 @@
 1.1.1.13 compute_as_gateway_mode=server #Gateway Mode
 1.1.1.14 compute_controller_list="['10.204.216.66', '10.204.217.7']"
 1.1.1.15 tsn_evpn_mode=True #Set this to True if the TSN is serving EVPN based TORs.
-1.1.1.16 tsn_server_list="['192.168.0.30', '192.168.0.32']"
+1.1.1.16 tsn_server_list="['192.168.0.30', '192.168.0.32']" vrouter_1G_hugepages=5 vrouter_2M_hugepages=512
 
 # TSN list - list of tsn nodes working in active/backup mode per compute node
 # when agent runs in tsn-no-forwarding mode.
