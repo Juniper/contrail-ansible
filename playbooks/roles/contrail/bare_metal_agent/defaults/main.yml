@@ -174,3 +174,9 @@ tsn_evpn_mode_config: "{{ ' --tsn_evpn_mode ' if tsn_evpn_mode else '' }}"
 # Tsn List
 tsn_server_list: []
 tsn_servers_config: "{{ ' --tsn_servers ' + tsn_server_list | join(' ') if tsn_server_list else '' }}"
+
+# vrouter kernel mode hugepages
+vrouter_1G_hugepages: ''
+vrouter_2M_hugepages: ''
+vrouter_1G_hugepages_args: "{{ ' --vrouter_1G_hugepages ' + vrouter_1G_hugepages | string if vrouter_1G_hugepages else '' }}"
+vrouter_2M_hugepages_args: "{{ ' --vrouter_2M_hugepages ' + vrouter_2M_hugepages | string if vrouter_2M_hugepages else '' }}"
