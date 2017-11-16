@@ -36,6 +36,11 @@
   when:
     - "'contrail-vc-compute' in groups"
 
+- name: "Create vrouter_kmod_hugepage"
+  set_fact:
+    vrouter_kmod_hugepage: "{{ true if hostvars[inventory_hostname].get('vrouter_1G_hugepages') or hostvars[inventory_hostname].get('vrouter_2M_hugepages') \
+                            or hostvars[inventory_hostname].get('vrouter_1G_hugepages') == 0 or hostvars[inventory_hostname].get('vrouter_2M_hugepages') == 0 else false }}"
+
 - name: Disable selinux for redhat systems
   command: setenforce 0
   when: cloud_orchestrator != 'openstack' and ansible_os_family == 'RedHat' and ansible_selinux.status == 'enabled'
