@@ -27,6 +27,11 @@
                           'ceph-controller' not in group_names else \
                           true }}"
         provision_type: "{{ provision_type | default('') }}"
+      when: cloud_orchestrator != "openshift"
+    - name: Set flag to false when orchestrator is OpenShift
+      set_fact:
+        docker_required: "{{ false }}"
+      when: cloud_orchestrator == "openshift"
 
   roles:
     - name: Setup docker engine on nodes
