@@ -16,6 +16,7 @@
 - name: "Disable iptables on redhat systems"
   service: name=iptables state=stopped enabled=no
   ignore_errors: yes
+  when: cloud_orchestrator != "openshift"
 
 - name: Set correct hostname on centos - this should always be only hostname and not hostname.domainname format
   shell: hostnamectl set-hostname "{{ ansible_hostname }}"
