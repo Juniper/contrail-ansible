@@ -285,3 +285,9 @@ webui_auth_protocol: 'http'
 ssl_certfile: "{{ ssl_certs_dir }}/server.pem"
 ssl_keyfile: "{{ ssl_certs_dir }}/server-privkey.pem"
 ssl_cafile: "{{ ssl_certs_dir }}/ca-cert.pem"
+
+# Enable/Disable backup of config and resource files
+resource_backup_restore: false
+backup_idle_timeout: ''
+restore_audit_timeout: ''
+backup_file_count: ''

@@ -55,6 +55,7 @@
 1.1.1.14 compute_controller_list="['10.204.216.66', '10.204.217.7']"
 1.1.1.15 tsn_evpn_mode=True #Set this to True if the TSN is serving EVPN based TORs.
 1.1.1.16 tsn_server_list="['192.168.0.30', '192.168.0.32']" vrouter_1G_hugepages=5 vrouter_2M_hugepages=512
+1.1.1.17 resource_backup_restore=True backup_idle_timeout=10000 restore_audit_timeout=15000 backup_file_count=3
 
 # TSN list - list of tsn nodes working in active/backup mode per compute node
 # when agent runs in tsn-no-forwarding mode.
@@ -80,6 +81,12 @@
 #vrouter_dbg: Set 1 for pkt dumping and 0 to disable, default value is 0.
 #vr_memory_alloc_checks: Audit memory frees against allocs set 1 to enable and 0 to disable, default is 0.
 # None of the keys are  mandatory; the key value pairs will be set as given below for the vrouter module.
+
+# Resource backup and restore for graceful restart of a compute node
+# resource_backup_restore: Enable backup and restore of config and resource files
+# backup_idle_timeout: vrouter agent avoids generating backup file if change is detected within time
+# restore_audit_timeout:  Audit time for config/resource read from file
+# backup_file_count: Number of backup files
 
 # List of all the defined groups in this inventory
 [all:children]
