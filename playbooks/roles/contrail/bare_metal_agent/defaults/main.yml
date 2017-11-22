@@ -180,3 +180,13 @@ vrouter_1G_hugepages: ''
 vrouter_2M_hugepages: ''
 vrouter_1G_hugepages_args: "{{ ' --vrouter_1G_hugepages ' + vrouter_1G_hugepages | string if vrouter_1G_hugepages else '' }}"
 vrouter_2M_hugepages_args: "{{ ' --vrouter_2M_hugepages ' + vrouter_2M_hugepages | string if vrouter_2M_hugepages else '' }}"
+
+# Enable/Disable backup of config and resource files
+resource_backup_restore: false
+backup_idle_timeout: ''
+restore_audit_timeout: ''
+backup_file_count: ''
+resource_backup_restore_args: "{{ ' --resource_backup_restore ' if resource_backup_restore else '' }}"
+backup_idle_timeout_args: "{{ ' --backup_idle_timeout ' + backup_idle_timeout | string if backup_idle_timeout else '' }}"
+restore_audit_timeout_args: "{{ ' --restore_audit_timeout ' + restore_audit_timeout | string if restore_audit_timeout else '' }}"
+backup_file_count_args: "{{ ' --backup_file_count ' + backup_file_count | string if backup_file_count else '' }}"

@@ -110,7 +110,11 @@
           {{ vc_orchestrator_config }} \
           {{ tsn_evpn_mode_config }} \
           {{ vrouter_1G_hugepages_args }} \
-          {{ vrouter_2M_hugepages_args }}"
+          {{ vrouter_2M_hugepages_args }} \
+          {{ resource_backup_restore_args }} \
+          {{ backup_idle_timeout_args }} \
+          {{ restore_audit_timeout_args }} \
+          {{ backup_file_count_args }}"
 
 - name: Display all variables/facts known for a host
 

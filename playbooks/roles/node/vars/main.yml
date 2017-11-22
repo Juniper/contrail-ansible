@@ -72,6 +72,10 @@ agent_config_orig: "{{ agent_config | default({}) | combine(\
   'metadata_ssl_enable': metadata_ssl_enable,\
   'tsn_evpn_mode': tsn_evpn_mode,\
   'tsn_server_list': tsn_server_list,\
+  'resource_backup_restore': resource_backup_restore,\
+  'backup_idle_timeout': backup_idle_timeout,\
+  'restore_audit_timeout': restore_audit_timeout,\
+  'backup_file_count': backup_file_count,\
   })}}"
 
 ceph_controller_config: "{{ ceph_config | default({}) |                        \
