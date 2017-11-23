@@ -6,6 +6,20 @@
   delay: 1
   retries: 180
 
+- name: "update ASN in the global_system_config, api auth"
+  shell: "docker exec controller /usr/share/contrail-utils/provision_control.py \
+         --use_admin_api \
+         --router_asn {{ router_asn }} \
+         {{ orchestrator_opts }}"
+  when: api_aaa_mode != 'no-auth'
+
+- name: "update ASN in the global_system_config, no api auth"
+  shell: "docker exec controller /usr/share/contrail-utils/provision_control.py \
+         --api_server_ip 127.0.0.1 \
+         --router_asn {{ router_asn }} \
+         {{ orchestrator_opts }}"
+  when: api_aaa_mode == 'no-auth'
+
 - name: "Register control node with controller, no md5 and api auth"
   shell: "docker exec controller /usr/share/contrail-utils/provision_control.py \
          --use_admin_api \
@@ -51,6 +65,21 @@
          {{ orchestrator_opts }}"
   with_dict: "{{ controlnode_ip_hostname_dict | default ({}) }}"
   when: api_aaa_mode == 'no-auth' and bgp_md5 != ''
+
+- name: "Register external routers, api auth"
+  shell: "/usr/share/contrail-utils/provision_mx.py --use_admin_api \
+          {{ orchestrator_opts }} --router_name {{ item.key }} \
+          --router_ip  {{ item.value }} --router_asn {{ router_asn }}"
+  with_dict: "{{ external_routers_list }}"
+  when: api_aaa_mode != 'no-auth'
+
+- name: "Register external routers, no api auth"
+  shell: "/usr/share/contrail-utils/provision_mx.py \
+          --api_server_ip 127.0.0.1 \
+          {{ orchestrator_opts }} --router_name {{ item.key }} \
+          --router_ip  {{ item.value }} --router_asn {{ router_asn }}"
+  with_dict: "{{ external_routers_list }}"
+  when: api_aaa_mode == 'no-auth'
 
 - name: "Register analytics node with controller"
   shell: "docker exec controller /usr/share/contrail-utils/provision_analytics_node.py \
