@@ -3,10 +3,16 @@
   debug:
     msg: "controller_started"
 
+- name: remove puppet entry from /etc/hosts for vcenter orchestrator
+  shell: "sed -i '/puppet/d' /etc/hosts"
+
 - name: set /etc/hosts entry with their conrol-data IP for rabbitmq to work
   lineinfile: dest=/etc/hosts line="{{ item.key + ' ' + item.value }}"
   with_dict: "{{ controller_ip_hostname_dict }}"
   when: controller_ip_hostname_dict
+
+- name: Add puppet entry back in the the /etc/hosts
+  lineinfile: dest=/etc/hosts line="{{ ansible_srvr_ip + ' puppet' }}"
 
 - name: Copy contrail controller image
   copy:
