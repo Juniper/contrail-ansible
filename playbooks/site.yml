@@ -147,6 +147,7 @@
 
     - name: Reboot node having container
       shell: sleep 15 && docker exec -i agent /etc/contrail/contrail_reboot
+      shell: sleep 2 && /sbin/shutdown -r now
       async: 20
       poll: 0
       sudo: true
@@ -154,6 +155,7 @@
       when:
         - (contrail_compute_mode == 'container')
         - (provision_type == '')
+        - (reboot_required == true)
 
     # Skip this task from being run on the SM Lite node itself to avoid timing issues with Reboot
     - name: Waiting for server to come back
