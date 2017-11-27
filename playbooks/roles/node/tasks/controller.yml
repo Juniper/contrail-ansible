@@ -13,6 +13,7 @@
 
 - name: Add puppet entry back in the the /etc/hosts
   lineinfile: dest=/etc/hosts line="{{ ansible_srvr_ip + ' puppet' }}"
+  when: ansible_srvr_ip is defined and ansible_srvr_ip != ''
 
 - name: Copy contrail controller image
   copy:
