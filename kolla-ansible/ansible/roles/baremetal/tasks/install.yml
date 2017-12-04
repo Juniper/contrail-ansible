@@ -71,6 +71,12 @@
   pip: name=docker-py state=latest
   become: True
 
+- name: Install configfs mod
+  modprobe:
+    name: configfs
+    state: present
+  when:  ansible_os_family == 'Debian'
+
 - name: Remove packages
   package: name={{item}} state=absent
   with_items: "{{ ubuntu_pkg_removals }}"
