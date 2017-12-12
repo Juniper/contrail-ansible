@@ -35,6 +35,7 @@ api_aaa_mode: "{{ 'no-auth' if cloud_orchestrator == 'vcenter' else api_aaa_mode
 api_server_admin_port: "{{ '8095' if cloud_orchestrator == 'openstack' and api_aaa_mode != 'no-auth' else api_server_port }}"
 api_server_url: "{{ apiserver_auth_protocol }}://{{ api_server_ip }}:{{ api_server_port }}"
 router_asn: "{{ controller_config.get('bgp_asn', '64512') if controller_config is defined else '64512' }}"
+local_asn: "{{ controller_config.get('local_asn', '') if controller_config is defined else '' }}"
 bgp_md5: "{{ controller_config.get('bgp_md5', '') if controller_config is defined else '' }}"
 provision_auth: "{% if cloud_orchestrator == 'openstack' %}keystone{% else %}noauth{% endif %}"
 external_routers_list: "{{ controller_config.get('external_routers_list', {}) if controller_config is defined else {} }}"

@@ -11,6 +11,8 @@ keystone_auth_protocol: "{{ keystone_config.get('auth_protocol','http') }}"
 keystone_admin_user: "{{ keystone_config.get('admin_user','admin') }}"
 keystone_admin_password: "{{ keystone_config.get('admin_password','admin') }}"
 keystone_admin_tenant: "{{ keystone_config.get('admin_tenant','admin') }}"
+local_asn: "{{ controller_config.get('local_asn', '') if controller_config is defined else '' }}"
 
+local_asn_opts: "{{ '--local_autonomous_system ' + local_asn if local_asn else '' }}"
 keystone_opts: "--admin_user {{ keystone_admin_user }}  --admin_password {{ keystone_admin_password }} --admin_tenant_name {{ keystone_admin_tenant }}"
 orchestrator_opts: "{{ keystone_opts if cloud_orchestrator == 'openstack' else '' }}"
