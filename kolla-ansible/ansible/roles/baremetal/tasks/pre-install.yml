@@ -42,6 +42,43 @@
   when: ansible_os_family == 'Debian'
   ignore_errors: yes
 
+# docker-engine 1.13 has some issue working with later version of apparmor. So
+# make sure only apparmor=2.10.95-0ubuntu2 is installed and not later versions
+- name: Check if apparmor is installed
+  shell: dpkg-query -s apparmor
+  ignore_errors: True
+  register: is_installed
+  when:
+    - ansible_os_family == 'Debian'
+    - ansible_distribution_version == '16.04'
+
+- name: Remove apparmor if required
+  apt:
+    name: apparmor
+    state: absent
+  when:
+    - is_installed.stdout.find('installed') != -1
+    - (is_installed.stdout.find("2.10.95-0ubuntu2.") != -1) or is_installed.stdout.find("2.10.95-0ubuntu2") == -1
+    - ansible_os_family == 'Debian'
+    - ansible_distribution_version == '16.04'
+
+- name: Check if right version of apparmor is installed
+  shell: dpkg-query -s apparmor
+  ignore_errors: True
+  register: is_installed
+  when:
+    - ansible_os_family == 'Debian'
+    - ansible_distribution_version == '16.04'
+
+- name: Install the right version of apparmor
+  apt:
+    name: apparmor=2.10.95-0ubuntu2
+    state: installed
+  when:
+    - (is_installed.stdout.find('is not installed') != -1) or (is_installed.stdout.find('deinstall') != -1)
+    - ansible_os_family == 'Debian'
+    - ansible_distribution_version == '16.04'
+
 # NOTE: raw install is required to support cloud images which do not have python installed
 - name: "Install python2 and python-simplejson"
   become: True
