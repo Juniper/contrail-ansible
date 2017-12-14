@@ -19,10 +19,11 @@ debian_pkg_install:
 
 redhat_pkg_install:
  - epel-release
- - docker-engine-1.13.0
  - git
  - python-setuptools
  - ntp
+ - docker-engine-selinux-1.12.6
+ - docker-engine-1.12.6
 
 ubuntu_pkg_removals:
  - lxd
