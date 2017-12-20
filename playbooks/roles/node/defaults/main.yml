@@ -2,6 +2,7 @@
 kernel_upgrade: false
 kernel_version: "{{ '4.4.0-38' if ansible_distribution + ansible_distribution_version == 'Ubuntu16.04' else '3.13.0-110' }}"
 cloud_orchestrator: openstack
+action: add
 # os_release - operaing system release code
 # ubuntu 14.04 - ubuntu14.04, ubuntu 16.04 - ubuntu16.04, centos 7.1 - centos7.1
 valid_os_release: [ubuntu14.04, ubuntu16.04, centos7.1, centos7.2, redhat7, centos7]
@@ -161,14 +162,6 @@ vrouter_physical_interface: >-
 ##vrouter from container
 non_mgmt_ip: "{{ ctrl_data_ip if ctrl_data_ip is defined else '' }}"
 non_mgmt_gw: "{{ ctrl_data_gw if ctrl_data_gw is defined else '' }}"
-
-config_nodes: []
-config_server_list_derived: []
-control_server_list_derived: []
-control_server_hostname_list_derived: []
-config_ip: "{{ controller_list[0] | default('') }}"
-webui_nodes: []
-webui_server_list_derived: []
 
 # List of controller nodes for a compute node
 compute_controller_list: []

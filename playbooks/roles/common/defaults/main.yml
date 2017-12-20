@@ -1,4 +1,5 @@
 ---
+cloud_orchestrator: openstack
 contrail_compute_mode: bare_metal
 vcenter_compute_mode: "bare_metal"
 enable_openstack_compute: "{{ false if provision_type == 'ISSU' else true }}"
@@ -12,3 +13,11 @@ vrouter_kmod_hugepage: false
 tor_agent: {}
 tor_agent_list: []
 kernel_version_installed: ""
+
+config_nodes: []
+config_server_list_derived: []
+control_server_list_derived: []
+control_server_hostname_list_derived: []
+config_ip: "{{ controller_list[0] | default('') }}"
+webui_nodes: []
+webui_server_list_derived: []
