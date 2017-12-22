@@ -1,48 +1,48 @@
 ---
 - name: check controller container
-  shell: "docker ps -q --filter 'label=contrail.role=controller' --filter 'status=running'"
+  shell: "docker ps --filter 'label=contrail.role=controller' --filter 'status=running' --format {% raw %}'{{.Image}}'{% endraw %}"
   register: controller_container_ps
 
 - name: contrailctl for controller
   shell: "docker exec -i controller contrailctl config sync -c controller -F -v -t configure,service"
-  when: controller_container_ps.stdout != ''
+  when: controller_container_ps.stdout != '' and controller_container_ps.stdout == controller_image
 
 - name: check analytics container
-  shell: "docker ps -q --filter 'label=contrail.role=analytics' --filter 'status=running'"
+  shell: "docker ps --filter 'label=contrail.role=analytics' --filter 'status=running' --format {% raw %}'{{.Image}}'{% endraw %}"
   register: analytics_container_ps
 
 - name: contrailctl for analytics
   shell: "docker exec -i analytics contrailctl config sync -c analytics -F -v -t configure,service"
-  when: analytics_container_ps.stdout != ''
+  when: analytics_container_ps.stdout != '' and analytics_container_ps.stdout == analytics_image
 
 - name: check analyticsdb container
-  shell: "docker ps -q --filter 'label=contrail.role=analyticsdb' --filter 'status=running'"
+  shell: "docker ps --filter 'label=contrail.role=analyticsdb' --filter 'status=running' --format {% raw %}'{{.Image}}'{% endraw %}"
   register: analyticsdb_container_ps
 
 - name: contrailctl for analyticsdb
   shell: "docker exec -i analyticsdb contrailctl config sync -c analyticsdb -F -v -t configure,service"
-  when: analyticsdb_container_ps.stdout != ''
+  when: analyticsdb_container_ps.stdout != '' and analyticsdb_container_ps.stdout == analyticsdb_image
 
 - name: check agent container
-  shell: "docker ps -q --filter 'label=contrail.role=agent' --filter 'status=running'"
+  shell: "docker ps --filter 'label=contrail.role=agent' --filter 'status=running' --format {% raw %}'{{.Image}}'{% endraw %}"
   register: agent_container_ps
 
 - name: contrailctl for agent
   shell: "docker exec -i agent contrailctl config sync -c agent -F -v -t configure,service"
-  when: agent_container_ps.stdout != ''
+  when: agent_container_ps.stdout != '' and agent_container_ps.stdout == agent_image
 
 - name: check vcplugin container
-  shell: "docker ps -q --filter 'label=contrail.role=vcenter-plugin' --filter 'status=running'"
+  shell: "docker ps --filter 'label=contrail.role=vcenter-plugin' --filter 'status=running' --format {% raw %}'{{.Image}}'{% endraw %}"
   register: vcplugin_container_ps
 
 - name: contrailctl for vcplugin
   shell: "docker exec -i vcplugin contrailctl config sync -c controller -F -v -t configure"
-  when: vcplugin_container_ps.stdout != ''
+  when: vcplugin_container_ps.stdout != '' and vcplugin_container_ps.stdout == vcenterplugin_image
 
 - name: check kubemanager container
-  shell: "docker ps -q --filter 'label=contrail.role=kube-manager' --filter 'status=running'"
+  shell: "docker ps --filter 'label=contrail.role=kube-manager' --filter 'status=running' --format {% raw %}'{{.Image}}'{% endraw %}"
   register: kubemanager_container_ps
 
 - name: contrailctl for kubemanager
   shell: "docker exec -i contrail-kube-manager contrailctl config sync -c kubemanager -F -v -t configure,service"
-  when: kubemanager_container_ps.stdout != ''
+  when: kubemanager_container_ps.stdout != '' and kubemanager_container_ps.stdout == contrail_kube_manager_image
