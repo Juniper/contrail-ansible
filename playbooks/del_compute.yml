@@ -1,0 +1,42 @@
+---
+- name: Call Common Code 
+  hosts: all
+  roles:
+    - name: Run common code
+      role: common
+
+- name: Run the common task to create list
+  hosts: all
+  tasks:
+    - include_role:
+       name: common
+       tasks_from: create_list_facts
+
+- hosts: contrail-controllers
+  roles: 
+    - role: contrail/register
+      vars:
+        action: 'del'
+
+- name: "Deprovision compute node"
+  hosts: contrail-compute
+  post_tasks:
+    - name: "Deprovision compute node"
+      apt: name={{ item }} state=absent force=yes purge=yes
+      with_items:
+        - contrail*
+        - nova-compute
+        - python-bitstring
+        - python-barbicanclient
+        - python-barbicanclient
+        - python-contrail
+        - python-pycassa
+      when: ansible_os_family == 'Debian'
+    
+    - name: "Restore the interfaces file directory"
+      shell: cp /etc/network/orig.interfaces.* /etc/network/interfaces
+
+    - name: Reboot compute nodes
+      shell: reboot
+      sudo: true
+       

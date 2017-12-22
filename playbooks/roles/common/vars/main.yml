@@ -2,4 +2,9 @@
 enable_config_service: "{{ true if 'config' in controller_components else false }}"
 enable_control_service: "{{ true if 'control' in controller_components else false }}"
 enable_webui_service: "{{ true if 'webui' in controller_components else false }}"
+controller_group: "{{ groups['contrail-controllers'] | default([]) }}"
+analytics_group: "{{ groups['contrail-analytics'] | default([]) }}"
+analyticsdb_group: "{{ groups['contrail-analyticsdb'] | default([]) }}"
+compute_group: "{{ groups['contrail-compute'] | default([]) }}"
+ceph_controller_group: "{{ groups['ceph-controller'] | default([]) }}"
 
