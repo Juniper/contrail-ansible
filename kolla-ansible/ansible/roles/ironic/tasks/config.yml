@@ -52,6 +52,7 @@
       - "{{ node_custom_config }}/ironic-inspector/inspector.conf"
       - "{{ node_custom_config }}/ironic-inspector/{{ inventory_hostname }}/inspector.conf"
     dest: "{{ node_config_directory }}/ironic-inspector/inspector.conf"
+  when: enable_ironic_inspector | bool
 
 - name: Copying over dnsmasq.conf
   template:
@@ -61,7 +62,9 @@
     - "{{ node_custom_config }}/ironic/ironic-dnsmasq.conf"
     - "{{ node_custom_config }}/ironic/{{ inventory_hostname }}/ironic-dnsmasq.conf"
     - "ironic-dnsmasq.conf.j2"
-  when: inventory_hostname in groups['ironic-inspector']
+  when:
+    - inventory_hostname in groups['ironic-inspector']
+    - enable_ironic_inspector | bool
 
 - name: Copying pxelinux.cfg default
   template:

@@ -36,3 +36,4 @@
       - "/etc/localtime:/etc/localtime:ro"
   run_once: True
   delegate_to: "{{ groups['ironic-inspector'][0] }}"
+  when: enable_ironic_inspector | bool

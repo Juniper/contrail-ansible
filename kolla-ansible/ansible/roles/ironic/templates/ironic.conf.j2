@@ -31,10 +31,9 @@ api_url = {{ internal_protocol }}://{{ kolla_internal_fqdn }}:{{ ironic_api_port
 api_url = {{ internal_protocol }}://ironic-api:{{ ironic_api_port }}
 {% endif %}
 automated_clean=false
+{% endif %}
 [pxe]
 tftp_server={{ kolla_internal_fqdn }}
-{% endif %}
-
 [database]
 connection = mysql+pymysql://{{ ironic_database_user }}:{{ ironic_database_password }}@{{ ironic_database_address }}/{{ ironic_database_name }}
 max_retries = -1
