@@ -1,7 +1,7 @@
 ---
-- debug:
-    msg:
-      - " storage = {{ storage }}"
+#- debug:
+#    msg:
+#      - " storage = {{ storage }}"
 
 - debug:
     msg:
