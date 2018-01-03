@@ -20,10 +20,10 @@
 - name: check if mons are up
   shell: ceph -s
 
-- debug:
-    msg:
-      - "item {{ item }} {{ storage_ceph_config['osd_info'][ansible_hostname]['osd_info'][item] }} "
-  with_items: "{{ (storage_ceph_config['osd_info'][ansible_hostname]['osd_info']).keys() }}"
+#- debug:
+#    msg:
+#      - "item {{ item }} {{ storage_ceph_config['osd_info'][ansible_hostname]['osd_info'][item] }} "
+#  with_items: "{{ (storage_ceph_config['osd_info'][ansible_hostname]['osd_info']).keys() }}"
 
 - set_fact:
     osd_disks: "{{osd_disks + \
@@ -74,6 +74,10 @@
       - "mounted {{ mounted }}"
       - "journal_present {{ journal_present }}"
 
+- name: create empty disk list
+  set_fact:
+    disk_info: "{{ disk_info|default([]) }}"
+
 - name: create disk list
   set_fact:
     disk_info: "{{ disk_info|default([]) + \
@@ -103,9 +107,9 @@
     val2: "{{ val2 | int + 1 }}"
   with_items: "{{ osd_ssd_disks }}"
 
-- debug:
-    msg:
-      - "item {{ item }} "
-  with_items: "{{ disk_info }}"
+#- debug:
+#    msg:
+#      - "item {{ item }} "
+#  with_items: "{{ disk_info }}"
 
 

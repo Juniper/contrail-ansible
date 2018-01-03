@@ -59,6 +59,9 @@
     val_size: 0
 
 - set_fact:
+    disk_size: "{{ disk_size|default([]) }}"
+
+- set_fact:
     disk_size: "{{ disk_size|default([]) + \
                     [ {'weight': disk_size_tmp.results[val_size|int].stdout} ] }}"
     val_size: "{{ val_size | int + 1 }}"
