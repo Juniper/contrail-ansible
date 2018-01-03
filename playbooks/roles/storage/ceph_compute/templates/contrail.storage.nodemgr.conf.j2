@@ -9,6 +9,10 @@ disc_server_ip= {{ analytics_ip }}
 # second. System logs are dropped if the sending rate is exceeded
 # sandesh_send_rate_limit=
 
+[COLLECTOR]
+server_list = {{ analytics_collectors_with_port }}
+#server_list=ip1:port1 ip2:port2
+
 [SANDESH]
 #sandesh_ssl_enable=False
 #introspect_ssl_enable=False
