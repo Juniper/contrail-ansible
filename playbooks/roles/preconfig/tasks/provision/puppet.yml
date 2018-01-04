@@ -10,5 +10,8 @@
   template: src=templates/puppet.conf.j2 dest=/etc/puppet/puppet.conf
             owner=root group=root mode=0644
 
+- name: Restart apache2 service
+  service: name=apache2 state=restarted
+
 - name: Update default puppet config file for non-server-manager node
   shell: "sed -i 's/initialize(name, path, source, ignore = nil, environment = nil, source_permissions = :ignore)/initialize(name, path, source, ignore = nil, environment = nil, source_permissions = :use)/g' /usr/lib/ruby/vendor_ruby/puppet/configurer/downloader.rb"
