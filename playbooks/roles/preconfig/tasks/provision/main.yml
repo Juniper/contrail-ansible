@@ -9,12 +9,14 @@
     - "ntpdate {{smgr_ip}}"
     - "mv /etc/ntp.conf /etc/ntp.conf.orig"
     - "touch /var/lib/ntp/drift"
+  when: smgr_ip != ansible_default_ipv4.address
 
 - name: Create ntp.conf from template
   template: src=templates/ntp.conf.j2 dest=/etc/ntp.conf
             owner=root group=root mode=0644
   notify:
     - restart ntp
+  when: smgr_ip != ansible_default_ipv4.address
 
 - name: Blacklist mei and mei_me kernel modules
   lineinfile:
