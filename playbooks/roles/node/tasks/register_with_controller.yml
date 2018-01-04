@@ -123,23 +123,23 @@
   with_dict: "{{ analyticsdb_ip_hostname_dict | default ({}) }}"
   when: api_aaa_mode == 'no-auth'
 
-- name: "Register compute node with controller"
+- name: "Register compute node with controller {{ action }}"
   shell: "docker exec controller /usr/share/contrail-utils/provision_vrouter.py \
          --use_admin_api \
          --host_name {{ item.value }} \
          --host_ip {{ item.key }} \
-         --oper add \
+         --oper {{ action }} \
          {{ orchestrator_opts }} \
          {{ '--dpdk_enabled' if hostvars[compute_ctrl_ip_mgmt_ip_dict[item.key]].get('huge_pages') else '' }}"
   with_dict: "{{ compute_ip_hostname_dict | default({}) }}"
   when: cloud_orchestrator == 'openstack' and api_aaa_mode != 'no-auth'
 
-- name: "Register compute node with controller"
+- name: "Register compute node with controller {{ action }}"
   shell: "docker exec controller /usr/share/contrail-utils/provision_vrouter.py \
          --api_server_ip 127.0.0.1 \
          --host_name {{ item.value }} \
          --host_ip {{ item.key }} \
-         --oper add \
+         --oper {{ action }} \
          {{ orchestrator_opts }} \
          {{ '--dpdk_enabled' if hostvars[compute_ctrl_ip_mgmt_ip_dict[item.key]].get('huge_pages') else '' }}"
   with_dict: "{{ compute_ip_hostname_dict | default({}) }}"
