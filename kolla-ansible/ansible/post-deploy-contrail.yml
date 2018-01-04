@@ -12,7 +12,7 @@
       - python-ironicclient
 
   - name: Disable the nova-compute on the openstack container
-    shell: . /etc/kolla/admin-openrc.sh && nova service-disable {{ ansible_hostname }} nova-compute
+    shell: . /etc/kolla/admin-openrc.sh && openstack compute service set --disable {{ ansible_hostname }} nova-compute
     ignore_errors: yes
     when: enable_nova_compute | bool
 
