@@ -1,27 +1,18 @@
 ---
-- name: Install Packages for apt repo setup
-  apt: name={{ item }} state=latest force=yes install_recommends=no
-  with_items: "python-apt"
 
-- name: "Add preconfig thirdparty repo {{ thirdparty_apt_repo }}"
-  apt_repository:
-    repo: "{{ thirdparty_apt_repo }}"
+# For below task we cannot use apt_repository module due to needing python-apt package
+# Thus we are forced to do it manually and do apt update
+
+- name: "Update /etc/apt/sources.list Manually with thirdparty repo {{ thirdparty_apt_repo }}"
+  lineinfile:
+    dest: /etc/apt/sources.list
+    line: "{{ thirdparty_apt_repo }}"
     state: present
   register: apt_repo_added
   when:
     - thirdparty_apt_repo is defined
     - thirdparty_apt_repo != ""
     - ansible_os_family == 'Debian'
-
-- name: "Add Xenial Internet repos for Ocata"
-  apt_repository:
-    repo: "{{ item }}"
-    state: present
-  register: apt_repo_added
-  with_items: "{{ xenial_repos }}"
-  when:
-    - openstack_sku == "ocata"
-    - xenial_repos is defined
 
 - name: Allow unauthenticated packages for contrail packages to work
   copy: content='APT::Get::AllowUnauthenticated "true";' dest=/etc/apt/apt.conf.d/99allowunauth
@@ -30,6 +21,25 @@
 - name: Run apt-get update
   apt: update_cache=yes
   when: thirdparty_apt_repo is defined and thirdparty_apt_repo != "" and apt_repo_added.get('changed',false)
+  ignore_errors: yes
+
+- name: Install Packages for apt repo setup
+  apt: name={{ item }} state=latest force=yes install_recommends=no
+  with_items: "python-apt"
+
+- name: "Add Xenial Internet repos for Ocata"
+  apt_repository:
+    repo: "{{ item }}"
+    state: present
+  register: xenial_repo_added
+  with_items: "{{ xenial_repos }}"
+  when:
+    - openstack_sku == "ocata"
+    - xenial_repos is defined
+
+- name: Run apt-get update if Xenial repos also added
+  apt: update_cache=yes
+  when: xenial_repo_added.get('changed',false)
   ignore_errors: yes
 
 - name: Install Preconfig packages
