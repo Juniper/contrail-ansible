@@ -108,6 +108,7 @@ kubernetes_config:
   cluster_project: "{{ kubernetes_cluster_project|to_json }}"
   service_subnets: "{{ kubernetes_service_subnet }}"
   pod_subnets: "{{ kubernetes_pod_subnet }}"
+  ip_fabric_forwarding: "{{ kubernetes_ip_fabric_forwarding }}"
 kubernetes_vnc_config:
   public_fip_pool: "{{ kubernetes_public_fip_pool|to_json }}"
 
