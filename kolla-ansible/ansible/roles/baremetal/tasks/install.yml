@@ -90,3 +90,13 @@
   with_items: "{{ redhat_pkg_removals }}"
   become: True
   when: ansible_os_family == 'RedHat'
+
+- name: Install packages for Swift Ring Builder
+  package: name={{item}} state=latest
+  with_items:
+    - parted
+    - xfsprogs
+  become: True
+  when:
+    - ansible_os_family == 'Debian'
+    - enable_swift | bool

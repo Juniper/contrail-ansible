@@ -10,6 +10,7 @@
       - python-openstackclient
       - python-heatclient
       - python-ironicclient
+      - python-swiftclient
 
   - name: Disable the nova-compute on the openstack container
     shell: . /etc/kolla/admin-openrc.sh && openstack compute service set --disable {{ ansible_hostname }} nova-compute
