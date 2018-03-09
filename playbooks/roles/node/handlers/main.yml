@@ -32,7 +32,7 @@
   when: agent_container_ps.stdout != '' and agent_container_ps.stdout == agent_image
 
 - name: check vcplugin container
-  shell: "docker ps --filter 'label=contrail.role=vcenter-plugin' --filter 'status=running' --format {% raw %}'{{.Image}}'{% endraw %}"
+  shell: "docker ps --filter 'label=contrail.role=vcenterplugin' --filter 'status=running' --format {% raw %}'{{.Image}}'{% endraw %}"
   register: vcplugin_container_ps
 
 - name: contrailctl for vcplugin
