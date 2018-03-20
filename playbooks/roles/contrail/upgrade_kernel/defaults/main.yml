@@ -1,7 +1,7 @@
 ---
 kernel_upgrade: false
 cloud_orchestrator: openstack
-kernel_version: "{{ '4.4.0-38' if ansible_distribution + ansible_distribution_version == 'Ubuntu16.04' else '3.13.0-110' }}"
+kernel_version: "{{ '4.4.0-116' if ansible_distribution + ansible_distribution_version == 'Ubuntu16.04' else '3.13.0-142' }}"
 kernel_upgrade_packages:
   - "linux-headers-{{ kernel_version }}"
   - "linux-headers-{{ kernel_version }}-generic"
