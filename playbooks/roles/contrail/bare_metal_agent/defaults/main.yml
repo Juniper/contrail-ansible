@@ -8,6 +8,10 @@ default_kernel_compute_packages:
   - contrail-vrouter-dkms
   - contrail-vrouter-common
 
+netronome_vrouter_package:
+  - ns-agilio-vrouter
+  - virtio-forwarder
+
 upgrade_kernel_vrouter_packages:
   - "contrail-vrouter-{{ kernel_version }}-generic"
   - contrail-vrouter-common
@@ -89,7 +93,9 @@ compute_packages_redhat:
  - contrail-vrouter
  - contrail-vrouter-init
 compute_packages_default: "{{ compute_packages_to_install + lbaas_packages if enable_lbaas else compute_packages_to_install }}"
-compute_packages: "{{ compute_packages_redhat if ansible_os_family == 'RedHat' else compute_packages_default }}"
+enable_netronome: "{{ ns_hw_acceleration if ns_hw_acceleration else 'False' }}"
+compute_packages_netronome: "{{ compute_packages_to_install + netronome_vrouter_package if enable_netronome == True else compute_packages_default }}"
+compute_packages: "{{ compute_packages_redhat if ansible_os_family == 'RedHat' else compute_packages_netronome }}"
 
 #SRIOV defaults
 sriov: {}

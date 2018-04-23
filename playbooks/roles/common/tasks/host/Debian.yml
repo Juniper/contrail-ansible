@@ -9,6 +9,14 @@
   when: contrail_apt_repo is defined and contrail_apt_repo != ""
   ignore_errors: yes
 
+- name: Add netronome apt repository
+  apt_repository:
+    repo: "deb {{ netronome_apt_repo }} ./"
+    state: present
+  register: apt_repo_added
+  when: netronome_apt_repo is defined and netronome_apt_repo != ""
+  ignore_errors: yes
+
 - name: Allow unauthenticated packages for contrail packages to work
   copy: content='APT::Get::AllowUnauthenticated "true";' dest=/etc/apt/apt.conf.d/99allowunauth
 

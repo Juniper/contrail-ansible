@@ -97,6 +97,33 @@
       tags: [neutron_plugin]
       when: cloud_orchestrator == "openstack"
 
+- name: "Netronome: update initramfs"
+  hosts: contrail-compute
+  pre_tasks:
+    - name: "Netronome: Stop contrail-vrouter-agent"
+      service: name=contrail-vrouter-agent state=stopped
+      when: ((ns_hw_acceleration is defined) and (ns_hw_acceleration|bool == true))
+
+    - name: "Netronome: Unload vRouter Module"
+      modprobe: name=vrouter state=absent
+      when: ((ns_hw_acceleration is defined) and (ns_hw_acceleration|bool == true))
+
+    - name: "Netronome: Start Accelerated vRouter"
+      shell: /opt/netronome/bin/ns-vrouter-ctl start
+
+    - name: "Netronome: Add whitelist pci addr to nova.conf"
+      shell: /opt/netronome/libexec/add_nova_whitelist.py
+      when: ((ns_hw_acceleration is defined) and (ns_hw_acceleration|bool == true))
+
+    - name: "Netronome: Start contrail-vrouter-agent"
+      service: name=contrail-vrouter-agent state=started
+      when: ((ns_hw_acceleration is defined) and (ns_hw_acceleration|bool == true))
+
+  post_tasks:
+    - name: "Netronome: Update initramfs"
+      shell: update-initramfs -u
+      when: ((ns_hw_acceleration is defined) and (ns_hw_acceleration|bool == true))
+
 - name: Reboot compute nodes
   hosts: contrail-compute
   pre_tasks:
@@ -131,6 +158,8 @@
       set_fact:
         reboot_required: >-
           {%- if vrouter_loaded == "no" or vhost_loaded == "no" or vhost0_exists == false  or vrouter_kmod_hugepage == true -%}
+            true
+          {%- elif ns_hw_acceleration is defined and ns_hw_acceleration|bool == true -%}
             true
           {%- else %}
             false

@@ -190,3 +190,93 @@
   when:
     - (provision_type == 'ISSU')
     - (dpdk_mode or sriov_interface_list)
+
+- name: "Netronome: Enable KVM Hugepages"
+  lineinfile:
+    dest: /etc/default/qemu-kvm
+    regexp: '^KVM_HUGEPAGES=.*'
+    line: 'KVM_HUGEPAGES=1'
+    backrefs: yes
+    state: present
+  when: ((ns_hw_acceleration is defined) and (ns_hw_acceleration|bool == true))
+
+- name: "Netronome: Disable KSM-Enable"
+  lineinfile:
+    dest: /etc/default/qemu-kvm
+    regexp: '^KSM_ENABLED=.*'
+    line: 'KSM_ENABLED=0'
+    backrefs: yes
+    state: present
+  when: ((ns_hw_acceleration is defined) and (ns_hw_acceleration|bool == true))
+
+- name: "Netronome: Enable offloads in contrail-vrouter-agent.conf"
+  lineinfile:
+    dest: /etc/contrail/contrail-vrouter-agent.conf
+    insertafter: '\[DEFAULT\]'
+    line: 'offload=enabled'
+    state: present
+  when: ((ns_hw_acceleration is defined) and (ns_hw_acceleration|bool == true))
+
+- name: "Netronome: Update default grub for SR-IOV iommu"
+  lineinfile:
+    dest: /etc/default/grub
+    insertafter: 'GRUB_CMDLINE_LINUX_DEFAULT="[^"]*'
+    line: 'GRUB_CMDLINE_LINUX_DEFAULT="${GRUB_CMDLINE_LINUX_DEFAULT} intel_iommu=on iommu=pt"'
+    state: present
+  notify: update-grub
+  when: ((ns_hw_acceleration is defined) and (ns_hw_acceleration|bool == true))
+
+- name: "Netronome: Update default grub for virtioforwarder hugepages"
+  lineinfile:
+    dest: /etc/default/grub
+    insertafter: 'GRUB_CMDLINE_LINUX_DEFAULT="[^"]*'
+    line: 'GRUB_CMDLINE_LINUX_DEFAULT="${GRUB_CMDLINE_LINUX_DEFAULT} default_hugepagesz=2M hugepagesz=2M hugepages={{ns_virtioforwarder_hugepages}}"'
+    state: present
+  notify: update-grub
+  when: ((ns_hw_acceleration is defined) and (ns_hw_acceleration|bool == true))
+
+- name: "Netronome: Set virtio-forwarder socket owner"
+  lineinfile:
+    dest: /etc/default/virtioforwarder
+    regexp: '^VIRTIOFWD_SOCKET_OWNER=.*'
+    line: 'VIRTIOFWD_SOCKET_OWNER=libvirt-qemu'
+    state: present
+  when:
+    - ((ns_hw_acceleration is defined) and (ns_hw_acceleration|bool == true))
+    - (ns_virtioforwarder_hugepages is defined)
+
+- name: "Netronome: Set virtio-forwarder socket group"
+  lineinfile:
+    dest: /etc/default/virtioforwarder
+    regexp: '^VIRTIOFWD_SOCKET_GROUP=.*'
+    line: 'VIRTIOFWD_SOCKET_GROUP=kvm'
+    state: present
+  when:
+    - ((ns_hw_acceleration is defined) and (ns_hw_acceleration|bool == true))
+    - (ns_virtioforwarder_hugepages is defined)
+
+- name: "Netronome: Set virtio-forwarder dynamic sockets"
+  lineinfile:
+    dest: /etc/default/virtioforwarder
+    regexp: '^VIRTIOFWD_DYNAMIC_SOCKETS=.*'
+    line: 'VIRTIOFWD_DYNAMIC_SOCKETS=y'
+    state: present
+  when:
+    - ((ns_hw_acceleration is defined) and (ns_hw_acceleration|bool == true))
+    - (ns_virtioforwarder_hugepages is defined)
+
+- name: "Netronome: Set virtio-forwarder socket dir"
+  lineinfile:
+    dest: /etc/default/virtioforwarder
+    regexp: '^VIRTIOFWD_SOCKET_DIR=.*'
+    line: 'VIRTIOFWD_SOCKET_DIR=/var/run/vrouter'
+    state: present
+  when:
+    - ((ns_hw_acceleration is defined) and (ns_hw_acceleration|bool == true))
+    - (ns_virtioforwarder_hugepages is defined)
+
+- name: "Netronome: Enable virtio-forwarder"
+  shell: systemctl enable virtio-forwarder.service
+  when:
+    - ((ns_hw_acceleration is defined) and (ns_hw_acceleration|bool == true))
+    - (ns_virtioforwarder_hugepages is defined)
