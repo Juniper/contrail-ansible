@@ -12,6 +12,16 @@
     - contrail_apt_repo != ""
     - ansible_os_family == 'Debian'
 
+- name: "Add netronome apt repository if required {{ netronome_apt_repo }}"
+  apt_repository:
+    repo: "deb {{ netronome_apt_repo }}"
+    state: present
+  register: apt_repo_added
+  when:
+    - netronome_apt_repo is defined
+    - netronome_apt_repo != ""
+    - ansible_os_family == 'Debian'
+
 - name: Allow unauthenticated packages for contrail packages to work
   copy: content='APT::Get::AllowUnauthenticated "true";' dest=/etc/apt/apt.conf.d/99allowunauth
   when: contrail_apt_repo is defined and contrail_apt_repo != "" and ansible_os_family == "Debian"
