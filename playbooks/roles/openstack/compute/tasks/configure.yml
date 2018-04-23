@@ -111,6 +111,15 @@
   notify: restart libvirt
   ignore_errors: yes
 
+- name: Configure apparmor for sockets
+  blockinfile:
+    dest: /etc/apparmor.d/abstractions/libvirt-qemu
+    block: |
+      # for access to create sockets in /var/run/vrouter
+      /{var/,}run/vrouter/** rwmix,
+  notify: restart libvirt
+  when: ((ns_hw_acceleration is defined) and (ns_hw_acceleration|bool == true))
+
 - name: Configure qemu
   blockinfile:
     dest: /etc/libvirt/qemu.conf
@@ -119,7 +128,7 @@
        "/dev/null", "/dev/full", "/dev/zero",
         "/dev/random", "/dev/urandom",
         "/dev/ptmx", "/dev/kvm", "/dev/kqemu",
-        "/dev/rtc", "/dev/hpet","/dev/net/tun",
+        "/dev/rtc", "/dev/hpet","/dev/net/tun","/dev/vfio/vfio",
       ]
   notify: restart libvirt
 
