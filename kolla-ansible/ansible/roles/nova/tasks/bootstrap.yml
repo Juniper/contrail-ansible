@@ -42,6 +42,7 @@
       database_password: "{{ nova_api_database_password }}"
   run_once: True
   delegate_to: "{{ groups['nova-api'][0] }}"
+  no_log: True
 
 - include: bootstrap_service.yml
   when:

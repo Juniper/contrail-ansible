@@ -22,6 +22,7 @@
   with_inidata:
     global: "{{ global_config_orig }}"
     agent: "{{ agent_config_orig }}"
+  no_log: True
 
 # facts for non-global vars, these variables have variable names appended with
 # the key of the dict it is passing from with_inidata

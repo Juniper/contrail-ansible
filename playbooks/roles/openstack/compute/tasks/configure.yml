@@ -32,6 +32,7 @@
     auth_url: "{{ keystone_auth_protocol }}://{{ keystone_ip }}:{{ keystone_admin_port }}/"
   when:
     - openstack_sku == 'newton'
+  no_log: True
 
 - name: Configure oslo rabbit hosts in nova.conf to fix configuration problem by compute-server-setup
   ini_file: dest={{ nova_conf }} section=oslo_messaging_rabbit option={{ item.key }} value={{ item.value }}  create=yes
@@ -40,6 +41,7 @@
     rabbit_hosts: "{{ rabbitmq_servers_with_port }}"
     rabbit_password: "{{ rabbitmq_password }}"
     rabbit_userid: "{{ rabbitmq_user }}"
+  no_log: True
 
 # Hack for ocata - placement section is mandatory in ocata
 # compute-server-setup.sh was not setting up below configs, which caused neutron auth issues while booting a vm
@@ -59,6 +61,7 @@
     password: "{{ neutron_password }}"
   when:
     - openstack_sku == 'ocata'
+  no_log: True
 
 - name: Configure the placement section in nova.conf
   ini_file: dest={{ nova_conf }} section=placement option={{ item.key }} value={{ item.value }}  create=yes
@@ -75,6 +78,7 @@
     os_interface: 'internal'
   when:
     - openstack_sku == 'ocata'
+  no_log: True
 
 # Hack for ocata - transport_url is required to talk to nov-conductor in ocata
 - name: Configure the transport_url in nova.conf

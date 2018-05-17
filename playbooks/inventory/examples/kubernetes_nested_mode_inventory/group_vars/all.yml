@@ -49,7 +49,7 @@ webui_config: {http_listen_port: 8085}
 ###################################################
 # Openstack specific configuration
 ##
-keystone_config: {ip: 10.84.29.27, admin_password: c0ntrail123, admin_user: admin, admin_tenant: admin}
+keystone_config: {ip: 10.84.29.27, admin_password: <Password>, admin_user: admin, admin_tenant: admin}
 
 ###################################################
 # Kubernetes cluster configuration

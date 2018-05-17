@@ -62,13 +62,13 @@ glance
 storage
 
 [control]
-192.168.1.22 ansible_connection=ssh                                 ansible_ssh_pass=c0ntrail123
+192.168.1.22 ansible_connection=ssh                                 ansible_ssh_pass=<Password>
 
 [cloudkitty-processor:children]
 cloudkitty
 
 [compute]
-192.168.1.22 ansible_connection=ssh                                 ansible_ssh_pass=c0ntrail123
+192.168.1.22 ansible_connection=ssh                                 ansible_ssh_pass=<Password>
 
 [trove:children]
 control
@@ -113,7 +113,7 @@ compute
 control
 
 [network]
-192.168.1.22 ansible_connection=ssh                                 ansible_ssh_pass=c0ntrail123
+192.168.1.22 ansible_connection=ssh                                 ansible_ssh_pass=<Password>
 
 [rally:children]
 control
@@ -175,7 +175,7 @@ control
 designate
 
 [storage]
-192.168.1.22 ansible_connection=ssh                                 ansible_ssh_pass=c0ntrail123
+192.168.1.22 ansible_connection=ssh                                 ansible_ssh_pass=<Password>
 
 [placement-api:children]
 placement
@@ -451,7 +451,7 @@ control
 octavia
 
 [monitoring]
-192.168.1.22 ansible_connection=ssh                                 ansible_ssh_pass=c0ntrail123
+192.168.1.22 ansible_connection=ssh                                 ansible_ssh_pass=<Password>
 
 [influxdb:children]
 monitoring

@@ -29,6 +29,7 @@
   notify:
     - check controller container
     - contrailctl for controller
+  no_log: True
 
 - name: Configure contrailctl/controller.conf KEYSTONE section
   ini_file: dest="{{ contrailctl_config_directory }}/controller.conf" section=KEYSTONE option={{ item.key }} value={{ item.value }}  create=yes
@@ -37,5 +38,6 @@
     - check controller container
     - contrailctl for controller
   when: cloud_orchestrator == "openstack"
+  no_log: True
 
 - meta: flush_handlers

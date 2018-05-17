@@ -19,6 +19,7 @@
   notify:
     - check analytics container
     - contrailctl for analytics
+  no_log: True
 
 - name: Configure contrailctl/analytics.conf KEYSTONE section
   ini_file: dest="{{ contrailctl_config_directory }}/analytics.conf" section=KEYSTONE option={{ item.key }} value={{ item.value }}  create=yes
@@ -27,5 +28,6 @@
     - check analytics container
     - contrailctl for analytics
   when: cloud_orchestrator == "openstack"
+  no_log: True
 
 - meta: flush_handlers
